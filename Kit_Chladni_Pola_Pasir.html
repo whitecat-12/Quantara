@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Kit Chladni - Pola Pasir Bergetar</title>
+<style media="not all">
+:root{--fg:#1a1a1a;--card:rgba(255,255,255,.93);--bd:#c3ced4;--ac:#0b7285;--hi:#e8f1f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}}
+:root[data-theme="dark"]{--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;font-size:13px;backdrop-filter:blur(6px)}
+#ui{left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:min(290px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto}
+#anw{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100vw - 24px))}
+#an{width:100%;display:block}
+h1{font-size:15px;margin:0 0 8px}
+label{display:block;margin:6px 0}input[type=range]{width:100%}
+button{font:inherit;border:1px solid var(--bd);background:var(--hi);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+button.on,button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+.seg{display:flex;gap:6px}.seg button{flex:1}.row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+p{margin:6px 0 0;line-height:1.4}#rd{font-variant-numeric:tabular-nums}#hint{color:var(--ac)}
+button{min-height:36px}#ui.min .mh{display:none}#anw.h{display:none}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));display:grid;grid-template-columns:repeat(2,52px);gap:6px;padding:6px}
+#nav button{padding:0;height:40px;font-size:15px;min-height:0}#nav .t{font-size:11px}
+#ui.col>*:not(h1){display:none}#ui.col h1{margin:0}#ui.col #bMore{display:none}
+#nav.col button:not(#bNav){display:none}#nav.col{grid-template-columns:auto}#nav #bNav{grid-column:1/-1;font-size:11px;padding:0 8px}
+#anw.col canvas{display:none}#anw.col>div{margin:0!important}
+@media(max-width:700px){#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:52vh}#anw{left:8px;right:auto;width:calc(100vw - 84px);top:calc(8px + env(safe-area-inset-top,0px));bottom:auto}#nav{right:8px;top:calc(8px + env(safe-area-inset-top,0px));grid-template-columns:repeat(2,46px);gap:4px;padding:4px}#nav button{height:36px}.card{font-size:12px}}
+</style>
+<style>
+:root{--fg:#17212b;--mut:#5f6f7c;--card:rgba(255,255,255,.88);--bd:rgba(20,40,60,.12);--ac:#0b7285;--ac2:#18a7bd;--onac:#fff;--hi:rgba(20,40,60,.06);--sh:0 10px 30px rgba(20,40,60,.18);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);padding:14px;font-size:13px}
+button{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;color:var(--fg);background:var(--hi);border:1px solid var(--bd);border-radius:12px;min-height:44px;padding:0 14px;cursor:pointer;transition:background .15s,transform .1s}
+button:hover{background:var(--bd)}button:active{transform:scale(.95)}
+button.pri,button.act{background:var(--ac);color:var(--onac);border-color:transparent}
+button.pri:hover,button.act:hover{background:var(--ac2)}
+.ib{width:44px;padding:0;flex:none}
+#ui{left:16px;top:calc(16px + env(safe-area-inset-top,0px));width:min(330px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;display:flex;flex-direction:column;gap:14px}
+.hd{display:flex;align-items:center;gap:8px}.hd .ib{width:38px;min-height:38px}
+.lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;font-size:18px;flex:none}
+.tt{flex:1;min-width:0;margin-left:2px}.tt b{display:block;font-size:16px}.tt span{color:var(--mut);font-size:11px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:var(--hi);border-radius:14px}
+.seg button{background:transparent;border:0;min-height:42px}.seg button.on{background:var(--ac);color:var(--onac);box-shadow:0 3px 10px rgba(11,114,133,.35)}
+.mh{display:flex;flex-direction:column;gap:14px}#ui.min .mh{display:none}
+.fl{display:flex;align-items:center;gap:8px;font-weight:600}.fl svg{color:var(--ac);width:16px}
+.v{margin-left:auto;background:var(--hi);padding:3px 11px;border-radius:999px;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:8px 0 0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:var(--hi);border:1px solid var(--bd)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--ac);border:3px solid var(--card);box-shadow:0 1px 6px rgba(0,0,0,.35);margin-top:-9px}
+input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:var(--hi)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ac);border:3px solid var(--card)}
+.row{display:flex;gap:10px}#bGo{flex:1.6}#bRe{flex:1}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{background:var(--hi);border-radius:12px;padding:8px 12px}
+.st small{display:block;color:var(--mut);font-size:11px}.st b{font-size:17px;font-variant-numeric:tabular-nums}.st em{font-style:normal;color:var(--mut);font-size:11px;margin-left:3px}
+.hint{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(24,167,189,.12);line-height:1.45}.hint svg{color:var(--ac);margin-top:2px;flex:none}
+.tip{color:var(--mut);font-size:11px;line-height:1.5}
+#ui.col>*:not(.hd){display:none}#ui.col #bMore{display:none}
+#nav{right:16px;top:calc(16px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:12px;padding:12px}
+.nh{display:flex;align-items:center;justify-content:space-between;gap:14px;font-weight:700;font-size:12px;color:var(--mut)}.nh .ib{width:34px;min-height:34px}
+.g3{display:grid;grid-template-columns:repeat(3,44px);gap:8px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ct{display:grid;place-items:center;color:var(--mut)}
+.pv{flex-direction:column;gap:4px;min-height:52px;font-size:10px;padding:0}
+#nav.col .grp{display:none}
+#anw{right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100vw - 32px))}#anw.h{display:none}
+.ah{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:10px}.ah svg{color:var(--ac)}.ah .ib{margin-left:auto;width:34px;min-height:34px}
+#an{width:100%;height:auto;display:block}
+@media(max-width:700px){
+#ui{left:12px;right:12px;top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;max-height:56vh}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));padding:10px;gap:10px}
+.g3{grid-template-columns:repeat(3,40px);gap:6px}.g2{gap:6px}.pv{min-height:40px}.pv span{display:none}.ib{width:40px;min-height:40px}
+#anw{left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:auto;z-index:20}
+}
+</style>
+<style>
+/* tata letak ringkas: panel di kolom samping, kanvas 3D di tengah */
+canvas#c{width:auto;height:auto}
+button{min-height:38px;border-radius:10px;font-size:12px;padding:0 12px}.ib{width:38px;padding:0}
+#ui{left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:248px;max-height:calc(100vh - 24px);padding:12px;gap:10px}
+.hd .ib{width:32px;min-height:32px}.lg{width:34px;height:34px;font-size:15px;border-radius:10px}.tt b{font-size:14px}.tt span{font-size:10px}
+.seg button{min-height:36px}.mh{gap:10px}.fl{font-size:12px}.v{padding:1px 9px}
+input[type=range]{height:22px;margin:4px 0 0}
+.st{grid-template-columns:repeat(4,1fr);gap:6px}.st div{padding:6px 2px;text-align:center}.st b{display:block;font-size:13px}.st small,.st em{display:block;font-size:10px;margin:0}
+.hint{padding:8px 10px;font-size:12px;line-height:1.35}
+#rc{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));width:316px;display:flex;flex-direction:column;gap:10px}
+#rc .card{position:static}
+#nav{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:10px;width:auto}
+.nh{grid-column:1/-1;order:0;font-size:11px}#nav .ib{width:auto;min-height:36px;padding:0}#nav .nh .ib{width:30px;min-height:30px}
+.g3{display:contents}.g3 span{display:none}
+#zi{order:1}#zo{order:2}#hm{order:3}#pl{order:4}#pu{order:5}#pdn{order:6}#pr{order:7}
+.g2{grid-column:1/-1;order:8;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pv{flex-direction:row;gap:6px;min-height:36px;font-size:11px;padding:0}.pv span{display:inline}
+#anw{width:auto;padding:10px}
+#rc #ui{position:fixed;left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto}
+@media(max-width:899px){
+#rc{display:contents}#rc .card{position:fixed}
+#nav{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));padding:8px;gap:6px}
+#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:48vh;padding:10px;gap:8px}
+#anw{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));bottom:auto;z-index:20}
+#ui.min .hint,#ui.min .tip{display:none}
+#rc #ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="rc"><div id="nav" class="card">
+<div class="nh"><span><i class="fa-solid fa-video"></i>&nbsp; Tampilan</span><button id="bNav" class="ib" aria-label="Ciutkan"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="grp g3"><button id="zi" class="ib" aria-label="Zoom in"><i class="fa-solid fa-magnifying-glass-plus"></i></button><button id="zo" class="ib" aria-label="Zoom out"><i class="fa-solid fa-magnifying-glass-minus"></i></button><button id="hm" class="ib" aria-label="Tampilan awal"><i class="fa-solid fa-house"></i></button></div>
+<div class="grp g3"><span></span><button id="pu" class="ib" aria-label="Geser atas"><i class="fa-solid fa-chevron-up"></i></button><span></span><button id="pl" class="ib" aria-label="Geser kiri"><i class="fa-solid fa-chevron-left"></i></button><span class="ct"><i class="fa-solid fa-up-down-left-right"></i></span><button id="pr" class="ib" aria-label="Geser kanan"><i class="fa-solid fa-chevron-right"></i></button><span></span><button id="pdn" class="ib" aria-label="Geser bawah"><i class="fa-solid fa-chevron-down"></i></button><span></span></div>
+<div class="grp g2"><button id="vF" class="pv" aria-label="Depan"><i class="fa-solid fa-eye"></i><span>Depan</span></button><button id="vT" class="pv" aria-label="Atas"><i class="fa-solid fa-table-cells"></i><span>Atas</span></button><button id="vK" class="pv" aria-label="Samping"><i class="fa-solid fa-arrows-left-right"></i><span>Samping</span></button></div>
+</div>
+<div id="ui" class="card">
+<div class="hd"><div class="lg"><i class="fa-solid fa-flask-vial"></i></div><div class="tt"><b>Pola Chladni</b><span>Kit pelat bergetar</span></div><button id="bMore" class="ib" aria-label="Pengaturan"><i class="fa-solid fa-sliders"></i></button><button id="bMin" class="ib" aria-label="Ciutkan panel"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="seg"><button id="bGLB"><i class="fa-solid fa-wave-square"></i>Manual</button><button id="bGLBB" class="on"><i class="fa-solid fa-bullseye"></i>Resonansi</button></div>
+<div class="mh">
+<label id="lM" hidden><span class="fl"><i class="fa-solid fa-wave-square"></i>Frekuensi<b class="v"><span id="vM">120</span> Hz</b></span><input id="sM" type="range" min="100" max="1200" step="1" value="120"></label>
+<label id="lV"><span class="fl"><i class="fa-solid fa-bullseye"></i>Pola ke-<b class="v"><span id="vV">1</span> / 10</b></span><input id="sV" type="range" min="1" max="10" step="1" value="1"></label>
+<label><span class="fl"><i class="fa-solid fa-clock"></i>Kecepatan simulasi<b class="v"><span id="vS">0,5</span>×</b></span><input id="sS" type="range" min="0.1" max="1" step="0.1" value="0.5"></label>
+</div>
+<div class="row"><button id="bGo" class="pri"><i class="fa-solid fa-play"></i>Getarkan</button><button id="bRe"><i class="fa-solid fa-rotate-left"></i>Ulang</button><button id="bAn" class="ib" aria-label="Grafik resonansi"><i class="fa-solid fa-chart-simple"></i></button></div>
+<div class="st"><div><small>Waktu</small><b id="rt">0,00</b><em>s</em></div><div><small>Frek.</small><b id="rs">0</b><em>Hz</em></div><div><small>Amp.</small><b id="rv">0</b><em>%</em></div><div><small>Tertata</small><b id="ra">0</b><em>%</em></div></div>
+<div class="hint"><i class="fa-solid fa-circle-info"></i><span id="hint"></span></div>
+<div class="tip mh">Seret: putar. Cubit atau gulir: zoom. Geser 2 jari, klik kanan, atau Shift+seret: geser tampilan.</div>
+</div>
+<div id="anw" class="card"><div class="ah"><i class="fa-solid fa-chart-simple"></i><span>Resonansi &amp; pola</span><button id="bAnM" class="ib" aria-label="Tutup grafik"><i class="fa-solid fa-xmark"></i></button></div><canvas id="an" width="720" height="400"></canvas></div></div>
+<div id="oldui" hidden>
+<div id="nav" class="card"><button id="bNav">Sembunyikan ▲</button><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">−</button><button id="pl" aria-label="Geser kiri">◀</button><button id="pr" aria-label="Geser kanan">▶</button><button id="pu" aria-label="Geser atas">▲</button><button id="pdn" aria-label="Geser bawah">▼</button><button id="vF" class="t">Depan</button><button id="vA" class="t">Atas</button><button id="vT" class="t">Timer</button><button id="vK" class="t">Katrol</button><button id="hm" aria-label="Reset tampilan">⌂</button><button id="bAn" class="t">Grafik</button></div>
+<div id="ui" class="card">
+<h1>Alat Uji GLB &amp; GLBB <button id="bMin" aria-label="Minimize panel" style="float:right;margin-left:6px;padding:2px 10px;min-height:0;font-size:14px">−</button><button id="bMore" style="float:right;padding:2px 8px;min-height:0;font-size:12px">Pengaturan ▾</button></h1>
+<div class="seg"><button id="bGLB">GLB</button><button id="bGLBB" class="on">GLBB</button></div>
+<div class="mh"><label id="lM">Sudut kemiringan rel: <b id="vM">6</b>°<input id="sM" type="range" min="2" max="15" step="1" value="6"></label>
+<label id="lV" hidden>Kecepatan awal: <b id="vV">0,5</b> m/s<input id="sV" type="range" min="0.2" max="1" step="0.1" value="0.5"></label>
+<label>Kecepatan simulasi: <b id="vS">0,5</b>×<input id="sS" type="range" min="0.1" max="1" step="0.1" value="0.5"></label>
+</div><div class="row"><button id="bGo" class="pri">Lepas</button><button id="bRe">Ulang</button></div>
+<p id="rd"></p><p id="hint"></p>
+<p class="mh" style="font-size:11px;opacity:.7">Seret 1 jari: putar. Cubit 2 jari: zoom, geser 2 jari: geser tampilan. Mouse: klik kanan atau Shift+seret untuk geser, gulir untuk zoom.</p>
+</div>
+<div id="anw" class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><b style="font-size:12px">Pita ketik &amp; grafik</b><button id="bAnM" aria-label="Minimize grafik" style="padding:0 10px;min-height:28px">−</button></div><canvas id="an" width="720" height="400"></canvas></div>
+</div><script>document.getElementById('oldui').remove()</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T=THREE,$=id=>document.getElementById(id),fmt=(n,d=2)=>n.toFixed(d).replace('.',',');
+const PI=Math.PI;
+const R=new T.WebGLRenderer({canvas:$('c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;
+const SC=new T.Scene();SC.background=new T.Color(0xdfe9ee);const S=new T.Group();SC.add(S);
+const cam=new T.PerspectiveCamera(40,1,.05,60);
+SC.add(new T.HemisphereLight(0xffffff,0xb0b8bc,.9));
+const sun=new T.DirectionalLight(0xffffff,.7);sun.position.set(.9,2.2,1.6);sun.target.position.set(0,.8,0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-.8,right:.8,top:.8,bottom:-.8,near:.5,far:8});sun.shadow.bias=-.0004;SC.add(sun,sun.target);
+const mat=(c,m=0,r=.6)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r});
+function add(g,m,x,y,z,p=S){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;p.add(o);return o}
+const box=(w,h,d,c,x,y,z,p,m=0)=>add(new T.BoxGeometry(w,h,d),mat(c,m),x,y,z,p);
+const cyl=(r,h,c,x,y,z,p,ax,m=0)=>{const o=add(new T.CylinderGeometry(r,r,h,32),mat(c,m,.4),x,y,z,p);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;return o};
+
+/* meja */
+const TY=.75;
+box(1.1,.04,.76,0xb7803f,0,TY-.02,0);
+[-.5,.5].forEach(x=>[-.33,.33].forEach(z=>box(.05,TY-.04,.05,0x151515,x,(TY-.04)/2,z)));
+
+/* vibrator (pengetar) + batang penjepit pelat */
+const LP=.30,PT=.003,PLY=.93,TOPY=PLY+PT/2;
+cyl(.085,.016,0x151515,0,TY+.008,0);
+cyl(.062,.09,0x2b3338,0,TY+.061,0,S,null,.35);
+cyl(.066,.01,0xd2412a,0,TY+.111,0);
+cyl(.05,.006,0x333b40,0,TY+.119,0);
+cyl(.006,.062,0xcfd3d6,0,TY+.147,0,S,null,.9);
+cyl(.0075,.012,0x888c90,0,PLY-.0075,0,S,null,.8);
+cyl(.012,.006,0xb0b4b8,0,TOPY+.003,0,S,null,.8);
+cyl(.007,.012,0xd2412a,.066,TY+.07,0,S,'x');
+
+/* pelat logam persegi (bergetar) */
+const pg=new T.BoxGeometry(LP,PT,LP,48,1,48);
+const pl=new T.Mesh(pg,mat(0x1f4d7a,.25,.45));pl.position.set(0,PLY,0);pl.castShadow=pl.receiveShadow=true;S.add(pl);
+const pBase=Float32Array.from(pg.attributes.position.array),nVert=pBase.length/3,shape=new Float32Array(nVert);
+
+/* generator sinyal */
+const gen=new T.Group();gen.position.set(.30,TY,-.16);S.add(gen);
+box(.22,.09,.15,0x2b3338,0,.045,0,gen);box(.22,.006,.15,0x151515,0,.093,0,gen);
+const dc=document.createElement('canvas');dc.width=256;dc.height=96;const dx=dc.getContext('2d'),dtex=new T.CanvasTexture(dc);
+const disp=new T.Mesh(new T.PlaneGeometry(.12,.045),new T.MeshBasicMaterial({map:dtex}));disp.position.set(-.035,.052,.0756);gen.add(disp);
+const knob=new T.Group();knob.position.set(.075,.05,.0775);gen.add(knob);
+cyl(.016,.014,0xd8d8d6,0,0,0,knob,'z');box(.003,.012,.004,0xd2412a,0,.008,.0078,knob);
+const ledMat=new T.MeshBasicMaterial({color:0x2a4a3a});const led=new T.Mesh(new T.SphereGeometry(.0045,12,8),ledMat);led.position.set(.085,.078,.0758);gen.add(led);
+cyl(.006,.012,0xd2412a,.062,.018,.0765,gen,'z');cyl(.006,.012,0x151515,.088,.018,.0765,gen,'z');
+cyl(.006,.012,0x151515,-.113,.03,0,gen,'x');
+const cab=new T.CatmullRomCurve3([new T.Vector3(.194,TY+.03,-.16),new T.Vector3(.15,TY+.016,-.12),new T.Vector3(.11,TY+.012,-.05),new T.Vector3(.085,TY+.04,-.01),new T.Vector3(.072,TY+.07,0)]);
+add(new T.TubeGeometry(cab,40,.0035,6,false),mat(0x111111,0,.8),0,0,0);
+
+/* wadah pasir */
+cyl(.05,.022,0xd9d9d6,-.38,TY+.011,.18);
+add(new T.ConeGeometry(.044,.03,24),mat(0xe9d8a6,0,.95),-.38,TY+.037,.18);
+
+/* pola getar (mode) pelat persegi bebas: f ~ (n^2 + m^2) */
+const KF=30;
+const MODES=[[0,2,-1],[1,2,-1],[0,3,1],[1,3,-1],[2,3,1],[0,4,-1],[1,4,1],[2,4,-1],[3,4,1],[3,5,-1]].map(([n,m,s])=>({n,m,s,f:KF*(n*n+m*m),w:KF*(n*n+m*m)*.025,um:1,base:0}));
+const uf=(m,X,Y)=>Math.cos(m.n*PI*X)*Math.cos(m.m*PI*Y)-m.s*Math.cos(m.m*PI*X)*Math.cos(m.n*PI*Y);
+MODES.forEach(m=>{let um=0;for(let i=0;i<=80;i++)for(let j=0;j<=80;j++)um=Math.max(um,Math.abs(uf(m,i/80,j/80)));m.um=um;let c=0;for(let i=0;i<80;i++)for(let j=0;j<80;j++)if(Math.abs(uf(m,(i+.5)/80,(j+.5)/80))/um<.12)c++;m.base=c/6400});
+function resp(f){let b=0,k=0;MODES.forEach((m,i)=>{const d=(f-m.f)/m.w,l=1/(1+d*d);if(l>b){b=l;k=i}});return{A:b,k}}
+function setShape(){const m=MODES[st.dom];for(let i=0;i<nVert;i++)shape[i]=uf(m,pBase[i*3]/LP+.5,pBase[i*3+2]/LP+.5)/m.um}
+
+/* pasir */
+const N=8000,PXa=new Float32Array(N),PYa=new Float32Array(N);
+const sg=new T.BufferGeometry(),spos=new Float32Array(N*3),scol=new Float32Array(N*3);
+for(let i=0;i<N;i++){const v=.85+.15*Math.random();scol[i*3]=.96*v;scol[i*3+1]=.89*v;scol[i*3+2]=.7*v}
+sg.setAttribute('position',new T.BufferAttribute(spos,3));sg.setAttribute('color',new T.BufferAttribute(scol,3));
+const sc2=document.createElement('canvas');sc2.width=sc2.height=32;const sx=sc2.getContext('2d');sx.fillStyle='#fff';sx.beginPath();sx.arc(16,16,14,0,7);sx.fill();
+const sandPts=new T.Points(sg,new T.PointsMaterial({size:.0032,map:new T.CanvasTexture(sc2),alphaTest:.5,vertexColors:true,sizeAttenuation:true}));sandPts.frustumCulled=false;S.add(sandPts);
+function scatter(){for(let i=0;i<N;i++){PXa[i]=Math.random();PYa[i]=Math.random()}}
+
+/* kondisi simulasi */
+const THR=.06,KJ=.24;
+const st={mode:'res',run:false,t:0,f:120,pat:1,spd:.5,ph:0,A:0,As:0,dom:0,frac:0};
+const freq=()=>st.mode==='res'?MODES[st.pat-1].f:st.f;
+function reset(){Object.assign(st,{run:false,t:0,As:0,A:0});scatter()}
+const tert=()=>{const m=MODES[st.dom];return Math.max(0,Math.min(1,(st.frac-m.base)/(.92-m.base)))};
+function stepSand(dt){
+ const m=MODES[st.dom],a=m.n*PI,b=m.m*PI,s=m.s,inv=1/m.um,A=st.As,sq=Math.sqrt(dt*st.spd)*KJ;
+ const amp=A*.004,sph=Math.sin(st.ph),y0=TOPY+.0012;let hit=0;
+ for(let i=0;i<N;i++){
+  let X=PXa[i],Y=PYa[i],hop=0;
+  const u=(Math.cos(a*X)*Math.cos(b*Y)-s*Math.cos(b*X)*Math.cos(a*Y))*inv,au=u<0?-u:u;
+  if(au<.12)hit++;
+  const v=A*au-THR;
+  if(v>0){const q=sq*v;X+=(Math.random()+Math.random()+Math.random()-1.5)*2*q;Y+=(Math.random()+Math.random()+Math.random()-1.5)*2*q;
+   if(X<0)X=-X;if(X>1)X=2-X;if(Y<0)Y=-Y;if(Y>1)Y=2-Y;hop=Math.random()*v*.004}
+  PXa[i]=X;PYa[i]=Y;const o=i*3;spos[o]=(X-.5)*LP;spos[o+2]=(Y-.5)*LP;spos[o+1]=y0+amp*u*sph+hop;
+ }
+ st.frac=hit/N;sg.attributes.position.needsUpdate=true;
+}
+
+/* tampilan generator */
+let dLast='';
+function drawDisp(f,on){const key=f+'|'+on;if(key===dLast)return;dLast=key;
+ dx.fillStyle='#0b1c1f';dx.fillRect(0,0,256,96);const c=on?'#6ff0a8':'#2f6f58';dx.fillStyle=c;dx.strokeStyle=c;
+ dx.font='bold 48px monospace';dx.textAlign='right';dx.fillText(String(f).padStart(4,'0'),188,70);
+ dx.font='bold 22px sans-serif';dx.textAlign='left';dx.fillText('Hz',196,70);dx.font='bold 14px sans-serif';dx.fillText('SINUS',10,22);
+ dx.lineWidth=2;dx.beginPath();for(let x=0;x<=70;x++){const y=18+Math.sin(x/70*PI*4)*8;x?dx.lineTo(176+x,y):dx.moveTo(176,y)}dx.stroke();dtex.needsUpdate=true}
+
+/* kamera orbit */
+const tgt=new T.Vector3(.08,.86,0),ob={th:.1,ph:1.15,r:1};let goal=null;
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),HR=()=>{const a=cv.clientWidth/cv.clientHeight;return Math.max(.75,Math.min(1.6,.9/a))};
+const TV=()=>{const a=cv.clientWidth/cv.clientHeight;return Math.max(.5,Math.min(1.4,.58/Math.min(1,a)))};
+function zoom(f){ob.r=cl(ob.r*f,.25,3)}
+function pan(dx,dy){tgt.x=cl(tgt.x+Math.cos(ob.th)*dx,-1.3,1.1);tgt.z=cl(tgt.z-Math.sin(ob.th)*dx,-.6,.8);tgt.y=cl(tgt.y+dy,.4,1.4)}
+function go(o){goal=Object.assign({th:ob.th,ph:ob.ph,r:ob.r,x:tgt.x,y:tgt.y,z:tgt.z},o)}
+function animGoal(){if(!goal)return;const k=.14;ob.th+=(goal.th-ob.th)*k;ob.ph+=(goal.ph-ob.ph)*k;ob.r+=(goal.r-ob.r)*k;tgt.x+=(goal.x-tgt.x)*k;tgt.y+=(goal.y-tgt.y)*k;tgt.z+=(goal.z-tgt.z)*k;if(Math.abs(goal.r-ob.r)<.003&&Math.abs(goal.th-ob.th)<.003&&Math.abs(goal.ph-ob.ph)<.003&&Math.abs(goal.x-tgt.x)<.003)goal=null}
+function setCam(){cam.position.set(tgt.x+ob.r*Math.sin(ob.ph)*Math.sin(ob.th),tgt.y+ob.r*Math.cos(ob.ph),tgt.z+ob.r*Math.sin(ob.ph)*Math.cos(ob.th));cam.lookAt(tgt)}
+const cv=$('c'),P=new Map(),ray=new T.Raycaster();let mv=0;
+cv.addEventListener('pointerdown',e=>{goal=null;cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,s:e.shiftKey});if(P.size===1)mv=0});
+cv.addEventListener('pointermove',e=>{const p=P.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;
+ if(P.size===2){const o=[...P.entries()].find(([k])=>k!==e.pointerId)[1];const d0=Math.hypot(p.x-o.x,p.y-o.y),c0x=(p.x+o.x)/2,c0y=(p.y+o.y)/2;p.x=e.clientX;p.y=e.clientY;const d1=Math.hypot(p.x-o.x,p.y-o.y);if(d0>0&&d1>0)zoom(d0/d1);const k=ob.r*.0011;pan(-((p.x+o.x)/2-c0x)*k,((p.y+o.y)/2-c0y)*k);mv+=99;return}
+ p.x=e.clientX;p.y=e.clientY;mv+=Math.abs(dx)+Math.abs(dy);
+ if(p.b===1||p.b===2||p.s){const k=ob.r*.0012;pan(-dx*k,dy*k)}else{ob.th-=dx*.006;ob.ph=cl(ob.ph-dy*.006,.2,1.5)}});
+cv.addEventListener('pointerup',e=>P.delete(e.pointerId));
+cv.addEventListener('pointercancel',e=>P.delete(e.pointerId));cv.addEventListener('contextmenu',e=>e.preventDefault());
+cv.addEventListener('wheel',e=>{e.preventDefault();goal=null;zoom(1+e.deltaY*.001)},{passive:false});
+function lay(){const m=innerWidth<900,u=$('ui').getBoundingClientRect(),n=$('nav').getBoundingClientRect(),r=$('rc').getBoundingClientRect();
+ const L=m?0:u.right+12,Rr=m?0:innerWidth-r.left+12,Tp=m?n.bottom+6:0,Bt=m?innerHeight-u.top+6:0;
+ cv.style.left=L+'px';cv.style.top=Tp+'px';cv.style.width=Math.max(60,innerWidth-L-Rr)+'px';cv.style.height=Math.max(60,innerHeight-Tp-Bt)+'px';size()}
+function size(){const w=cv.clientWidth||innerWidth,h=cv.clientHeight||innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',lay);const ro=new ResizeObserver(lay);[$('ui'),$('nav'),$('rc')].forEach(e=>ro.observe(e));lay();
+
+/* UI */
+function setMode(m){if(m==='man'&&st.mode!=='man'){st.f=Math.round(freq());$('sM').value=st.f;$('vM').textContent=st.f}st.mode=m;ui()}
+function ui(){
+ $('bGLB').classList.toggle('on',st.mode==='man');$('bGLBB').classList.toggle('on',st.mode==='res');
+ $('lM').hidden=st.mode!=='man';$('lV').hidden=st.mode!=='res';
+}
+$('bGLB').onclick=()=>setMode('man');$('bGLBB').onclick=()=>setMode('res');
+$('sM').oninput=e=>{st.f=+e.target.value;$('vM').textContent=st.f};
+$('sV').oninput=e=>{st.pat=+e.target.value;$('vV').textContent=st.pat};
+$('sS').oninput=e=>{st.spd=+e.target.value;$('vS').textContent=fmt(st.spd,1)};
+$('bRe').onclick=reset;
+$('bMore').onclick=()=>{$('bMore').classList.toggle('act',!$('ui').classList.toggle('min'))};
+function showAn(on){$('anw').classList.toggle('h',!on);$('bAn').classList.toggle('act',on)}
+$('bAn').onclick=()=>showAn($('anw').classList.contains('h'));$('bAnM').onclick=()=>showAn(false);
+const tg=(b,el,a,c2)=>$(b).onclick=()=>{const c=$(el).classList.toggle('col');$(b).innerHTML=c?c2:a};
+const CU='<i class="fa-solid fa-chevron-up"></i>',CD='<i class="fa-solid fa-chevron-down"></i>';tg('bMin','ui',CU,CD);tg('bNav','nav',CU,CD);
+const nv=(id,f)=>$(id).onclick=()=>{goal=null;f()};
+nv('zi',()=>zoom(.78));nv('zo',()=>zoom(1.28));nv('pl',()=>pan(-ob.r*.12,0));nv('pr',()=>pan(ob.r*.12,0));nv('pu',()=>pan(0,ob.r*.08));nv('pdn',()=>pan(0,-ob.r*.08));
+$('hm').onclick=$('vF').onclick=()=>go({th:.1,ph:1.15,r:HR(),x:.08,y:.86,z:0});
+$('vT').onclick=()=>go({th:0,ph:.2,r:TV(),x:0,y:.93,z:0});
+$('vK').onclick=()=>go({th:1.45,ph:1.4,r:.75,x:0,y:.9,z:0});
+$('bGo').onclick=()=>{if(st.run)return;st.run=true};
+
+/* panel grafik resonansi & pola */
+function drawAn(){
+ const c=$('an'),k=c.getContext('2d'),W=360,H=200;k.setTransform(2,0,0,2,0,0);k.clearRect(0,0,W,H);
+ const cs=getComputedStyle(document.documentElement),fg=cs.getPropertyValue('--fg').trim(),ac=cs.getPropertyValue('--ac').trim();
+ const f=freq(),r=resp(f),m=MODES[st.dom];
+ k.fillStyle=fg;k.font='11px system-ui,sans-serif';k.textAlign='left';k.fillText('Respons pelat: amplitudo terhadap frekuensi',4,12);
+ const bx=26,bw=W-bx-6,by=22,bh=76,F0=100,F1=1200,fx=ff=>bx+(ff-F0)/(F1-F0)*bw;
+ k.strokeStyle=fg;k.globalAlpha=.4;k.beginPath();k.moveTo(bx,by);k.lineTo(bx,by+bh);k.lineTo(W-4,by+bh);k.stroke();k.globalAlpha=1;
+ k.beginPath();for(let x=0;x<=bw;x++){const y=by+bh-resp(F0+x/bw*(F1-F0)).A*bh;x?k.lineTo(bx+x,y):k.moveTo(bx,y)}
+ k.strokeStyle=ac;k.lineWidth=1.6;k.stroke();k.lineTo(bx+bw,by+bh);k.lineTo(bx,by+bh);k.globalAlpha=.15;k.fillStyle=ac;k.fill();k.globalAlpha=1;k.lineWidth=1;
+ k.font='9px system-ui,sans-serif';k.textAlign='center';MODES.forEach((q,i)=>{k.fillStyle=i===st.dom?ac:fg;k.fillText(i+1,fx(q.f),by+bh+10)});
+ k.fillStyle=fg;k.font='10px system-ui,sans-serif';k.textAlign='left';k.fillText('0',14,by+bh);k.fillText('100 Hz',bx,by+bh+21);k.textAlign='right';k.fillText('1200 Hz',W-4,by+bh+21);
+ const mx=fx(cl(f,F0,F1));k.strokeStyle='#d8362b';k.lineWidth=1.5;k.beginPath();k.moveTo(mx,by);k.lineTo(mx,by+bh);k.stroke();k.lineWidth=1;
+ /* pola simpul */
+ const tx=4,ty=138,ts=46,nc=23,cw=ts/nc;
+ for(let i=0;i<nc;i++)for(let j=0;j<nc;j++){const au=Math.abs(uf(m,(i+.5)/nc,(j+.5)/nc))/m.um;k.globalAlpha=au<.12?.9:.1;k.fillStyle=au<.12?ac:fg;k.fillRect(tx+i*cw,ty+j*cw,cw+.3,cw+.3)}
+ k.globalAlpha=1;k.fillStyle='#f6ecc8';for(let i=0;i<400;i++)k.fillRect(tx+PXa[i]*ts,ty+PYa[i]*ts,1,1);
+ k.fillStyle=fg;k.textAlign='left';k.font='11px system-ui,sans-serif';
+ k.fillText('Pola ke-'+(st.dom+1)+'  (n, m) = ('+m.n+', '+m.m+')',58,148);
+ k.fillText('f = '+m.f+' Hz,  λ ≈ '+fmt(2*LP*100/Math.sqrt(m.n*m.n+m.m*m.m),1)+' cm',58,162);
+ k.fillText('Biru: garis simpul, titik: pasir',58,176);
+ let msg='Tekan Getarkan untuk menyalakan generator.';
+ if(st.run)msg=r.A>.5?'Resonansi: pasir menumpuk di garis simpul (A ≈ 0).':r.A>THR+.05?'Dekat resonansi: pola mulai terbentuk.':'Tidak resonan: amplitudo kecil, pasir hampir diam.';
+ k.fillText(msg,4,H-4);
+}
+
+/* loop */
+let last=performance.now(),fr=0;
+function frame(now){
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ const f=freq(),r=resp(f);
+ if(r.k!==st.dom){st.dom=r.k;setShape()}
+ st.A=st.run?r.A:0;st.As+=(st.A-st.As)*Math.min(1,dt*6);
+ if(st.run){st.t+=dt*st.spd;st.ph+=dt*37.7}
+ const amp=st.As*.004,sph=Math.sin(st.ph),pp=pg.attributes.position.array;
+ for(let i=0;i<nVert;i++)pp[i*3+1]=pBase[i*3+1]+amp*shape[i]*sph;
+ pg.attributes.position.needsUpdate=true;
+ stepSand(dt);
+ knob.rotation.z=-(f-100)/1100*PI*1.5;ledMat.color.set(st.run?0x35e08a:0x2a4a3a);drawDisp(Math.round(f),st.run);
+ animGoal();setCam();R.render(SC,cam);
+ if(fr++%3==0){
+  $('rt').textContent=fmt(st.t);$('rs').textContent=Math.round(f);$('rv').textContent=Math.round(st.As*100);$('ra').textContent=Math.round(tert()*100);
+  const m=MODES[st.dom];
+  $('hint').textContent=!st.run?'Tekan Getarkan: pelat bergetar, pasir bergeser dari perut gelombang ke garis simpul.':st.mode==='res'?'Pola ke-'+st.pat+' (n,m)=('+m.n+','+m.m+'): f = '+m.f+' Hz pas resonansi, pasir membentuk garis simpul.':r.A>.5?'Resonan dengan pola ke-'+(st.dom+1)+'. Pasir menumpuk di garis simpul.':'Belum resonan: putar frekuensi hingga puncak pada grafik (nomor 1 sampai 10).';
+  drawAn();
+ }
+ requestAnimationFrame(frame);
+}
+if(innerWidth<700)$('ui').classList.add('min');else $('bMore').classList.add('act');showAn(innerWidth>=700);
+scatter();setShape();ob.r=HR();ui();requestAnimationFrame(frame);
+
+</script></body></html>

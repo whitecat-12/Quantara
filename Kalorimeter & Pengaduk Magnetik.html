@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Kalorimeter &amp; Pengaduk Magnetik</title>
+<style media="not all">
+:root{--fg:#1a1a1a;--card:rgba(255,255,255,.93);--bd:#c3ced4;--ac:#0b7285;--hi:#e8f1f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}}
+:root[data-theme="dark"]{--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;font-size:13px;backdrop-filter:blur(6px)}
+#ui{left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:min(290px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto}
+#anw{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100vw - 24px))}
+#an{width:100%;display:block}
+h1{font-size:15px;margin:0 0 8px}
+label{display:block;margin:6px 0}input[type=range]{width:100%}
+button{font:inherit;border:1px solid var(--bd);background:var(--hi);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+button.on,button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+.seg{display:flex;gap:6px}.seg button{flex:1}.row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+p{margin:6px 0 0;line-height:1.4}#rd{font-variant-numeric:tabular-nums}#hint{color:var(--ac)}
+button{min-height:36px}#ui.min .mh{display:none}#anw.h{display:none}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));display:grid;grid-template-columns:repeat(2,52px);gap:6px;padding:6px}
+#nav button{padding:0;height:40px;font-size:15px;min-height:0}#nav .t{font-size:11px}
+#ui.col>*:not(h1){display:none}#ui.col h1{margin:0}#ui.col #bMore{display:none}
+#nav.col button:not(#bNav){display:none}#nav.col{grid-template-columns:auto}#nav #bNav{grid-column:1/-1;font-size:11px;padding:0 8px}
+#anw.col canvas{display:none}#anw.col>div{margin:0!important}
+@media(max-width:700px){#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:52vh}#anw{left:8px;right:auto;width:calc(100vw - 84px);top:calc(8px + env(safe-area-inset-top,0px));bottom:auto}#nav{right:8px;top:calc(8px + env(safe-area-inset-top,0px));grid-template-columns:repeat(2,46px);gap:4px;padding:4px}#nav button{height:36px}.card{font-size:12px}}
+</style>
+<style>
+:root{--fg:#17212b;--mut:#5f6f7c;--card:rgba(255,255,255,.88);--bd:rgba(20,40,60,.12);--ac:#0b7285;--ac2:#18a7bd;--onac:#fff;--hi:rgba(20,40,60,.06);--sh:0 10px 30px rgba(20,40,60,.18);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);padding:14px;font-size:13px}
+button{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;color:var(--fg);background:var(--hi);border:1px solid var(--bd);border-radius:12px;min-height:44px;padding:0 14px;cursor:pointer;transition:background .15s,transform .1s}
+button:hover{background:var(--bd)}button:active{transform:scale(.95)}
+button.pri,button.act{background:var(--ac);color:var(--onac);border-color:transparent}
+button.pri:hover,button.act:hover{background:var(--ac2)}
+.ib{width:44px;padding:0;flex:none}
+#ui{left:16px;top:calc(16px + env(safe-area-inset-top,0px));width:min(330px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;display:flex;flex-direction:column;gap:14px}
+.hd{display:flex;align-items:center;gap:8px}.hd .ib{width:38px;min-height:38px}
+.lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;font-size:18px;flex:none}
+.tt{flex:1;min-width:0;margin-left:2px}.tt b{display:block;font-size:16px}.tt span{color:var(--mut);font-size:11px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:var(--hi);border-radius:14px}
+.seg button{background:transparent;border:0;min-height:42px}.seg button.on{background:var(--ac);color:var(--onac);box-shadow:0 3px 10px rgba(11,114,133,.35)}
+.mh{display:flex;flex-direction:column;gap:14px}#ui.min .mh{display:none}
+.fl{display:flex;align-items:center;gap:8px;font-weight:600}.fl svg{color:var(--ac);width:16px}
+.v{margin-left:auto;background:var(--hi);padding:3px 11px;border-radius:999px;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:8px 0 0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:var(--hi);border:1px solid var(--bd)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--ac);border:3px solid var(--card);box-shadow:0 1px 6px rgba(0,0,0,.35);margin-top:-9px}
+input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:var(--hi)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ac);border:3px solid var(--card)}
+.row{display:flex;gap:10px}#bGo{flex:1.6}#bRe{flex:1}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{background:var(--hi);border-radius:12px;padding:8px 12px}
+.st small{display:block;color:var(--mut);font-size:11px}.st b{font-size:17px;font-variant-numeric:tabular-nums}.st em{font-style:normal;color:var(--mut);font-size:11px;margin-left:3px}
+.hint{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(24,167,189,.12);line-height:1.45}.hint svg{color:var(--ac);margin-top:2px;flex:none}
+.tip{color:var(--mut);font-size:11px;line-height:1.5}
+#ui.col>*:not(.hd){display:none}#ui.col #bMore{display:none}
+#nav{right:16px;top:calc(16px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:12px;padding:12px}
+.nh{display:flex;align-items:center;justify-content:space-between;gap:14px;font-weight:700;font-size:12px;color:var(--mut)}.nh .ib{width:34px;min-height:34px}
+.g3{display:grid;grid-template-columns:repeat(3,44px);gap:8px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ct{display:grid;place-items:center;color:var(--mut)}
+.pv{flex-direction:column;gap:4px;min-height:52px;font-size:10px;padding:0}
+#nav.col .grp{display:none}
+#anw{right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100vw - 32px))}#anw.h{display:none}
+.ah{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:10px}.ah svg{color:var(--ac)}.ah .ib{margin-left:auto;width:34px;min-height:34px}
+#an{width:100%;height:auto;display:block}
+@media(max-width:700px){
+#ui{left:12px;right:12px;top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;max-height:56vh}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));padding:10px;gap:10px}
+.g3{grid-template-columns:repeat(3,40px);gap:6px}.g2{gap:6px}.pv{min-height:40px}.pv span{display:none}.ib{width:40px;min-height:40px}
+#anw{left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:auto;z-index:20}
+}
+</style>
+<style>
+/* tata letak ringkas: panel di kolom samping, kanvas 3D di tengah */
+canvas#c{width:auto;height:auto}
+button{min-height:38px;border-radius:10px;font-size:12px;padding:0 12px}.ib{width:38px;padding:0}
+#ui{left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:248px;max-height:calc(100vh - 24px);padding:12px;gap:10px}
+.hd .ib{width:32px;min-height:32px}.lg{width:34px;height:34px;font-size:15px;border-radius:10px}.tt b{font-size:14px}.tt span{font-size:10px}
+.seg button{min-height:36px}.mh{gap:10px}.fl{font-size:12px}.v{padding:1px 9px}
+input[type=range]{height:22px;margin:4px 0 0}
+.st{grid-template-columns:repeat(4,1fr);gap:6px}.st div{padding:6px 2px;text-align:center}.st b{display:block;font-size:13px}.st small,.st em{display:block;font-size:10px;margin:0}
+.hint{padding:8px 10px;font-size:12px;line-height:1.35}
+#rc{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));width:316px;display:flex;flex-direction:column;gap:10px}
+#rc .card{position:static}
+#nav{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:10px;width:auto}
+.nh{grid-column:1/-1;order:0;font-size:11px}#nav .ib{width:auto;min-height:36px;padding:0}#nav .nh .ib{width:30px;min-height:30px}
+.g3{display:contents}.g3 span{display:none}
+#zi{order:1}#zo{order:2}#hm{order:3}#pl{order:4}#pu{order:5}#pdn{order:6}#pr{order:7}
+.g2{grid-column:1/-1;order:8;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pv{flex-direction:row;gap:6px;min-height:36px;font-size:11px;padding:0}.pv span{display:inline}
+#anw{width:auto;padding:10px}
+#rc #ui{position:fixed;left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto}
+@media(max-width:899px){
+#rc{display:contents}#rc .card{position:fixed}
+#nav{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));padding:8px;gap:6px}
+#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:48vh;padding:10px;gap:8px}
+#anw{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));bottom:auto;z-index:20}
+#ui.min .hint,#ui.min .tip{display:none}
+#rc #ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="rc"><div id="nav" class="card">
+<div class="nh"><span><i class="fa-solid fa-video"></i>&nbsp; Tampilan</span><button id="bNav" class="ib" aria-label="Ciutkan"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="grp g3"><button id="zi" class="ib" aria-label="Zoom in"><i class="fa-solid fa-magnifying-glass-plus"></i></button><button id="zo" class="ib" aria-label="Zoom out"><i class="fa-solid fa-magnifying-glass-minus"></i></button><button id="hm" class="ib" aria-label="Tampilan awal"><i class="fa-solid fa-house"></i></button></div>
+<div class="grp g3"><span></span><button id="pu" class="ib" aria-label="Geser atas"><i class="fa-solid fa-chevron-up"></i></button><span></span><button id="pl" class="ib" aria-label="Geser kiri"><i class="fa-solid fa-chevron-left"></i></button><span class="ct"><i class="fa-solid fa-up-down-left-right"></i></span><button id="pr" class="ib" aria-label="Geser kanan"><i class="fa-solid fa-chevron-right"></i></button><span></span><button id="pdn" class="ib" aria-label="Geser bawah"><i class="fa-solid fa-chevron-down"></i></button><span></span></div>
+<div class="grp g2"><button id="vF" class="pv" aria-label="Depan"><i class="fa-solid fa-eye"></i><span>Depan</span></button><button id="vT" class="pv" aria-label="Termometer"><i class="fa-solid fa-temperature-half"></i><span>Termo</span></button><button id="vK" class="pv" aria-label="Pengaduk"><i class="fa-solid fa-rotate"></i><span>Aduk</span></button></div>
+</div>
+<div id="ui" class="card">
+<div class="hd"><div class="lg"><i class="fa-solid fa-temperature-half"></i></div><div class="tt"><b>Kalorimeter</b><span>Kit kalor jenis + pengaduk magnetik</span></div><button id="bMore" class="ib" aria-label="Pengaturan"><i class="fa-solid fa-sliders"></i></button><button id="bMin" class="ib" aria-label="Ciutkan panel"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="seg"><button id="bLog" class="on"><i class="fa-solid fa-cube"></i>Logam</button><button id="bLis"><i class="fa-solid fa-bolt"></i>Listrik</button></div>
+<div class="mh">
+<label><span class="fl"><i class="fa-solid fa-droplet"></i>Massa air<b class="v"><span id="vW">100</span> g</b></span><input id="sW" type="range" min="100" max="200" step="10" value="100"></label>
+<label id="lJ"><span class="fl"><i class="fa-solid fa-cubes"></i>Jenis logam<b class="v"><span id="vJ">Aluminium</span></b></span><input id="sJ" type="range" min="0" max="3" step="1" value="0"></label>
+<label id="lMm"><span class="fl"><i class="fa-solid fa-weight-hanging"></i>Massa logam<b class="v"><span id="vMm">50</span> g</b></span><input id="sMm" type="range" min="20" max="60" step="10" value="50"></label>
+<label id="lTm"><span class="fl"><i class="fa-solid fa-fire"></i>Suhu logam<b class="v"><span id="vTm">90</span> °C</b></span><input id="sTm" type="range" min="60" max="100" step="5" value="90"></label>
+<label id="lP" hidden><span class="fl"><i class="fa-solid fa-bolt"></i>Daya pemanas<b class="v"><span id="vP">50</span> W</b></span><input id="sP" type="range" min="20" max="100" step="10" value="50"></label>
+<label><span class="fl"><i class="fa-solid fa-rotate"></i>Putaran pengaduk<b class="v"><span id="vR">600</span> rpm</b></span><input id="sR" type="range" min="0" max="1200" step="100" value="600"></label>
+<label><span class="fl"><i class="fa-solid fa-clock"></i>Kecepatan simulasi<b class="v"><span id="vS">5</span>×</b></span><input id="sS" type="range" min="1" max="20" step="1" value="5"></label>
+</div>
+<div class="row"><button id="bGo" class="pri"></button><button id="bRe"><i class="fa-solid fa-rotate-left"></i>Ulang</button><button id="bAn" class="ib" aria-label="Grafik suhu"><i class="fa-solid fa-chart-line"></i></button></div>
+<div class="st"><div><small>Waktu</small><b id="rt">0</b><em>s</em></div><div><small>Suhu</small><b id="rv">25,0</b><em>°C</em></div><div><small>ΔT</small><b id="rs">0,0</b><em>°C</em></div><div><small>Kalor</small><b id="ra">0</b><em>J</em></div></div>
+<div class="hint"><i class="fa-solid fa-circle-info"></i><span id="hint"></span></div>
+<div class="tip mh">Seret: putar. Cubit atau gulir: zoom. Geser 2 jari, klik kanan, atau Shift+seret: geser tampilan.</div>
+</div>
+<div id="anw" class="card"><div class="ah"><i class="fa-solid fa-chart-line"></i><span>Grafik suhu &amp; waktu</span><button id="bAnM" class="ib" aria-label="Tutup grafik"><i class="fa-solid fa-xmark"></i></button></div><canvas id="an" width="720" height="400"></canvas></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T=THREE,$=id=>document.getElementById(id),fmt=(n,d=2)=>n.toFixed(d).replace('.',',');
+const R=new T.WebGLRenderer({canvas:$('c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;
+const SC=new T.Scene();SC.background=new T.Color(0xdfe9ee);
+const cam=new T.PerspectiveCamera(40,1,.01,20);
+SC.add(new T.HemisphereLight(0xffffff,0xb0b8bc,.95));
+const sun=new T.DirectionalLight(0xffffff,.75);sun.position.set(.3,.7,.5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-.4,right:.4,top:.4,bottom:-.4,near:.1,far:2});SC.add(sun);
+const mat=(c,m=0,r=.6)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r});
+const gm=(c,o)=>new T.MeshStandardMaterial({color:c,transparent:true,opacity:o,roughness:.1,metalness:.1,side:T.DoubleSide,depthWrite:false});
+function add(g,m,x,y,z,p=SC,sh=true){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=sh;o.receiveShadow=true;p.add(o);return o}
+const box=(w,h,d,c,x,y,z,p,m=0)=>add(new T.BoxGeometry(w,h,d),mat(c,m),x,y,z,p);
+const cyl=(r,h,c,x,y,z,p,m=0)=>add(new T.CylinderGeometry(r,r,h,32),mat(c,m,.4),x,y,z,p);
+const glass=(r,h,o,x,y,z,p,c=0xffffff,open=true)=>add(new T.CylinderGeometry(r,r,h,40,1,open),gm(c,o),x,y,z,p,false);
+const V3=(x,y,z)=>new T.Vector3(x,y,z);
+const tube=(pts,r,c,p=SC)=>{const m=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),40,r,6),mat(c,0,.5));p.add(m);return m};
+const lcdTex=()=>{const c=document.createElement('canvas');c.width=256;c.height=128;return{t:new T.CanvasTexture(c),k:c.getContext('2d')}};
+function lcd(o,a,b,c){const k=o.k;k.fillStyle='#0f1c18';k.fillRect(0,0,256,128);k.fillStyle=c;k.textAlign='center';k.font='bold 54px monospace';k.fillText(a,128,72);k.font='20px monospace';k.fillText(b,128,108);o.t.needsUpdate=true}
+
+/* meja */
+add(new T.PlaneGeometry(2,2),new T.ShadowMaterial({opacity:.16}),0,-.0004,0,SC,false).rotation.x=-Math.PI/2;
+
+/* magnetic stirrer */
+const PT=.056;
+box(.17,.044,.17,0x1e5aa8,0,.026,0);box(.172,.006,.172,0x143f7a,0,.051,0);cyl(.075,.004,0xaab4bd,0,.054,0,SC,.8);
+[.065,.05,.035].forEach(r=>add(new T.TorusGeometry(r,.0006,6,48),mat(0x7d8890,.8,.4),0,.0562,0,SC,false).rotation.x=Math.PI/2);
+[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([a,b])=>cyl(.008,.004,0x111111,a*.068,.002,b*.068,SC));
+for(let i=-3;i<=3;i++)[-1,1].forEach(s=>box(.0015,.006,.012,0x0b2a55,s*.0855,.028,i*.02));
+box(.15,.03,.001,0x0c1f3d,0,.028,.0848);box(.012,.008,.004,0xd8362b,.073,.027,.0875);
+for(let i=0;i<=8;i++){const a=2.2-i*.55;box(.0012,.004,.001,0xffffff,.045-.021*Math.sin(a),.027+.021*Math.cos(a),.0858,SC).rotation.z=a}
+const rl=lcdTex();add(new T.PlaneGeometry(.05,.025),new T.MeshBasicMaterial({map:rl.t}),-.035,.03,.0855,SC,false);
+const knob=new T.Group();knob.position.set(.045,.027,.0855);SC.add(knob);
+add(new T.CylinderGeometry(.014,.014,.012,24),mat(0x37424a,.3,.4),0,0,.006,knob).rotation.x=Math.PI/2;box(.003,.012,.003,0xffffff,0,.007,.013,knob);
+const led=add(new T.SphereGeometry(.003,12,8),new T.MeshStandardMaterial({color:0x222222,emissive:0x00ff66,emissiveIntensity:0}),0,.043,.0855,SC,false);
+
+/* kalorimeter */
+const cal=new T.Group();cal.position.y=PT;SC.add(cal);
+const Y0=.008,RW=.035;
+cyl(.047,.008,0xf3f1ea,0,.004,0,cal);
+glass(.047,.075,.28,0,.0375,0,cal);glass(.036,.065,.16,0,.0405,0,cal,0x9cc4e4);glass(.049,.004,.3,0,.077,0,cal,0xffffff,false);
+add(new T.TorusGeometry(.047,.0025,8,40),mat(0xffffff,0,.8),0,.075,0,cal).rotation.x=Math.PI/2;
+add(new T.TorusGeometry(.036,.0015,8,40),mat(0xb0b8bf,.8,.3),0,.073,0,cal).rotation.x=Math.PI/2;
+[.02,.035,.05,.062].forEach(y=>add(new T.TorusGeometry(.0362,.0004,6,48),mat(0x24455f,0,.5),0,y,0,cal,false).rotation.x=Math.PI/2);
+[.02,.04,.06].forEach(y=>add(new T.TorusGeometry(.0472,.0006,6,48),mat(0xc9ced2,0,.8),0,y,0,cal,false).rotation.x=Math.PI/2);
+cyl(.004,.007,0x1e5aa8,.02,.0825,.03,cal);cyl(.0055,.0015,0x143f7a,.02,.0865,.03,cal);
+const wMat=new T.MeshStandardMaterial({color:0x5aa9e6,transparent:true,opacity:.6,roughness:.1,side:T.DoubleSide,depthWrite:false});
+const wBody=add(new T.CylinderGeometry(RW,RW,1,40,1,true),wMat,0,0,0,cal,false);
+const lp=[];for(let j=0;j<=14;j++)lp.push(new T.Vector2(RW*j/14,0));
+const wSurf=add(new T.LatheGeometry(lp,40),wMat,0,0,0,cal,false);
+let wH=.026;
+function setLevel(){wH=st.mw/38.48/100;wBody.scale.y=wH;wBody.position.y=Y0+wH/2}
+function surf(d){const p=wSurf.geometry.attributes.position;for(let i=0;i<p.count;i++){const r=Math.hypot(p.getX(i),p.getZ(i))/RW;p.setY(i,Y0+wH-d*(1-r*r)**2)}p.needsUpdate=true;wSurf.geometry.computeVertexNormals()}
+/* pengaduk magnet (stir bar) + partikel pelacak */
+const bar=new T.Group();bar.position.set(0,Y0+.003,0);cal.add(bar);
+add(new T.CylinderGeometry(.003,.003,.026,12),mat(0xf5f5f5,.1,.3),0,0,0,bar,false).rotation.z=Math.PI/2;box(.005,.0032,.0036,0xd8362b,.009,0,0,bar);add(new T.TorusGeometry(.0034,.0008,6,12),mat(0xdddddd,.3,.4),0,0,0,bar,false).rotation.x=Math.PI/2;
+const NP=90,pp=[];for(let i=0;i<NP;i++)pp.push({r:RW*.92*Math.sqrt(Math.random()),a:Math.random()*6.283,f:Math.random()});
+const pGeo=new T.BufferGeometry();pGeo.setAttribute('position',new T.BufferAttribute(new Float32Array(NP*3),3));
+const pts=new T.Points(pGeo,new T.PointsMaterial({color:0xffffff,size:.004,transparent:true,opacity:.9}));pts.frustumCulled=false;cal.add(pts);
+/* termometer digital */
+const PRX=-.024,PRZ=.012;
+cyl(.0015,.13,0xc7ccd1,PRX,.085,PRZ,cal,.8);cyl(.004,.006,0x222a30,PRX,.081,PRZ,cal);cyl(.0025,.012,0x4a5560,PRX,.12,PRZ,cal);box(.01,.02,.01,0x222a30,PRX,.155,PRZ,cal);
+tube([V3(PRX,PT+.165,PRZ),V3(-.08,PT+.2,.04),V3(-.15,PT+.1,.05),V3(-.2,.03,.05)],.0013,0x222222);
+const tl=lcdTex(),disp=new T.Group();disp.position.set(-.2,0,.06);disp.rotation.y=.4;SC.add(disp);
+box(.09,.05,.05,0x2b3138,0,.025,0,disp);[-.025,0,.025].forEach(x=>box(.012,.006,.002,0x8fa0ad,x,.005,.0258,disp));add(new T.PlaneGeometry(.075,.036),new T.MeshBasicMaterial({map:tl.t}),0,.027,.0255,disp,false);
+
+/* kit logam: pemanas air + logam bergantung */
+const hot=new T.Group();hot.position.set(.2,0,0);SC.add(hot);
+cyl(.05,.02,0x2d3237,0,.01,0,hot);add(new T.CylinderGeometry(.006,.006,.008,16),mat(0xb0b8bf,.7,.3),0,.01,.052,hot).rotation.x=Math.PI/2;
+add(new T.TorusGeometry(.04,.0022,8,32),new T.MeshStandardMaterial({color:0x331100,emissive:0xff4a1a,emissiveIntensity:1}),0,.0205,0,hot,false).rotation.x=Math.PI/2;
+glass(.034,.075,.22,0,.0575,0,hot);[.03,.045,.06].forEach(y=>add(new T.TorusGeometry(.0342,.0004,6,36),mat(0xffffff,0,.5),0,y+.02,0,hot,false).rotation.x=Math.PI/2);add(new T.TorusGeometry(.034,.0012,6,36),mat(0xdfe6ea,0,.3),0,.095,0,hot,false).rotation.x=Math.PI/2;glass(.0335,.058,.5,0,.049,0,hot,0xffc690,false);
+const MET=[{n:'Aluminium',c:.90,rho:2.7,col:0xc5cbd0},{n:'Besi',c:.45,rho:7.87,col:0x6f757b},{n:'Tembaga',c:.385,rho:8.96,col:0xc8733b},{n:'Timbal',c:.13,rho:11.34,col:0x4d525a}];
+const mg=new T.Group();SC.add(mg);const mMat=mat(0xc5cbd0,.8,.35);
+const mMesh=add(new T.CylinderGeometry(1,1,1,28),mMat,0,0,0,mg),thr=box(.0008,.09,.0008,0xf0f0f0,0,0,0,mg),hd=add(new T.SphereGeometry(.004,12,8),mat(0xf0f0f0),0,0,0,mg);
+let mh=.02;
+function setMetal(){const V=st.mm/MET[st.mi].rho/1e6,r=Math.min(.019,Math.max(.008,Math.sqrt(V/(Math.PI*.025))));mh=V/(Math.PI*r*r);mMesh.scale.set(r,mh,r);mMat.color.setHex(MET[st.mi].col);thr.position.y=mh/2+.045;hd.position.y=mh/2+.09}
+
+/* kit listrik: pemanas celup + catu daya */
+const lisG=new T.Group();SC.add(lisG);
+const ht=new T.Group();ht.position.y=PT;lisG.add(ht);
+const hMat=new T.MeshStandardMaterial({color:0x8a8f94,metalness:.8,roughness:.3,emissive:0xff4a1a,emissiveIntensity:0});
+const hp=[];for(let k=0;k<=96;k++){const a=k/96*7*Math.PI;hp.push(V3(.010+.007*Math.cos(a),Y0+.008+k/96*.02,-.008+.007*Math.sin(a)))}
+ht.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(hp),160,.0012,6),hMat));
+add(new T.CylinderGeometry(.0012,.0012,.114,6),hMat,.017,Y0+.008+.057,-.008,ht,false);add(new T.CylinderGeometry(.0012,.0012,.094,6),hMat,.003,Y0+.028+.047,-.008,ht,false);
+tube([V3(.017,PT+.13,-.008),V3(.07,PT+.17,0),V3(.15,PT+.1,.04),V3(.185,.04,.06)],.0013,0xcc2222,lisG);
+tube([V3(.003,PT+.13,-.008),V3(.06,PT+.2,0),V3(.14,PT+.12,.05),V3(.2,.04,.06)],.0013,0x222222,lisG);
+const pl=lcdTex(),psu=new T.Group();psu.position.set(.2,0,.06);psu.rotation.y=-.4;lisG.add(psu);
+box(.1,.05,.06,0x37424a,0,.025,0,psu);[[-.03,0xcc2222],[-.015,0x111111]].forEach(([x,c])=>add(new T.CylinderGeometry(.0035,.0035,.006,12),mat(c,.2,.5),x,.005,.0305,psu,false).rotation.x=Math.PI/2);add(new T.CylinderGeometry(.007,.007,.008,16),mat(0x9aa7b1,.6,.3),.03,.005,.032,psu).rotation.x=Math.PI/2;add(new T.PlaneGeometry(.085,.036),new T.MeshBasicMaterial({map:pl.t}),0,.027,.0305,psu,false);
+
+/* kondisi simulasi */
+const CW=4.2,CK=40,TA=25;
+const st={mode:'log',mw:100,mm:50,tm0:90,mi:0,P:50,rpm:600,spd:5,ph:'idle',t:0,Tw:TA,Tp:TA,Tm:90,mu:0,hist:[],nh:0,res:''};
+const Ct=()=>st.mw*CW+CK,Cm=()=>st.mm*MET[st.mi].c,Tf0=()=>(Ct()*TA+Cm()*st.tm0)/(Ct()+Cm());
+function reset(){Object.assign(st,{ph:'idle',t:0,Tw:TA,Tp:TA,Tm:st.tm0,mu:0,hist:[{t:0,p:TA,m:st.tm0}],nh:1,res:''})}
+function step(h){
+ const r=st.rpm,Ps=.25*(r/1000)**2,loss=.01*(st.Tw-TA);
+ if(st.mode==='log'){const k=.02+.05*r/(r+200),dT=k*(st.Tm-st.Tw);st.Tm-=dT*h;st.Tw+=(Cm()*dT-loss+Ps)/Ct()*h}
+ else st.Tw+=(st.P-loss+Ps)/Ct()*h;
+ st.Tp+=(st.Tw-st.Tp)/(1.5+30/(1+r/80))*h;st.t+=h;
+ if(st.t>=st.nh){st.hist.push({t:st.t,p:st.Tp,m:st.Tm});st.nh+=1}
+ if(st.mode==='log'?st.t>=300:st.Tp>=70){st.ph='done';finish()}
+}
+function finish(){const dT=Math.max(.05,st.Tp-TA);
+ if(st.mode==='log')st.res='Selesai: T akhir '+fmt(st.Tp,1)+' °C, c logam ≈ '+fmt(Ct()*dT/(st.mm*(st.tm0-st.Tp)))+' J/g°C (tabel '+fmt(MET[st.mi].c)+').';
+ else st.res='Selesai: c air terukur ≈ '+fmt((st.P*st.t/dT-CK)/st.mw)+' J/g°C (literatur 4,20).'}
+
+/* kamera orbit */
+const tgt=new T.Vector3(0,.09,0),ob={th:.3,ph:1.15,r:.6};let goal=null;
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),HR=()=>{const a=cv.clientWidth/cv.clientHeight;return Math.max(.55,Math.min(1,.72/a))};
+function zoom(f){ob.r=cl(ob.r*f,.12,1.8)}
+function pan(dx,dy){tgt.x=cl(tgt.x+Math.cos(ob.th)*dx,-.4,.4);tgt.z=cl(tgt.z-Math.sin(ob.th)*dx,-.3,.3);tgt.y=cl(tgt.y+dy,-.02,.4)}
+function go(o){goal=Object.assign({th:ob.th,ph:ob.ph,r:ob.r,x:tgt.x,y:tgt.y,z:tgt.z},o)}
+function animGoal(){if(!goal)return;const k=.14;ob.th+=(goal.th-ob.th)*k;ob.ph+=(goal.ph-ob.ph)*k;ob.r+=(goal.r-ob.r)*k;tgt.x+=(goal.x-tgt.x)*k;tgt.y+=(goal.y-tgt.y)*k;tgt.z+=(goal.z-tgt.z)*k;if(Math.abs(goal.r-ob.r)<.003&&Math.abs(goal.th-ob.th)<.003&&Math.abs(goal.ph-ob.ph)<.003&&Math.abs(goal.x-tgt.x)<.003)goal=null}
+function setCam(){cam.position.set(tgt.x+ob.r*Math.sin(ob.ph)*Math.sin(ob.th),tgt.y+ob.r*Math.cos(ob.ph),tgt.z+ob.r*Math.sin(ob.ph)*Math.cos(ob.th));cam.lookAt(tgt)}
+const cv=$('c'),P=new Map(),ray=new T.Raycaster();let mv=0;
+cv.addEventListener('pointerdown',e=>{goal=null;cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,s:e.shiftKey});if(P.size===1)mv=0});
+cv.addEventListener('pointermove',e=>{const p=P.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;
+ if(P.size===2){const o=[...P.entries()].find(([k])=>k!==e.pointerId)[1];const d0=Math.hypot(p.x-o.x,p.y-o.y),c0x=(p.x+o.x)/2,c0y=(p.y+o.y)/2;p.x=e.clientX;p.y=e.clientY;const d1=Math.hypot(p.x-o.x,p.y-o.y);if(d0>0&&d1>0)zoom(d0/d1);const k=ob.r*.0011;pan(-((p.x+o.x)/2-c0x)*k,((p.y+o.y)/2-c0y)*k);mv+=99;return}
+ p.x=e.clientX;p.y=e.clientY;mv+=Math.abs(dx)+Math.abs(dy);
+ if(p.b===1||p.b===2||p.s){const k=ob.r*.0012;pan(-dx*k,dy*k)}else{ob.th-=dx*.006;ob.ph=cl(ob.ph-dy*.006,.2,1.5)}});
+cv.addEventListener('pointerup',e=>P.delete(e.pointerId));
+cv.addEventListener('pointercancel',e=>P.delete(e.pointerId));cv.addEventListener('contextmenu',e=>e.preventDefault());
+cv.addEventListener('wheel',e=>{e.preventDefault();goal=null;zoom(1+e.deltaY*.001)},{passive:false});
+function lay(){const m=innerWidth<900,u=$('ui').getBoundingClientRect(),n=$('nav').getBoundingClientRect(),r=$('rc').getBoundingClientRect();
+ const L=m?0:u.right+12,Rr=m?0:innerWidth-r.left+12,Tp=m?n.bottom+6:0,Bt=m?innerHeight-u.top+6:0;
+ cv.style.left=L+'px';cv.style.top=Tp+'px';cv.style.width=Math.max(60,innerWidth-L-Rr)+'px';cv.style.height=Math.max(60,innerHeight-Tp-Bt)+'px';size()}
+function size(){const w=cv.clientWidth||innerWidth,h=cv.clientHeight||innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',lay);const ro=new ResizeObserver(lay);[$('ui'),$('nav'),$('rc')].forEach(e=>ro.observe(e));lay();
+
+/* UI */
+function drawPSU(){lcd(pl,fmt(st.P,0)+' W','12 V · '+fmt(st.P/12,2)+' A','#ffb347')}
+function ui(){const L=st.mode==='log';
+ $('bLog').classList.toggle('on',L);$('bLis').classList.toggle('on',!L);
+ ['lMm','lJ','lTm'].forEach(i=>$(i).hidden=!L);$('lP').hidden=L;
+ hot.visible=mg.visible=L;lisG.visible=!L;
+ $('bGo').innerHTML='<i class="fa-solid fa-'+(L?'arrow-down':'bolt')+'"></i>'+(L?'Celupkan':'Nyalakan');
+ setLevel();setMetal();drawPSU()}
+const setMode=m=>{st.mode=m;reset();ui()};
+$('bLog').onclick=()=>setMode('log');$('bLis').onclick=()=>setMode('lis');
+const sl=(id,vid,fn,dec=0,rs=1)=>$(id).oninput=e=>{const v=+e.target.value;fn(v);$(vid).textContent=fmt(v,dec);if(rs)reset();ui()};
+sl('sW','vW',v=>st.mw=v);sl('sMm','vMm',v=>st.mm=v);sl('sTm','vTm',v=>st.tm0=v);sl('sP','vP',v=>st.P=v);
+sl('sR','vR',v=>st.rpm=v,0,0);sl('sS','vS',v=>st.spd=v,0,0);
+$('sJ').oninput=e=>{st.mi=+e.target.value;$('vJ').textContent=MET[st.mi].n;reset();ui()};
+$('bRe').onclick=reset;
+$('bGo').onclick=()=>{if(st.ph==='move'||st.ph==='run')return;if(st.ph==='done')reset();st.ph=st.mode==='log'?'move':'run'};
+$('bMore').onclick=()=>{$('bMore').classList.toggle('act',!$('ui').classList.toggle('min'))};
+function showAn(on){$('anw').classList.toggle('h',!on);$('bAn').classList.toggle('act',on)}
+$('bAn').onclick=()=>showAn($('anw').classList.contains('h'));$('bAnM').onclick=()=>showAn(false);
+const tg=(b,el,a,c2)=>$(b).onclick=()=>{const c=$(el).classList.toggle('col');$(b).innerHTML=c?c2:a};
+const CU='<i class="fa-solid fa-chevron-up"></i>',CD='<i class="fa-solid fa-chevron-down"></i>';tg('bMin','ui',CU,CD);tg('bNav','nav',CU,CD);
+const nv=(id,f)=>$(id).onclick=()=>{goal=null;f()};
+nv('zi',()=>zoom(.78));nv('zo',()=>zoom(1.28));nv('pl',()=>pan(-ob.r*.12,0));nv('pr',()=>pan(ob.r*.12,0));nv('pu',()=>pan(0,ob.r*.08));nv('pdn',()=>pan(0,-ob.r*.08));
+$('hm').onclick=$('vF').onclick=()=>go({th:.3,ph:1.15,r:HR(),x:0,y:.09,z:0});
+
+$('vT').onclick=()=>go({th:.5,ph:1.2,r:.32,x:-.2,y:.05,z:.05});
+$('vK').onclick=()=>go({th:.15,ph:1.4,r:.3,x:0,y:.07,z:.03});
+
+/* grafik suhu */
+function drawAn(){const c=$('an'),k=c.getContext('2d'),W=360,H=200,L=st.mode==='log';k.setTransform(2,0,0,2,0,0);k.clearRect(0,0,W,H);
+ const cs=getComputedStyle(document.documentElement),fg=cs.getPropertyValue('--fg').trim(),ac=cs.getPropertyValue('--ac').trim(),mu=cs.getPropertyValue('--mut').trim();
+ const bx=32,by=22,bw=W-bx-10,bh=128,tmax=L?300:Math.max(120,Math.ceil(st.t*1.15/60)*60),y0=20,y1=L?Math.ceil((st.tm0+3)/10)*10:80;
+ const X=t=>bx+t/tmax*bw,Y=v=>by+bh-(v-y0)/(y1-y0)*bh;
+ k.fillStyle=fg;k.font='11px system-ui,sans-serif';k.textAlign='left';k.fillText('Suhu terhadap waktu (1 titik = 1 s)',4,12);
+ k.strokeStyle=fg;k.fillStyle=mu;
+ for(let i=0;i<=4;i++){const v=y0+(y1-y0)*i/4,y=Y(v),t=tmax*i/4;k.globalAlpha=.15;k.beginPath();k.moveTo(bx,y);k.lineTo(bx+bw,y);k.stroke();k.globalAlpha=1;k.fillText(Math.round(v),6,y+3);k.fillText(Math.round(t),X(t)-6,by+bh+12)}
+ const line=(key,col,dash)=>{k.strokeStyle=col;k.lineWidth=2;k.setLineDash(dash);k.beginPath();st.hist.forEach((p,i)=>i?k.lineTo(X(p.t),Y(p[key])):k.moveTo(X(p.t),Y(p[key])));k.stroke();k.setLineDash([]);k.lineWidth=1};
+ if(L){line('m',mu,[4,3]);k.strokeStyle=ac;k.globalAlpha=.5;k.setLineDash([2,3]);k.beginPath();k.moveTo(bx,Y(Tf0()));k.lineTo(bx+bw,Y(Tf0()));k.stroke();k.setLineDash([]);k.globalAlpha=1}
+ line('p',ac,[]);
+ k.fillStyle=ac;k.fillText('— Termometer (air)',bx,by+bh+26);
+ if(L){k.fillStyle=mu;k.fillText('- - Logam',bx+105,by+bh+26)}
+ k.textAlign='right';k.fillStyle=mu;k.fillText('t (s)',W-6,by+bh+26);k.textAlign='left';
+ k.fillStyle=fg;k.fillText(L?'T akhir teori (tanpa rugi kalor) = '+fmt(Tf0(),1)+' °C (garis titik)':'Laju naik teori ≈ '+fmt(st.P/Ct()*60,1)+' °C/menit',4,H-4);
+}
+
+/* loop */
+let last=performance.now(),fr=0,wv=0,ba=0,lk='';
+const cA=new T.Color(0x5aa9e6),cB=new T.Color(0xf08a5d);
+function frame(now){
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ if(st.ph==='move'){st.mu=Math.min(1,st.mu+dt/1.6);if(st.mu>=1)st.ph='run'}
+ if(st.ph==='run'){let r=dt*st.spd;while(r>0&&st.ph==='run'){const h=Math.min(.05,r);step(h);r-=h}}
+ const rn=st.rpm/1200;wv+=(rn-wv)*Math.min(1,dt*1.2);ba+=rn*28*dt;
+ bar.rotation.y=ba;knob.rotation.z=2.2-rn*4.4;led.material.emissiveIntensity=rn>0?1:0;
+ const d=Math.min(wv*wv*.012,wH*.7),key=d+'|'+wH;if(key!==lk||wv>.01){lk=key;surf(d)}
+ const pa=pGeo.attributes.position;
+ pp.forEach((q,i)=>{q.a+=wv*7*(.4+.8*(1-q.r/RW))*dt;const sy=Y0+wH-d*(1-(q.r/RW)**2)**2-.002;pa.setXYZ(i,q.r*Math.cos(q.a),Math.min(Y0+.004+q.f*(wH-.006),sy),q.r*Math.sin(q.a))});pa.needsUpdate=true;
+ wMat.color.copy(cA).lerp(cB,cl((st.Tw-20)/60,0,1));
+ const e=st.mu*st.mu*(3-2*st.mu),hy=.022+mh/2,iy=PT+Y0+.007+mh/2;
+ mg.position.set(.2-.196*e,hy+(iy-hy)*e+.12*Math.sin(Math.PI*st.mu),-.002*e);
+ const f=cl((st.Tm-TA)/75,0,1);mMat.emissive.setRGB(f*.55,f*.1,0);
+ hMat.emissiveIntensity+=((st.ph==='run'&&st.mode==='lis'?1:0)-hMat.emissiveIntensity)*.1;
+ animGoal();setCam();R.render(SC,cam);
+ if(fr++%3==0){
+  const L=st.mode==='log',dT=st.Tp-TA;
+  $('rt').textContent=fmt(st.t,0);$('rv').textContent=fmt(st.Tp,1);$('rs').textContent=fmt(dT,1);$('ra').textContent=fmt(L?Ct()*dT:st.P*st.t,0);
+  lcd(tl,fmt(st.Tp,1)+'°C','TERMOMETER','#7dff9a');lcd(rl,fmt(st.rpm,0),'RPM PENGADUK','#7dd8ff');
+  $('hint').textContent=st.ph==='done'?st.res:st.ph==='move'?'Logam panas dipindahkan ke kalorimeter…':st.ph==='run'?(L?'Kalor dari logam diserap air + kalorimeter. Pengaduk magnetik memutar air agar suhu merata, jadi termometer cepat setimbang.':'Energi listrik P·t diserap air + kalorimeter. Pengaduk meratakan suhu; coba 0 rpm dan lihat termometer tertinggal.'):L?'Logam '+MET[st.mi].n.toLowerCase()+' dipanaskan '+st.tm0+' °C. Tekan Celupkan, lalu amati suhu air di termometer.':'Pemanas celup '+st.P+' W (12 V, '+fmt(st.P/12,2)+' A). Tekan Nyalakan dan amati kenaikan suhu.';
+  drawAn();
+ }
+ requestAnimationFrame(frame);
+}
+if(innerWidth<700)$('ui').classList.add('min');else $('bMore').classList.add('act');showAn(innerWidth>=700);
+ob.r=HR();reset();ui();requestAnimationFrame(frame);
+</script></body></html>
