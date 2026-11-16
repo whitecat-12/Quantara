@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Explorer - Aplikasi Belajar Fisika & Sains</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ===== MathJax v3 (LaTeX → SVG) ===== -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: { fontCache: 'global' },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --primary: #38b2ac;
+            --secondary: #0e7490;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: 'Baloo 2', cursive;
+            background-color: #f8fafc;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* ===== Floating Bottom Nav ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 24px);
+            max-width: 380px;
+            height: 68px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 22px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18), 0 4px 10px rgba(15, 23, 42, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 6px;
+            z-index: 50;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            flex: 1;
+            max-width: 72px;
+            height: 100%;
+            border-radius: 16px;
+            gap: 3px;
+            padding: 6px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .nav-item span {
+            font-size: 0.6rem;
+            font-weight: 600;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: rgba(56, 178, 172, 0.08);
+        }
+
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+            box-shadow: 0 6px 16px rgba(56, 178, 172, 0.45);
+        }
+
+        .nav-item.active:hover {
+            color: white;
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+        }
+
+        .nav-icon {
+            font-size: 1.05rem;
+            line-height: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* ===== Pages ===== */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.35s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .islamic-pattern {
+            background-image: radial-gradient(rgba(56, 178, 172, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* ===== Achievements / Menu Badges ===== */
+        .achievement-badge {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .achievement-badge::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 2px dashed currentColor;
+            opacity: 0.3;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .app-logo { display: flex; align-items: center; }
+
+        .app-logo-icon {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .app-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #60a5fa;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== Daily Dose (RAPI) ===== */
+        .daily-dose-card {
+            background: linear-gradient(135deg, #f4f2ff, #e5e1ff);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .daily-dose-header {
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .daily-dose-content {
+            padding: 18px 16px 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .daily-dose-verse {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #334155;
+            position: relative;
+            padding-left: 28px;
+            padding-right: 16px;
+            padding-top: 2px;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .daily-dose-verse.fade-out { opacity: 0; transform: translateY(-8px); }
+        .daily-dose-verse.fade-in  { opacity: 1; transform: translateY(0); }
+
+        .daily-dose-verse::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -8px;
+            font-size: 2.4rem;
+            color: #9999ff;
+            line-height: 1;
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .daily-dose-reference {
+            display: block;
+            text-align: right;
+            font-style: italic;
+            color: #64748b;
+            margin-top: 10px;
+            font-size: 0.85em;
+            padding-right: 8px;
+        }
+
+        .daily-dose-title { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+        .daily-dose-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 0; }
+
+        .daily-dose-next {
+            background: rgba(255, 255, 255, 0.25);
+            border: none; color: white;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .daily-dose-next:hover { background: rgba(255, 255, 255, 0.45); transform: rotate(90deg); }
+
+        .daily-dose-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            margin-bottom: 10px;
+        }
+
+        .daily-dose-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(153, 153, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none; padding: 0;
+        }
+
+        .daily-dose-dot.active { background: #9999ff; width: 18px; border-radius: 3px; }
+        .daily-dose-dot:hover { background: rgba(153, 153, 255, 0.6); }
+
+        .daily-dose-timer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: rgba(153, 153, 255, 0.15);
+            overflow: hidden;
+        }
+
+        .daily-dose-timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9999ff, #b399ff);
+            width: 0%;
+            animation: timerProgress 8s linear infinite;
+        }
+
+        @keyframes timerProgress {
+            from { width: 0%; }
+            to   { width: 100%; }
+        }
+
+        /* ===== CALCULATOR ===== */
+        .calc-display {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 16px;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .calc-top { display: flex; justify-content: flex-end; margin-bottom: 6px; }
+
+        .calc-mode {
+            background: rgba(255,255,255,0.12);
+            color: #38b2ac;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(56,178,172,0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calc-mode:hover { background: rgba(56,178,172,0.2); }
+
+        .calc-history {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.8rem;
+            min-height: 1.2em;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            text-align: right;
+            padding: 0 4px;
+        }
+
+        .calc-expr {
+            color: white;
+            font-size: 1.9rem;
+            font-weight: 600;
+            text-align: right;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            line-height: 1.25;
+            padding: 0 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .calc-btn {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 14px 0;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #0f172a;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            user-select: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .calc-btn:hover { background: #e2e8f0; }
+        .calc-btn:active { transform: scale(0.94); }
+
+        .calc-btn.op {
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+            color: white;
+        }
+        .calc-btn.op:hover { filter: brightness(1.08); }
+
+        .calc-btn.fn {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 0.82rem;
+        }
+        .calc-btn.fn:hover { background: #fde68a; }
+
+        .calc-btn.clear {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.95rem;
+        }
+        .calc-btn.clear:hover { filter: brightness(1.08); }
+
+        .calc-btn.equals {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            font-size: 1.3rem;
+        }
+        .calc-btn.equals:hover { filter: brightness(1.08); }
+
+        .calc-btn.row-span-2 { grid-row: span 2; }
+
+        /* ===== CALC HISTORY LIST ===== */
+        .calc-history-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-history-item:hover {
+            border-color: #38b2ac;
+            background: #f0fdfa;
+            transform: translateX(2px);
+        }
+
+        .calc-history-item:active { transform: scale(0.98); }
+
+        .calc-history-expr {
+            font-size: 0.72rem;
+            color: #64748b;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calc-history-result {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .calc-history-time {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ===== NOTES ===== */
+        .note-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+        }
+
+        .note-card:hover {
+            border-color: #38b2ac;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #1e293b;
+            transition: border-color 0.2s ease;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .note-input:focus { border-color: #38b2ac; background: white; }
+
+        textarea.note-input { resize: vertical; min-height: 220px; line-height: 1.6; }
+
+        .fab {
+            position: fixed;
+            bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+            right: calc((100vw - min(414px, 100vw)) / 2 + 16px);
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+            color: white;
+            border: none;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 20px rgba(56,178,172,0.5);
+            cursor: pointer;
+            z-index: 40;
+            transition: all 0.2s ease;
+        }
+
+        .fab:hover { transform: scale(1.05); }
+        .fab:active { transform: scale(0.95); }
+
+        /* ===== NAYRA AI CHAT ===== */
+        #page-nayra.active {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 180px);
+            height: calc(100dvh - 180px);
+        }
+
+        .nayra-chat {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 2px;
+        }
+
+        .chat-bubble {
+            max-width: 82%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            animation: bubbleIn 0.25s ease;
+        }
+
+        @keyframes bubbleIn {
+            from { opacity: 0; transform: translateY(6px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 2px 8px rgba(56, 178, 172, 0.28);
+        }
+
+        .chat-bubble.ai {
+            background: white;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .chat-input-row {
+            flex-shrink: 0;
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px 14px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            align-items: center;
+        }
+
+        .chat-input-row input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 24px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            background: #f1f5f9;
+            transition: background 0.2s ease;
+            color: #1e293b;
+            min-width: 0;
+        }
+
+        .chat-input-row input:focus { background: #e2e8f0; }
+        .chat-input-row input::placeholder { color: #94a3b8; }
+
+        .chat-input-row button {
+            background: linear-gradient(135deg, #38b2ac, #0e7490);
+            color: white;
+            border: none;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(56, 178, 172, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-input-row button:hover:not(:disabled) {
+            filter: brightness(1.08);
+            transform: scale(1.05);
+        }
+
+        .chat-input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .typing-dots { display: inline-flex; gap: 4px; align-items: center; padding: 2px 0; }
+        .typing-dots span {
+            width: 6px; height: 6px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30%           { transform: translateY(-4px); opacity: 1; }
+        }
+
+        /* ===== LAB MENU BADGES ===== */
+        .lab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .lab-item:hover { transform: translateY(-3px) scale(1.05); }
+        .lab-item:hover .achievement-badge { box-shadow: 0 8px 16px -4px currentColor; }
+
+        .lab-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #475569;
+            margin-top: 6px;
+            text-align: center;
+            line-height: 1.15;
+            max-width: 60px;
+        }
+
+        /* ===== NEWTON QUIZ MODAL ===== */
+        .newton-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .newton-modal.show {
+            display: flex;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .newton-modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .newton-modal-body {
+            overflow-y: auto;
+            padding: 14px;
+            flex: 1;
+            background: #f8fafc;
+        }
+
+        .newton-modal-body::-webkit-scrollbar { width: 6px; }
+        .newton-modal-body::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 3px;
+        }
+
+        .soal-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .soal-card:last-child { margin-bottom: 0; }
+
+        .soal-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: #1e293b;
+            min-height: 44px;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            background: #fff7ed;
+            border-color: #f97316;
+        }
+
+        .quiz-option:disabled { cursor: default; }
+
+        .quiz-option.selected {
+            background: #fff7ed;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        .quiz-option.correct {
+            background: #dcfce7;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
+        }
+
+        .quiz-option.wrong {
+            background: #fee2e2;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+        }
+
+        .quiz-option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: white;
+            color: #ea580c;
+            font-weight: 700;
+            font-size: 0.72rem;
+            border: 1.5px solid currentColor;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option.selected .quiz-option-letter {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .quiz-option.correct .quiz-option-letter {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+
+        .quiz-option.wrong .quiz-option-letter {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .quiz-option-text {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2px 0;
+        }
+
+        .quiz-option-text::-webkit-scrollbar { height: 3px; }
+        .quiz-option-text::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 2px;
+        }
+
+        .quiz-explanation {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+        }
+
+        .quiz-explanation.correct {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .quiz-explanation.wrong {
+            background: #fef2f2;
+            border-color: #fca5a5;
+        }
+
+        .quiz-status {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quiz-status.correct { color: #15803d; }
+        .quiz-status.wrong   { color: #b91c1c; }
+
+        .quiz-explanation-math {
+            color: #334155;
+            font-size: 0.82rem;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .quiz-explanation-math::-webkit-scrollbar { height: 4px; }
+        .quiz-explanation-math::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 2px;
+        }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            border: 2px solid #fdba74;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .quiz-score-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #c2410c;
+            line-height: 1;
+        }
+
+        .quiz-score-label {
+            font-size: 0.78rem;
+            color: #92400e;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .quiz-stats-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        /* ===== COMING SOON MODAL ===== */
+        .comingsoon-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 110;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .comingsoon-modal.show {
+            display: flex;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        .comingsoon-content {
+            background: linear-gradient(160deg, #ffffff 0%, #f1f5f9 100%);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 340px;
+            padding: 28px 24px 24px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .comingsoon-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f59e0b);
+            background-size: 200% 100%;
+            animation: gradientMove 4s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .comingsoon-icon {
+            width: 80px; height: 80px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 10px 24px -6px rgba(99, 102, 241, 0.6);
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-6px); }
+        }
+
+        .comingsoon-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .comingsoon-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 18px;
+        }
+
+        .comingsoon-date-box {
+            background: linear-gradient(135deg, #eef2ff, #ede9fe);
+            border: 2px dashed #a5b4fc;
+            border-radius: 14px;
+            padding: 14px 12px;
+            margin-bottom: 16px;
+        }
+
+        .comingsoon-date-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .comingsoon-date {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #4338ca;
+            line-height: 1.15;
+        }
+
+        .comingsoon-desc {
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .comingsoon-close-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 16px -4px rgba(99, 102, 241, 0.5);
+            font-family: inherit;
+        }
+
+        .comingsoon-close-btn:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .comingsoon-close-btn:active { transform: scale(0.98); }
+
+        @media (max-width: 414px) {
+            .bottom-nav {
+                height: 64px;
+                bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+                border-radius: 20px;
+            }
+            .nav-icon { font-size: 1rem; }
+            .nav-item span { font-size: 0.55rem; }
+            .achievement-badge { width: 46px; height: 46px; font-size: 20px; }
+            .lab-label { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header bg-gradient-to-r from-primary to-secondary p-4 text-white">
+            <div class="flex justify-between items-center">
+                <div class="app-logo">
+                    <div class="app-logo-icon" id="headerIcon" style="background: #9999ff; color: white;">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h1 class="app-name" id="headerTitle" style="color: #9999ff;">QUANTARA</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-user-circle text-xl"></i>
+                </div>
+            </div>
+        </header>
+
+        <main class="pb-28 islamic-pattern">
+
+            <!-- ================= BERANDA ================= -->
+            <div id="page-beranda" class="page active">
+                <section class="p-4 pb-0">
+                    <div class="daily-dose-card" style="border: 2px solid #C7CCFF;">
+                        <div class="daily-dose-header" style="background: linear-gradient(135deg, #9999ff, #b399ff, #d1b3ff);">
+                            <div>
+                                <div class="daily-dose-title" style="color: white;">Fakta Sains Harian</div>
+                                <div class="daily-dose-subtitle" style="color: white;">Temukan keajaiban sains setiap hari!</div>
+                            </div>
+                            <button class="daily-dose-next" id="nextFactBtn" title="Fakta berikutnya">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="daily-dose-content">
+                            <div class="daily-dose-verse" id="dailyFactText">Memuat fakta sains...</div>
+                            <div class="daily-dose-dots" id="dailyDots"></div>
+                            <div class="daily-dose-timer">
+                                <div class="daily-dose-timer-fill" id="timerFill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="p-4">
+                    <!-- ===== MENU ALAT FISIKA (16 alat) ===== -->
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 mb-4 transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-toolbox text-teal-500 mr-2"></i> Menu Alat Fisika
+                            </h3>
+                            <span class="text-xs bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-2.5 py-1 rounded-full">16 alat</span>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-3 text-center">
+                            <a href="1.html" class="lab-item">
+                                <div class="achievement-badge bg-yellow-100 text-yellow-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-bolt-lightning"></i>
+                                </div>
+                                <span class="lab-label">Usaha &amp; Energi</span>
+                            </a>
+                            <a href="2.html" class="lab-item">
+                                <div class="achievement-badge bg-blue-100 text-blue-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-person-running"></i>
+                                </div>
+                                <span class="lab-label">GLB &amp; GLBB</span>
+                            </a>
+                            <a href="3.html" class="lab-item">
+                                <div class="achievement-badge bg-green-100 text-green-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <span class="lab-label">Optik</span>
+                            </a>
+                            <a href="4.html" class="lab-item">
+                                <div class="achievement-badge bg-purple-100 text-purple-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-ear-listen"></i>
+                                </div>
+                                <span class="lab-label">Organa</span>
+                            </a>
+                            <a href="5.html" class="lab-item">
+                                <div class="achievement-badge bg-orange-100 text-orange-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <span class="lab-label">Atwood</span>
+                            </a>
+                            <a href="6.html" class="lab-item">
+                                <div class="achievement-badge bg-red-100 text-red-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-temperature-high"></i>
+                                </div>
+                                <span class="lab-label">Kalorimeter</span>
+                            </a>
+                            <a href="7.html" class="lab-item">
+                                <div class="achievement-badge bg-amber-100 text-amber-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-arrows-spin"></i>
+                                </div>
+                                <span class="lab-label">Inersia</span>
+                            </a>
+                            <a href="8.html" class="lab-item">
+                                <div class="achievement-badge bg-teal-100 text-teal-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                                <span class="lab-label">Elektronika</span>
+                            </a>
+                            <a href="9.html" class="lab-item">
+                                <div class="achievement-badge bg-indigo-100 text-indigo-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-scale-balanced"></i>
+                                </div>
+                                <span class="lab-label">Wheatstone</span>
+                            </a>
+                            <a href="10.html" class="lab-item">
+                                <div class="achievement-badge bg-pink-100 text-pink-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-diagram-project"></i>
+                                </div>
+                                <span class="lab-label">Kirchhoff</span>
+                            </a>
+                            <a href="11.html" class="lab-item">
+                                <div class="achievement-badge bg-cyan-100 text-cyan-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-magnet"></i>
+                                </div>
+                                <span class="lab-label">Magnetometer</span>
+                            </a>
+                            <a href="12.html" class="lab-item">
+                                <div class="achievement-badge bg-lime-100 text-lime-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <span class="lab-label">Trafometer</span>
+                            </a>
+                            <a href="13.html" class="lab-item">
+                                <div class="achievement-badge bg-rose-100 text-rose-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <span class="lab-label">Bandul</span>
+                            </a>
+                            <a href="14.html" class="lab-item">
+                                <div class="achievement-badge bg-sky-100 text-sky-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-wave-square"></i>
+                                </div>
+                                <span class="lab-label">Melde</span>
+                            </a>
+                            <a href="15.html" class="lab-item">
+                                <div class="achievement-badge bg-violet-100 text-violet-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-apple-whole"></i>
+                                </div>
+                                <span class="lab-label">Newton</span>
+                            </a>
+                            <a href="16.html" class="lab-item">
+                                <div class="achievement-badge bg-fuchsia-100 text-fuchsia-500 p-3 rounded-full shadow-sm">
+                                    <i class="fas fa-water"></i>
+                                </div>
+                                <span class="lab-label">Archimedes</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Daily Challenge -->
+                    <div class="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-xl shadow-md p-4 mb-4 border-l-4 border-orange-400">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-bolt text-orange-500 mr-2"></i> Tantangan Fisika
+                            </h3>
+                            <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full">Baru!</span>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">Selesaikan 5 soal pilihan ganda Hukum Newton dan dapatkan 50 poin bonus!</p>
+                        <button onclick="openNewtonModal()" class="mt-3 w-full py-2 bg-orange-500 text-white rounded-lg text-sm font-medium flex items-center justify-center hover:bg-orange-600 transition">
+                            <i class="fas fa-play mr-2"></i> Mulai Tantangan
+                        </button>
+                    </div>
+
+                    <!-- Lab Bintang -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-md p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-gamepad text-indigo-500 mr-2"></i> Lab Bintang
+                            </h3>
+                            <span class="text-[10px] bg-indigo-500 text-white px-2 py-0.5 rounded-full">Soon</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
+                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-indigo-100 text-indigo-500 p-2 rounded-full inline-block">
+                                        <i class="fa-solid fa-binoculars"></i>
+                                    </div>
+                                    <p class="text-xs mt-1">Tata Surya</p>
+                                </div>
+                            </button>
+                            <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
+                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-green-100 text-green-500 p-2 rounded-full inline-block">
+                                        <i class="fa-solid fa-compass"></i>
+                                    </div>
+                                    <p class="text-xs mt-1">Rasi Bintang</p>
+                                </div>
+                            </button>
+                            <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
+                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-yellow-100 text-yellow-500 p-2 rounded-full inline-block">
+                                        <i class="fa-solid fa-splotch"></i>
+                                    </div>
+                                    <p class="text-xs mt-1">Simulasi Bintang</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= KALKULATOR ================= -->
+            <div id="page-kalkulator" class="page">
+                <section class="p-4">
+                    <div class="mb-3">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-calculator text-teal-500 mr-2"></i> Kalkulator Scientific
+                        </h2>
+                        <p class="text-xs text-gray-500">Mendukung trigonometri, logaritma, akar, pangkat, π, e, dan banyak lagi.</p>
+                    </div>
+
+                    <div class="calc-display">
+                        <div class="calc-top">
+                            <button class="calc-mode" id="angleMode" onclick="toggleAngleMode()">DEG</button>
+                        </div>
+                        <div class="calc-history" id="calcHistory"></div>
+                        <div class="calc-expr" id="calcExpr">0</div>
+                    </div>
+
+                    <div class="calc-grid mt-3">
+                        <button class="calc-btn clear" onclick="calcClear()">C</button>
+                        <button class="calc-btn fn" onclick="calcBackspace()"><i class="fas fa-delete-left"></i></button>
+                        <button class="calc-btn fn" onclick="calcInput('(')">(</button>
+                        <button class="calc-btn fn" onclick="calcInput(')')">)</button>
+                        <button class="calc-btn op" onclick="calcInput('÷')">÷</button>
+
+                        <button class="calc-btn fn" onclick="calcInput('sin(')">sin</button>
+                        <button class="calc-btn fn" onclick="calcInput('cos(')">cos</button>
+                        <button class="calc-btn fn" onclick="calcInput('tan(')">tan</button>
+                        <button class="calc-btn fn" onclick="calcInput('√(')">√</button>
+                        <button class="calc-btn op" onclick="calcInput('×')">×</button>
+
+                        <button class="calc-btn fn" onclick="calcInput('log(')">log</button>
+                        <button class="calc-btn fn" onclick="calcInput('ln(')">ln</button>
+                        <button class="calc-btn fn" onclick="calcInput('^')">x^y</button>
+                        <button class="calc-btn fn" onclick="calcInput('π')">π</button>
+                        <button class="calc-btn op" onclick="calcInput('−')">−</button>
+
+                        <button class="calc-btn" onclick="calcInput('7')">7</button>
+                        <button class="calc-btn" onclick="calcInput('8')">8</button>
+                        <button class="calc-btn" onclick="calcInput('9')">9</button>
+                        <button class="calc-btn fn" onclick="calcInput('e')">e</button>
+                        <button class="calc-btn op" onclick="calcInput('+')">+</button>
+
+                        <button class="calc-btn" onclick="calcInput('4')">4</button>
+                        <button class="calc-btn" onclick="calcInput('5')">5</button>
+                        <button class="calc-btn" onclick="calcInput('6')">6</button>
+                        <button class="calc-btn fn" onclick="calcInput('²')">x²</button>
+                        <button class="calc-btn fn" onclick="calcInput('%')">%</button>
+
+                        <button class="calc-btn" onclick="calcInput('1')">1</button>
+                        <button class="calc-btn" onclick="calcInput('2')">2</button>
+                        <button class="calc-btn" onclick="calcInput('3')">3</button>
+                        <button class="calc-btn fn" onclick="calcToggleSign()">±</button>
+                        <button class="calc-btn equals row-span-2" onclick="calcEquals()">=</button>
+
+                        <button class="calc-btn" onclick="calcInput('0')">0</button>
+                        <button class="calc-btn" onclick="calcInput('.')">.</button>
+                        <button class="calc-btn" onclick="calcInput('00')">00</button>
+                        <button class="calc-btn fn" onclick="calcAns()">Ans</button>
+                    </div>
+
+                    <div class="mt-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800 text-sm flex items-center">
+                                <i class="fas fa-history text-teal-500 mr-2"></i> Riwayat Hitungan
+                                <span id="calcHistoryCount" class="ml-2 text-xs font-normal text-gray-400"></span>
+                            </h3>
+                            <button onclick="clearCalcHistory()" id="calcHistoryClearBtn" class="text-xs text-red-500 hover:text-red-700 hidden">
+                                <i class="fas fa-trash mr-1"></i> Hapus
+                            </button>
+                        </div>
+                        <div id="calcHistoryList" class="space-y-2"></div>
+                        <div id="calcHistoryEmpty" class="text-center py-6 text-gray-400 text-xs hidden">
+                            <i class="fas fa-calculator text-2xl mb-2 block"></i>
+                            Belum ada riwayat hitungan.<br>
+                            Hasil perhitungan akan muncul di sini dan tersimpan otomatis.
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= CATATAN ================= -->
+            <div id="page-catatan" class="page">
+                <section class="p-4">
+                    <div id="notesListView">
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-lg font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-book text-yellow-500 mr-2"></i> Catatan Saya
+                            </h2>
+                            <span class="text-xs text-gray-400" id="notesCount"></span>
+                        </div>
+                        <div id="notesList"></div>
+                        <div id="notesEmpty" class="text-center py-12 text-gray-400" style="display:none;">
+                            <i class="fas fa-note-sticky text-4xl mb-3 block"></i>
+                            <p class="text-sm">Belum ada catatan.</p>
+                            <p class="text-xs mt-1">Tap tombol <b>+</b> untuk membuat catatan baru.</p>
+                        </div>
+                    </div>
+
+                    <div id="noteEditorView" style="display:none;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <button onclick="showList()" class="text-gray-500 hover:text-gray-700 text-lg">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h3 class="font-bold text-gray-800 flex-1" id="noteEditorTitle">Catatan Baru</h3>
+                            <button onclick="deleteNote()" id="noteDeleteBtn" class="text-red-500 hover:text-red-700 text-sm px-2" style="display:none;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="noteTitle" class="note-input mb-2" placeholder="Judul catatan...">
+                        <textarea id="noteBody" class="note-input" placeholder="Tulis catatanmu di sini..."></textarea>
+                        <button onclick="saveNote()" class="mt-3 w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg text-sm font-semibold flex items-center justify-center">
+                            <i class="fas fa-save mr-2"></i> Simpan Catatan
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= NAYRA AI ================= -->
+            <div id="page-nayra" class="page">
+                <div class="nayra-chat">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chatInput" placeholder="Tanya apa saja ke Nayra..." autocomplete="off">
+                        <button id="chatSend" onclick="nayraSend()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Floating FAB for notes -->
+        <button class="fab" id="notesFab" onclick="newNote()" title="Buat catatan baru" style="display:none;">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- ============ FLOATING BOTTOM NAV ============ -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" data-page="beranda">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="#" class="nav-item" data-page="kalkulator">
+                <i class="fas fa-calculator nav-icon"></i>
+                <span>Kalkulator</span>
+            </a>
+            <a href="#" class="nav-item" data-page="catatan">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Catatan</span>
+            </a>
+            <a href="#" class="nav-item" data-page="nayra">
+                <i class="fas fa-robot nav-icon"></i>
+                <span>Nayra AI</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- ============================================================
+         MODAL COMING SOON — 18 November 2026
+         ============================================================ -->
+    <div class="comingsoon-modal" id="comingSoonModal" onclick="if(event.target===this) closeComingSoon()">
+        <div class="comingsoon-content">
+            <div class="comingsoon-icon">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <div class="comingsoon-title">Coming Soon!</div>
+            <div class="comingsoon-subtitle">Fitur Lab Bintang sedang disiapkan</div>
+
+            <div class="comingsoon-date-box">
+                <div class="comingsoon-date-label">Segera Hadir</div>
+                <div class="comingsoon-date">18 November 2026</div>
+            </div>
+
+            <p class="comingsoon-desc">
+                Simulasi Tata Surya, Rasi Bintang, dan Simulasi Bintang interaktif
+                akan segera tersedia di Quantara. Nantikan ya! 🚀
+            </p>
+
+            <button class="comingsoon-close-btn" onclick="closeComingSoon()">
+                <i class="fas fa-check mr-1"></i> Oke, Siap!
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL NEWTON QUIZ
+         ============================================================ -->
+    <div class="newton-modal" id="newtonModal" onclick="if(event.target===this) closeNewtonModal()">
+        <div class="newton-modal-content">
+            <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 flex justify-between items-center flex-shrink-0">
+                <div>
+                    <div class="text-xs opacity-80 flex items-center gap-1">
+                        <i class="fas fa-bolt"></i> Tantangan Fisika
+                    </div>
+                    <div class="font-bold text-lg leading-tight">Hukum Newton — 5 Pilihan Ganda</div>
+                </div>
+                <button onclick="closeNewtonModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition flex-shrink-0">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="newton-modal-body" id="newtonModalBody">
+                <div id="quizProgress"></div>
+
+                <div id="quizContainer">
+                    <div class="soal-card" data-q="0">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="soal-num">1</span>
+                            <div class="text-xs font-bold text-orange-700 leading-tight pt-1">Bidang Miring + Gaya Luar + Gesek</div>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Balok bermassa $m = 5\,\text{kg}$ berada di bidang miring dengan sudut $\theta = 37°$ ($\sin 37° = 0{,}6$, $\cos 37° = 0{,}8$). Koefisien gesek kinetis $\mu_k = 0{,}25$. Balok ditarik gaya $F = 55\,\text{N}$ sejajar bidang ke atas. Jika $g = 10\,\text{m/s}^2$, tentukan percepatan balok.
+                        </p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-q="0" data-idx="0">
+                                <span class="quiz-option-letter">A</span>
+                                <span class="quiz-option-text">$2\;\text{m/s}^2$</span>
+                            </button>
+                            <button class="quiz-option" data-q="0" data-idx="1">
+                                <span class="quiz-option-letter">B</span>
+                                <span class="quiz-option-text">$3\;\text{m/s}^2$</span>
+                            </button>
+                            <button class="quiz-option" data-q="0" data-idx="2">
+                                <span class="quiz-option-letter">C</span>
+                                <span class="quiz-option-text">$4\;\text{m/s}^2$</span>
+                            </button>
+                            <button class="quiz-option" data-q="0" data-idx="3">
+                                <span class="quiz-option-letter">D</span>
+                                <span class="quiz-option-text">$5\;\text{m/s}^2$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-explanation" data-q="0" style="display:none;">
+                            <div class="quiz-status"></div>
+                            <div class="quiz-explanation-math">
+                                $$F - mg\sin\theta - \mu_k mg\cos\theta = ma$$
+                                $$55 - 5(10)(0{,}6) - 0{,}25(5)(10)(0{,}8) = 5a$$
+                                $$55 - 30 - 10 = 5a \implies \boxed{a = 3\;\text{m/s}^2}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soal-card" data-q="1">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="soal-num">2</span>
+                            <div class="text-xs font-bold text-orange-700 leading-tight pt-1">Sistem Meja Kasar + Katrol</div>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Benda $m_1 = 5\,\text{kg}$ di atas meja kasar ($\mu_k = 0{,}2$) dihubungkan dengan tali dan katrol ke benda $m_2 = 5\,\text{kg}$ yang menggantung. Jika $g = 10\,\text{m/s}^2$, hitung besar tegangan tali $T$.
+                        </p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-q="1" data-idx="0">
+                                <span class="quiz-option-letter">A</span>
+                                <span class="quiz-option-text">$20\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="1" data-idx="1">
+                                <span class="quiz-option-letter">B</span>
+                                <span class="quiz-option-text">$25\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="1" data-idx="2">
+                                <span class="quiz-option-letter">C</span>
+                                <span class="quiz-option-text">$30\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="1" data-idx="3">
+                                <span class="quiz-option-letter">D</span>
+                                <span class="quiz-option-text">$35\;\text{N}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-explanation" data-q="1" style="display:none;">
+                            <div class="quiz-status"></div>
+                            <div class="quiz-explanation-math">
+                                $$m_2 g - \mu_k m_1 g = (m_1 + m_2)\,a$$
+                                $$50 - 0{,}2(5)(10) = 10a \implies a = 4\;\text{m/s}^2$$
+                                $$T = m_2(g - a) = 5(10 - 4) = \boxed{30\;\text{N}}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soal-card" data-q="2">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="soal-num">3</span>
+                            <div class="text-xs font-bold text-orange-700 leading-tight pt-1">Dua Balok Bersentuhan (Gaya Kontak)</div>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Dua balok $m_1 = 3\,\text{kg}$ dan $m_2 = 2\,\text{kg}$ bersentuhan di lantai licin. Gaya $F = 20\,\text{N}$ diberikan pada $m_1$ mendorong ke arah $m_2$. Tentukan besar gaya kontak antara kedua balok.
+                        </p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-q="2" data-idx="0">
+                                <span class="quiz-option-letter">A</span>
+                                <span class="quiz-option-text">$4\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="2" data-idx="1">
+                                <span class="quiz-option-letter">B</span>
+                                <span class="quiz-option-text">$6\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="2" data-idx="2">
+                                <span class="quiz-option-letter">C</span>
+                                <span class="quiz-option-text">$8\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="2" data-idx="3">
+                                <span class="quiz-option-letter">D</span>
+                                <span class="quiz-option-text">$10\;\text{N}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-explanation" data-q="2" style="display:none;">
+                            <div class="quiz-status"></div>
+                            <div class="quiz-explanation-math">
+                                $$a = \frac{F}{m_1 + m_2} = \frac{20}{3+2} = 4\;\text{m/s}^2$$
+                                $$F_{12} = m_2\,a = 2(4) = \boxed{8\;\text{N}}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soal-card" data-q="3">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="soal-num">4</span>
+                            <div class="text-xs font-bold text-orange-700 leading-tight pt-1">Gaya Normal di Lift Dipercepat</div>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Seseorang bermassa $m = 50\,\text{kg}$ berdiri di dalam lift. Lift bergerak <b>naik</b> dengan percepatan $a = 2\,\text{m/s}^2$. Jika $g = 10\,\text{m/s}^2$, hitung gaya normal $N$ yang dikerjakan lantai lift pada orang tersebut.
+                        </p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-q="3" data-idx="0">
+                                <span class="quiz-option-letter">A</span>
+                                <span class="quiz-option-text">$300\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="3" data-idx="1">
+                                <span class="quiz-option-letter">B</span>
+                                <span class="quiz-option-text">$400\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="3" data-idx="2">
+                                <span class="quiz-option-letter">C</span>
+                                <span class="quiz-option-text">$500\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="3" data-idx="3">
+                                <span class="quiz-option-letter">D</span>
+                                <span class="quiz-option-text">$600\;\text{N}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-explanation" data-q="3" style="display:none;">
+                            <div class="quiz-status"></div>
+                            <div class="quiz-explanation-math">
+                                $$N - mg = ma$$
+                                $$N = m(g + a) = 50(10 + 2) = \boxed{600\;\text{N}}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soal-card" data-q="4">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="soal-num">5</span>
+                            <div class="text-xs font-bold text-orange-700 leading-tight pt-1">Bidang Miring Licin + Katrol + Benda Menggantung</div>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                            Benda $m_1 = 2\,\text{kg}$ di bidang miring licin ($\theta = 30°$) dihubungkan katrol ke $m_2 = 3\,\text{kg}$ yang menggantung. Jika $g = 10\,\text{m/s}^2$, hitung tegangan tali $T$.
+                        </p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-q="4" data-idx="0">
+                                <span class="quiz-option-letter">A</span>
+                                <span class="quiz-option-text">$12\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="4" data-idx="1">
+                                <span class="quiz-option-letter">B</span>
+                                <span class="quiz-option-text">$15\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="4" data-idx="2">
+                                <span class="quiz-option-letter">C</span>
+                                <span class="quiz-option-text">$18\;\text{N}$</span>
+                            </button>
+                            <button class="quiz-option" data-q="4" data-idx="3">
+                                <span class="quiz-option-letter">D</span>
+                                <span class="quiz-option-text">$21\;\text{N}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-explanation" data-q="4" style="display:none;">
+                            <div class="quiz-status"></div>
+                            <div class="quiz-explanation-math">
+                                $$m_2 g - m_1 g\sin\theta = (m_1 + m_2)\,a$$
+                                $$30 - 2(10)(0{,}5) = 5a \implies a = 4\;\text{m/s}^2$$
+                                $$T = m_1(a + g\sin\theta) = 2(4 + 5) = \boxed{18\;\text{N}}$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-white border-t border-slate-200 flex-shrink-0">
+                <button id="quizSubmitBtn" onclick="submitQuiz()" disabled
+                        class="w-full py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold text-sm hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Jawab semua soal (0/5)
+                </button>
+                <button id="quizCloseBtn" onclick="closeNewtonModal()"
+                        class="w-full py-2.5 mt-2 bg-slate-200 text-slate-700 rounded-xl font-semibold text-sm hover:bg-slate-300 transition" style="display:none;">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ============================================================
+           COMING SOON MODAL
+           ============================================================ */
+        function openComingSoon() {
+            document.getElementById('comingSoonModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeComingSoon() {
+            document.getElementById('comingSoonModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('comingSoonModal').classList.contains('show')) {
+                closeComingSoon();
+            }
+        });
+
+        /* ============================================================
+           INDEXEDDB HELPERS
+           ============================================================ */
+        const DB_NAME = 'quantara_db';
+        const DB_VERSION = 1;
+        let _dbInstance = null;
+
+        function openDB() {
+            if (_dbInstance) return Promise.resolve(_dbInstance);
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('notes')) {
+                        db.createObjectStore('notes', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('calcHistory')) {
+                        db.createObjectStore('calcHistory', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('quizResults')) {
+                        db.createObjectStore('quizResults', { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+                req.onsuccess = (e) => { _dbInstance = e.target.result; resolve(_dbInstance); };
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function dbAdd(store, data) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                const req = tx.objectStore(store).add(data);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function dbPut(store, data) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                const req = tx.objectStore(store).put(data);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function dbGetAll(store) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function dbGet(store, key) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).get(key);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function dbDelete(store, key) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                const req = tx.objectStore(store).delete(key);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function dbClear(store) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(store, 'readwrite');
+                const req = tx.objectStore(store).clear();
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function migrateNotesFromLocalStorage() {
+            try {
+                const legacy = localStorage.getItem('quantara_notes');
+                if (!legacy) return;
+                const arr = JSON.parse(legacy);
+                if (!Array.isArray(arr) || arr.length === 0) {
+                    localStorage.removeItem('quantara_notes');
+                    return;
+                }
+                for (const note of arr) {
+                    if (note && note.id) {
+                        try { await dbPut('notes', note); } catch (e) { console.warn('Migrate note err:', e); }
+                    }
+                }
+                localStorage.removeItem('quantara_notes');
+                console.log('✅ ' + arr.length + ' catatan berhasil dimigrasi ke IndexedDB');
+            } catch (e) {
+                console.warn('Migrasi catatan gagal:', e);
+            }
+        }
+
+        /* ============================================================
+           UTILS
+           ============================================================ */
+        function escapeHtml(s) {
+            return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function formatDate(ts) {
+            const d = new Date(ts);
+            const diff = Date.now() - d;
+            if (diff < 60000) return 'baru saja';
+            if (diff < 3600000) return Math.floor(diff / 60000) + 'm';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + 'j';
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+        }
+
+        /* ============================================================
+           PAGE NAVIGATION + DYNAMIC HEADER
+           ============================================================ */
+        const pageInfo = {
+            beranda:    { name: 'QUANTARA',   icon: 'fa-atom',        color: '#9999ff' },
+            kalkulator: { name: 'Kalkulator', icon: 'fa-calculator',  color: '#9999ff' },
+            catatan:    { name: 'Catatan',    icon: 'fa-book',        color: '#9999ff' },
+            nayra:      { name: 'Nayra AI',   icon: 'fa-robot',       color: '#9999ff' }
+        };
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+
+            const info = pageInfo[page];
+            if (info) {
+                document.getElementById('headerTitle').textContent = info.name;
+                document.getElementById('headerIcon').innerHTML = `<i class="fas ${info.icon}"></i>`;
+            }
+
+            const fab = document.getElementById('notesFab');
+            if (page === 'catatan') {
+                const listVisible = document.getElementById('notesListView').style.display !== 'none';
+                fab.style.display = listVisible ? 'block' : 'none';
+            } else {
+                fab.style.display = 'none';
+            }
+
+            if (page === 'nayra') {
+                setTimeout(() => {
+                    const messages = document.getElementById('chatMessages');
+                    messages.scrollTop = messages.scrollHeight;
+                    document.getElementById('chatInput').focus();
+                }, 300);
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                showPage(this.dataset.page);
+            });
+        });
+
+        /* ============================================================
+           NEWTON QUIZ MODAL
+           ============================================================ */
+        const QUIZ_TOTAL = 5;
+        const QUIZ_CORRECT = [1, 2, 2, 3, 2];
+        const LETTERS = ['A', 'B', 'C', 'D'];
+
+        let quizAnswers = {};
+        let quizSubmitted = false;
+        let newtonTypesetDone = false;
+
+        function typesetModalMath() {
+            const body = document.getElementById('newtonModalBody');
+            if (!body) return;
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([body]).catch(err => console.error('MathJax error:', err));
+            } else if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+                MathJax.startup.promise.then(() => {
+                    MathJax.typesetPromise([body]).catch(err => console.error('MathJax error:', err));
+                });
+            }
+        }
+
+        function attachQuizHandlers() {
+            document.querySelectorAll('#quizContainer .quiz-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (quizSubmitted) return;
+                    const q = parseInt(btn.dataset.q, 10);
+                    const idx = parseInt(btn.dataset.idx, 10);
+                    quizAnswers[q] = idx;
+                    document.querySelectorAll(`.quiz-option[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    updateSubmitButton();
+                });
+            });
+        }
+
+        function updateSubmitButton() {
+            const answered = Object.keys(quizAnswers).length;
+            const btn = document.getElementById('quizSubmitBtn');
+            btn.disabled = answered < QUIZ_TOTAL;
+            btn.textContent = answered < QUIZ_TOTAL
+                ? `Jawab semua soal (${answered}/${QUIZ_TOTAL})`
+                : 'Selesai & Lihat Pembahasan';
+        }
+
+        async function submitQuiz() {
+            if (Object.keys(quizAnswers).length < QUIZ_TOTAL) return;
+            quizSubmitted = true;
+            let correct = 0;
+
+            for (let i = 0; i < QUIZ_TOTAL; i++) {
+                const chosen = quizAnswers[i];
+                const correctIdx = QUIZ_CORRECT[i];
+                if (chosen === correctIdx) correct++;
+
+                document.querySelectorAll(`.quiz-option[data-q="${i}"]`).forEach(b => {
+                    const idx = parseInt(b.dataset.idx, 10);
+                    b.disabled = true;
+                    b.classList.remove('selected');
+                    if (idx === correctIdx) b.classList.add('correct');
+                    else if (idx === chosen) b.classList.add('wrong');
+                });
+
+                const expl = document.querySelector(`.quiz-explanation[data-q="${i}"]`);
+                const status = expl.querySelector('.quiz-status');
+                if (chosen === correctIdx) {
+                    expl.className = 'quiz-explanation correct';
+                    status.className = 'quiz-status correct';
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> Benar!';
+                } else {
+                    expl.className = 'quiz-explanation wrong';
+                    status.className = 'quiz-status wrong';
+                    status.innerHTML = `<i class="fas fa-times-circle"></i> Salah — Jawabanmu: ${LETTERS[chosen]} · Benar: ${LETTERS[correctIdx]}`;
+                }
+                expl.style.display = 'block';
+            }
+
+            const score = Math.round((correct / QUIZ_TOTAL) * 100);
+            const emoji = score >= 80 ? '🎉' : score >= 60 ? '👍' : '💪';
+            const msg = score >= 80 ? 'Luar biasa!' : score >= 60 ? 'Bagus!' : 'Perlu belajar lagi';
+
+            try {
+                await dbAdd('quizResults', {
+                    correct,
+                    total: QUIZ_TOTAL,
+                    score,
+                    answers: { ...quizAnswers },
+                    timestamp: Date.now()
+                });
+            } catch (e) {
+                console.warn('Gagal simpan hasil kuis:', e);
+            }
+
+            let statsHtml = '';
+            try {
+                const results = await dbGetAll('quizResults');
+                if (results.length > 0) {
+                    const totalAttempts = results.length;
+                    const best = Math.max(...results.map(r => r.score));
+                    statsHtml = `<div class="quiz-stats-badge">
+                        <i class="fas fa-chart-line"></i>
+                        ${totalAttempts}× percobaan · Terbaik ${best} poin
+                    </div>`;
+                }
+            } catch (e) {}
+
+            document.getElementById('quizProgress').innerHTML = `
+                <div class="quiz-score-box">
+                    <div class="quiz-score-value">${correct} / ${QUIZ_TOTAL}</div>
+                    <div class="quiz-score-label">Skor: ${score} poin — ${msg} ${emoji}</div>
+                    ${statsHtml}
+                    <div class="mt-3">
+                        <button onclick="retryQuiz()" class="px-4 py-1.5 bg-white text-orange-600 rounded-full text-xs font-semibold border border-orange-300 hover:bg-orange-50 transition">
+                            <i class="fas fa-redo mr-1"></i> Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quizSubmitBtn').style.display = 'none';
+            document.getElementById('quizCloseBtn').style.display = 'block';
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([document.getElementById('newtonModalBody')])
+                    .catch(err => console.error(err));
+            }
+
+            document.getElementById('newtonModalBody').scrollTop = 0;
+        }
+
+        function retryQuiz() {
+            resetQuiz();
+            document.getElementById('newtonModalBody').scrollTop = 0;
+        }
+
+        function resetQuiz() {
+            quizSubmitted = false;
+            quizAnswers = {};
+
+            document.querySelectorAll('.quiz-option').forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+            });
+            document.querySelectorAll('.quiz-explanation').forEach(e => {
+                e.className = 'quiz-explanation';
+                e.style.display = 'none';
+            });
+
+            document.getElementById('quizProgress').innerHTML = '';
+            document.getElementById('quizSubmitBtn').style.display = 'block';
+            document.getElementById('quizCloseBtn').style.display = 'none';
+            updateSubmitButton();
+        }
+
+        function openNewtonModal() {
+            resetQuiz();
+            const modal = document.getElementById('newtonModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('newtonModalBody').scrollTop = 0;
+
+            if (!newtonTypesetDone) {
+                newtonTypesetDone = true;
+                typesetModalMath();
+                if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+                    MathJax.startup.promise.then(() => typesetModalMath());
+                }
+                let attempts = 0;
+                const retry = setInterval(() => {
+                    attempts++;
+                    if (window.MathJax && MathJax.typesetPromise) {
+                        typesetModalMath();
+                        clearInterval(retry);
+                    } else if (attempts > 100) {
+                        clearInterval(retry);
+                    }
+                }, 100);
+            }
+        }
+
+        function closeNewtonModal() {
+            const modal = document.getElementById('newtonModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('newtonModal').classList.contains('show')) {
+                closeNewtonModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            attachQuizHandlers();
+            updateSubmitButton();
+        });
+
+        /* ============================================================
+           FAKTA SAINS HARIAN
+           ============================================================ */
+        const scienceFacts = [
+            { teks: "Air mendidih pada suhu 100°C di permukaan laut, tetapi titik didihnya menurun sekitar 1°C setiap kenaikan 300 meter dari permukaan laut.", sumber: "Fakta Fisika Dasar" },
+            { teks: "Satu sendok teh madu mengandung sekitar 60 kalori dan telah digunakan sebagai obat alami sejak 4.000 tahun lalu.", sumber: "Fakta Biologi" },
+            { teks: "Atom di dalam tubuhmu sebagian besar berasal dari bintang yang meledak miliaran tahun lalu. Kamu benar-benar terbuat dari debu bintang!", sumber: "Fakta Astronomi" },
+            { teks: "Air adalah satu-satunya zat alami yang ditemukan dalam tiga wujud sekaligus di Bumi: padat (es), cair, dan gas (uap).", sumber: "Fakta Kimia" },
+            { teks: "Cahaya Matahari membutuhkan waktu sekitar 8 menit 20 detik untuk sampai ke Bumi. Kamu melihat Matahari masa lalu, bukan saat ini!", sumber: "Fakta Astronomi" },
+            { teks: "Tulang manusia memiliki kekuatan sebanding dengan beton. Satu tulang paha bisa menahan beban hingga 30 kali berat tubuhmu.", sumber: "Fakta Biologi" },
+            { teks: "Inti atom sangat padat: satu sendok teh materi inti bintang neutron bisa memiliki berat miliaran ton!", sumber: "Fakta Fisika Modern" },
+            { teks: "DNA manusia memiliki 3 miliar pasangan basa. Jika diurai, panjangnya bisa mencapai 2 meter per sel.", sumber: "Fakta Biologi Molekuler" },
+            { teks: "Helium adalah satu-satunya unsur yang tidak bisa membeku pada tekanan atmosfer normal, bahkan pada suhu mendekati nol mutlak.", sumber: "Fakta Kimia" },
+            { teks: "Petir lebih panas dari permukaan Matahari. Suhu saluran petir bisa mencapai 30.000°C!", sumber: "Fakta Fisika Atmosfer" },
+            { teks: "Bulan menjauh dari Bumi sekitar 3,8 cm setiap tahun. Perlahan-lahan, hari di Bumi akan memanjang.", sumber: "Fakta Astronomi" },
+            { teks: "Tidak ada dua kepingan salju yang identik. Struktur kristal airnya selalu berbeda karena kondisi atmosfer yang unik.", sumber: "Fakta Kimia Kristal" }
+        ];
+
+        const FACT_DURATION = 8000;
+        let currentFactIndex = 0;
+        let factTimer = null;
+
+        const factEl = document.getElementById('dailyFactText');
+        const dotsContainer = document.getElementById('dailyDots');
+        const timerFill = document.getElementById('timerFill');
+        const nextBtn = document.getElementById('nextFactBtn');
+
+        function buildDots() {
+            dotsContainer.innerHTML = '';
+            scienceFacts.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'daily-dose-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Fakta ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    currentFactIndex = i;
+                    showFact(i, true);
+                    restartAutoRotate();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function showFact(index, resetTimer = false) {
+            const fact = scienceFacts[index];
+            factEl.classList.remove('fade-in');
+            factEl.classList.add('fade-out');
+            setTimeout(() => {
+                factEl.innerHTML = `${fact.teks} <span class="daily-dose-reference">— ${fact.sumber}</span>`;
+                factEl.classList.remove('fade-out');
+                factEl.classList.add('fade-in');
+            }, 400);
+            dotsContainer.querySelectorAll('.daily-dose-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+            if (resetTimer) {
+                timerFill.style.animation = 'none';
+                void timerFill.offsetWidth;
+                timerFill.style.animation = `timerProgress ${FACT_DURATION}ms linear infinite`;
+            }
+        }
+
+        function nextFact() {
+            currentFactIndex = (currentFactIndex + 1) % scienceFacts.length;
+            showFact(currentFactIndex, true);
+        }
+
+        function startAutoRotate() {
+            stopAutoRotate();
+            factTimer = setInterval(nextFact, FACT_DURATION);
+        }
+
+        function stopAutoRotate() {
+            if (factTimer) { clearInterval(factTimer); factTimer = null; }
+        }
+
+        function restartAutoRotate() {
+            timerFill.style.animation = 'none';
+            void timerFill.offsetWidth;
+            timerFill.style.animation = `timerProgress ${FACT_DURATION}ms linear infinite`;
+            startAutoRotate();
+        }
+
+        buildDots();
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+        currentFactIndex = dayOfYear % scienceFacts.length;
+        showFact(currentFactIndex, true);
+        startAutoRotate();
+        nextBtn.addEventListener('click', () => { nextFact(); restartAutoRotate(); });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoRotate();
+                timerFill.style.animationPlayState = 'paused';
+            } else {
+                startAutoRotate();
+                timerFill.style.animationPlayState = 'running';
+            }
+        });
+
+        /* ============================================================
+           KALKULATOR SCIENTIFIC + RIWAYAT (IndexedDB)
+           ============================================================ */
+        let calcExpr = '';
+        let calcHistoryStr = '';
+        let calcLastAns = 0;
+        let calcJustEvaluated = false;
+        let isDegMode = true;
+
+        const exprDisplay = document.getElementById('calcExpr');
+        const historyDisplay = document.getElementById('calcHistory');
+        const angleModeBtn = document.getElementById('angleMode');
+
+        function updateCalcDisplay() {
+            exprDisplay.textContent = calcExpr || '0';
+            historyDisplay.textContent = calcHistoryStr;
+        }
+
+        function toggleAngleMode() {
+            isDegMode = !isDegMode;
+            angleModeBtn.textContent = isDegMode ? 'DEG' : 'RAD';
+        }
+
+        function calcInput(val) {
+            if (calcJustEvaluated) {
+                const isOperator = ['+', '−', '×', '÷', '^', '²', '%'].includes(val);
+                if (!isOperator) calcExpr = '';
+                calcHistoryStr = '';
+                calcJustEvaluated = false;
+            }
+            calcExpr += val;
+            updateCalcDisplay();
+        }
+
+        function calcClear() {
+            calcExpr = '';
+            calcHistoryStr = '';
+            calcJustEvaluated = false;
+            updateCalcDisplay();
+        }
+
+        function calcBackspace() {
+            calcExpr = calcExpr.slice(0, -1);
+            updateCalcDisplay();
+        }
+
+        function calcToggleSign() {
+            if (!calcExpr) { calcExpr = '−'; updateCalcDisplay(); return; }
+            if (calcExpr.startsWith('(−')) calcExpr = calcExpr.slice(2);
+            else if (calcExpr.startsWith('−')) calcExpr = calcExpr.slice(1);
+            else calcExpr = '(−' + calcExpr + ')';
+            updateCalcDisplay();
+        }
+
+        function calcAns() {
+            if (calcJustEvaluated) { calcExpr = ''; calcJustEvaluated = false; calcHistoryStr = ''; }
+            calcExpr += String(calcLastAns);
+            updateCalcDisplay();
+        }
+
+        async function calcEquals() {
+            if (!calcExpr) return;
+            try {
+                const result = evaluateExpression(calcExpr);
+                const exprSnapshot = calcExpr;
+                calcHistoryStr = exprSnapshot + ' =';
+                calcLastAns = result;
+                calcExpr = String(result);
+                calcJustEvaluated = true;
+                updateCalcDisplay();
+                await saveCalcHistory(exprSnapshot, result);
+            } catch (e) {
+                calcHistoryStr = 'Error: ' + e.message;
+                updateCalcDisplay();
+            }
+        }
+
+        function evaluateExpression(display) {
+            let expr = display
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/−/g, '-')
+                .replace(/π/g, '(' + Math.PI + ')')
+                .replace(/√/g, 'sqrt')
+                .replace(/²/g, '^2')
+                .replace(/\^/g, '**')
+                .replace(/%/g, '/100')
+                .replace(/(?<!\d)e(?!\d)/g, '(' + Math.E + ')');
+
+            const stripped = expr
+                .replace(/sin|cos|tan|log|ln|sqrt/g, '')
+                .replace(/[\d+\-*/().,\s]/g, '');
+            if (stripped.length > 0) throw new Error('Ekspresi tidak valid');
+
+            const fn = new Function('isDeg', `
+                const PI = Math.PI;
+                const toRad = (x) => isDeg ? x * PI / 180 : x;
+                const sin = (x) => Math.sin(toRad(x));
+                const cos = (x) => Math.cos(toRad(x));
+                const tan = (x) => Math.tan(toRad(x));
+                const log = Math.log10;
+                const ln = Math.log;
+                const sqrt = Math.sqrt;
+                return (${expr});
+            `);
+
+            const result = fn(isDegMode);
+            if (typeof result !== 'number' || !isFinite(result)) throw new Error('Hasil tidak valid');
+            return Math.round(result * 1e10) / 1e10;
+        }
+
+        async function saveCalcHistory(expression, result) {
+            try {
+                await dbAdd('calcHistory', {
+                    expression,
+                    result,
+                    timestamp: Date.now()
+                });
+                const all = await dbGetAll('calcHistory');
+                if (all.length > 100) {
+                    all.sort((a, b) => a.timestamp - b.timestamp);
+                    const toDelete = all.slice(0, all.length - 100);
+                    for (const item of toDelete) {
+                        try { await dbDelete('calcHistory', item.id); } catch (e) {}
+                    }
+                }
+                await renderCalcHistory();
+            } catch (e) {
+                console.warn('Gagal simpan riwayat:', e);
+            }
+        }
+
+        async function renderCalcHistory() {
+            const items = await dbGetAll('calcHistory');
+            items.sort((a, b) => b.timestamp - a.timestamp);
+
+            const list = document.getElementById('calcHistoryList');
+            const empty = document.getElementById('calcHistoryEmpty');
+            const count = document.getElementById('calcHistoryCount');
+            const clearBtn = document.getElementById('calcHistoryClearBtn');
+
+            if (!list) return;
+
+            if (items.length === 0) {
+                list.innerHTML = '';
+                empty.classList.remove('hidden');
+                count.textContent = '';
+                clearBtn.classList.add('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            count.textContent = '(' + items.length + ')';
+            clearBtn.classList.remove('hidden');
+
+            list.innerHTML = items.slice(0, 50).map(item => {
+                const resultStr = String(item.result);
+                const safeResult = resultStr.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                return `<div class="calc-history-item" onclick="useHistoryResult('${safeResult}')">
+                    <div class="flex-1 min-w-0">
+                        <div class="calc-history-expr">${escapeHtml(item.expression)} =</div>
+                        <div class="calc-history-result">${escapeHtml(resultStr)}</div>
+                    </div>
+                    <div class="calc-history-time">${formatDate(item.timestamp)}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function useHistoryResult(val) {
+            if (calcJustEvaluated) {
+                calcExpr = '';
+                calcHistoryStr = '';
+                calcJustEvaluated = false;
+            }
+            const str = String(val);
+            calcExpr += str.startsWith('-') ? '(' + str + ')' : str;
+            updateCalcDisplay();
+        }
+
+        async function clearCalcHistory() {
+            if (!confirm('Hapus semua riwayat hitungan?')) return;
+            try {
+                await dbClear('calcHistory');
+                await renderCalcHistory();
+            } catch (e) {
+                console.warn('Gagal hapus riwayat:', e);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('page-kalkulator').classList.contains('active')) return;
+            if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+            const k = e.key;
+            if (/[0-9.]/.test(k)) { calcInput(k); e.preventDefault(); }
+            else if (k === '+') { calcInput('+'); e.preventDefault(); }
+            else if (k === '-') { calcInput('−'); e.preventDefault(); }
+            else if (k === '*') { calcInput('×'); e.preventDefault(); }
+            else if (k === '/') { calcInput('÷'); e.preventDefault(); }
+            else if (k === '(') { calcInput('('); e.preventDefault(); }
+            else if (k === ')') { calcInput(')'); e.preventDefault(); }
+            else if (k === '^') { calcInput('^'); e.preventDefault(); }
+            else if (k === 'Enter' || k === '=') { calcEquals(); e.preventDefault(); }
+            else if (k === 'Backspace') { calcBackspace(); e.preventDefault(); }
+            else if (k === 'Escape') { calcClear(); e.preventDefault(); }
+        });
+
+        /* ============================================================
+           CATATAN (IndexedDB)
+           ============================================================ */
+        let currentNoteId = null;
+
+        async function getNotes() {
+            try {
+                return await dbGetAll('notes');
+            } catch { return []; }
+        }
+
+        async function renderNotes() {
+            const notes = (await getNotes()).sort((a, b) => b.updatedAt - a.updatedAt);
+            const list = document.getElementById('notesList');
+            const empty = document.getElementById('notesEmpty');
+            const count = document.getElementById('notesCount');
+
+            count.textContent = notes.length + ' catatan';
+
+            if (notes.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            list.innerHTML = notes.map(n => {
+                const preview = n.body.length > 80 ? n.body.slice(0, 80) + '...' : n.body;
+                const title = n.title || 'Tanpa judul';
+                return `<div class="note-card" onclick="openNote('${n.id}')">
+                    <div class="flex justify-between items-start mb-1 gap-2">
+                        <h4 class="font-bold text-gray-800 truncate flex-1">${escapeHtml(title)}</h4>
+                        <span class="text-xs text-gray-400 flex-shrink-0">${formatDate(n.updatedAt)}</span>
+                    </div>
+                    <p class="text-sm text-gray-500">${preview ? escapeHtml(preview) : '<em class="text-gray-400">(kosong)</em>'}</p>
+                </div>`;
+            }).join('');
+        }
+
+        function showEditor() {
+            document.getElementById('notesListView').style.display = 'none';
+            document.getElementById('noteEditorView').style.display = 'block';
+            document.getElementById('notesFab').style.display = 'none';
+        }
+
+        async function showList() {
+            document.getElementById('notesListView').style.display = 'block';
+            document.getElementById('noteEditorView').style.display = 'none';
+            if (document.getElementById('page-catatan').classList.contains('active')) {
+                document.getElementById('notesFab').style.display = 'block';
+            }
+            await renderNotes();
+        }
+
+        function newNote() {
+            currentNoteId = null;
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteBody').value = '';
+            document.getElementById('noteEditorTitle').textContent = 'Catatan Baru';
+            document.getElementById('noteDeleteBtn').style.display = 'none';
+            showEditor();
+            setTimeout(() => document.getElementById('noteTitle').focus(), 100);
+        }
+
+        async function openNote(id) {
+            try {
+                const note = await dbGet('notes', id);
+                if (!note) return;
+                currentNoteId = id;
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteBody').value = note.body;
+                document.getElementById('noteEditorTitle').textContent = 'Edit Catatan';
+                document.getElementById('noteDeleteBtn').style.display = 'block';
+                showEditor();
+            } catch (e) {
+                console.warn('Gagal buka catatan:', e);
+            }
+        }
+
+        async function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const body = document.getElementById('noteBody').value.trim();
+            if (!title && !body) { alert('Catatan masih kosong'); return; }
+
+            const now = Date.now();
+
+            try {
+                if (currentNoteId) {
+                    const existing = await dbGet('notes', currentNoteId);
+                    if (existing) {
+                        await dbPut('notes', { ...existing, title, body, updatedAt: now });
+                    } else {
+                        await dbPut('notes', { id: currentNoteId, title, body, createdAt: now, updatedAt: now });
+                    }
+                } else {
+                    const newId = 'n_' + now + '_' + Math.random().toString(36).slice(2, 8);
+                    await dbPut('notes', { id: newId, title, body, createdAt: now, updatedAt: now });
+                }
+                currentNoteId = null;
+                await showList();
+            } catch (e) {
+                console.warn('Gagal simpan catatan:', e);
+                alert('Gagal menyimpan catatan: ' + e.message);
+            }
+        }
+
+        async function deleteNote() {
+            if (!currentNoteId) return;
+            if (!confirm('Hapus catatan ini?')) return;
+            try {
+                await dbDelete('notes', currentNoteId);
+                currentNoteId = null;
+                await showList();
+            } catch (e) {
+                console.warn('Gagal hapus catatan:', e);
+            }
+        }
+
+        /* ============================================================
+           NAYRA AI
+           ============================================================ */
+        const nayraMessages = [
+            {
+                role: 'system',
+                content: 'Kamu adalah Nayra AI, asisten belajar sains yang ramah, cerdas, dan membantu siswa Indonesia. Jawab dengan bahasa Indonesia yang baik dan mudah dipahami. Berikan penjelasan yang jelas, ringkas, dan akurat. Jika ditanya soal sains, berikan langkah-langkah bila perlu. Tetap fokus dan hindari jawaban bertele-tele.'
+            }
+        ];
+
+        let nayraBusy = false;
+        let nayraWelcomeShown = false;
+
+        function appendBubble(role, content, options = {}) {
+            const messages = document.getElementById('chatMessages');
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble ' + role;
+            if (options.html) bubble.innerHTML = content;
+            else bubble.textContent = content;
+            if (options.id) bubble.id = options.id;
+            messages.appendChild(bubble);
+            messages.scrollTop = messages.scrollHeight;
+            return bubble;
+        }
+
+        function replaceBubble(id, text) {
+            const bubble = document.getElementById(id);
+            if (bubble) {
+                bubble.textContent = text;
+                const messages = document.getElementById('chatMessages');
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        async function nayraSend() {
+            if (nayraBusy) return;
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            appendBubble('user', text);
+            nayraMessages.push({ role: 'user', content: text });
+
+            const typingId = 'typing_' + Date.now();
+            appendBubble('ai', '<span class="typing-dots"><span></span><span></span><span></span></span>', { html: true, id: typingId });
+
+            nayraBusy = true;
+            document.getElementById('chatSend').disabled = true;
+
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 30000);
+
+                const res = await fetch('https://text.pollinations.ai/openai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: 'openai', messages: nayraMessages }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                const reply = data?.choices?.[0]?.message?.content?.trim() || 'Maaf, saya tidak bisa menjawab saat ini.';
+
+                nayraMessages.push({ role: 'assistant', content: reply });
+                replaceBubble(typingId, reply);
+            } catch (err) {
+                let msg = 'Maaf, terjadi kesalahan. Coba lagi ya.';
+                if (err.name === 'AbortError') msg = 'Respons terlalu lama (>30 detik). Coba lagi.';
+                else if (err.message) msg = 'Gagal terhubung ke Nayra: ' + err.message;
+                replaceBubble(typingId, msg);
+            } finally {
+                nayraBusy = false;
+                document.getElementById('chatSend').disabled = false;
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        document.getElementById('chatInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                nayraSend();
+            }
+        });
+
+        if (!nayraWelcomeShown) {
+            nayraWelcomeShown = true;
+            appendBubble('ai', 'Halo! 👋 Aku Nayra AI, siap membantu kamu belajar sains. Tanya apa saja ya — fisika, kimia, biologi, matematika, atau topik lainnya! 🚀');
+        }
+
+        /* ============================================================
+           INIT
+           ============================================================ */
+        (async function initIndexedDBData() {
+            try {
+                await migrateNotesFromLocalStorage();
+            } catch (e) {
+                console.warn('Migrasi gagal:', e);
+            }
+
+            try {
+                await renderNotes();
+            } catch (e) {
+                console.warn('Render catatan gagal:', e);
+            }
+
+            try {
+                await renderCalcHistory();
+            } catch (e) {
+                console.warn('Render riwayat kalkulator gagal:', e);
+            }
+        })();
+    </script>
+</body>
+</html>
