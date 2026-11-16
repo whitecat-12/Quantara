@@ -8,17 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- ===== MathJax v3 (LaTeX → SVG) ===== -->
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$']],
-                displayMath: [['$$', '$$']]
-            },
+            tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
             svg: { fontCache: 'global' },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-            }
+            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -83,45 +77,16 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
-
-        .nav-item span {
-            font-size: 0.6rem;
-            font-weight: 600;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            color: var(--primary);
-            background: rgba(56, 178, 172, 0.08);
-        }
-
-        .nav-item.active {
-            color: white;
-            background: linear-gradient(135deg, #38b2ac, #0e7490);
-            box-shadow: 0 6px 16px rgba(56, 178, 172, 0.45);
-        }
-
-        .nav-item.active:hover {
-            color: white;
-            background: linear-gradient(135deg, #38b2ac, #0e7490);
-        }
-
-        .nav-icon {
-            font-size: 1.05rem;
-            line-height: 1;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-item.active .nav-icon {
-            transform: scale(1.1);
-            color: white;
-        }
+        .nav-item span { font-size: 0.6rem; font-weight: 600; line-height: 1; white-space: nowrap; }
+        .nav-item:hover { color: var(--primary); background: rgba(56, 178, 172, 0.08); }
+        .nav-item.active { color: white; background: linear-gradient(135deg, #38b2ac, #0e7490); box-shadow: 0 6px 16px rgba(56, 178, 172, 0.45); }
+        .nav-item.active:hover { color: white; background: linear-gradient(135deg, #38b2ac, #0e7490); }
+        .nav-icon { font-size: 1.05rem; line-height: 1; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-item.active .nav-icon { transform: scale(1.1); color: white; }
 
         /* ===== Pages ===== */
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.35s ease; }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -132,33 +97,36 @@
             background-size: 20px 20px;
         }
 
-        /* ===== Achievements / Menu Badges ===== */
+        /* ===== Achievements / Menu Badges (SMALLER) ===== */
         .achievement-badge {
-            width: 50px; height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
-
         .achievement-badge::after {
             content: '';
             position: absolute;
-            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
             border-radius: 50%;
             border: 2px dashed currentColor;
             opacity: 0.3;
             animation: spin 10s linear infinite;
+            pointer-events: none;
         }
-
         @keyframes spin {
             0%   { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         .app-logo { display: flex; align-items: center; }
-
         .app-logo-icon {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             color: white;
@@ -168,282 +136,235 @@
             margin-right: 8px;
             transition: all 0.3s ease;
         }
+        .app-name { font-weight: 700; font-size: 1.25rem; color: #60a5fa; transition: all 0.3s ease; }
 
-        .app-name {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #60a5fa;
-            transition: all 0.3s ease;
-        }
-
-        /* ===== Daily Dose ===== */
+        /* ===== Daily Dose (SMALLER TEXT) ===== */
         .daily-dose-card {
             background: linear-gradient(135deg, #f4f2ff, #e5e1ff);
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.08);
             position: relative;
         }
-
         .daily-dose-header {
             background: linear-gradient(135deg, #3b82f6, #10b981);
             color: white;
-            padding: 12px 16px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-
         .daily-dose-content {
-            padding: 18px 16px 16px;
+            padding: 12px 12px 12px;
             position: relative;
             display: flex;
             flex-direction: column;
         }
-
         .daily-dose-verse {
-            font-size: 0.9rem;
-            line-height: 1.7;
+            font-size: 0.78rem;
+            line-height: 1.55;
             color: #334155;
             position: relative;
-            padding-left: 28px;
-            padding-right: 16px;
+            padding-left: 22px;
+            padding-right: 10px;
             padding-top: 2px;
-            padding-bottom: 4px;
-            margin-bottom: 8px;
+            padding-bottom: 2px;
+            margin-bottom: 6px;
             transition: opacity 0.5s ease, transform 0.5s ease;
             word-wrap: break-word;
             overflow-wrap: anywhere;
         }
-
         .daily-dose-verse.fade-out { opacity: 0; transform: translateY(-8px); }
         .daily-dose-verse.fade-in  { opacity: 1; transform: translateY(0); }
-
         .daily-dose-verse::before {
             content: '"';
             position: absolute;
             left: 0;
-            top: -8px;
-            font-size: 2.4rem;
+            top: -6px;
+            font-size: 1.9rem;
             color: #9999ff;
             line-height: 1;
             opacity: 0.55;
             pointer-events: none;
         }
-
         .daily-dose-reference {
             display: block;
             text-align: right;
             font-style: italic;
             color: #64748b;
-            margin-top: 10px;
-            font-size: 0.85em;
-            padding-right: 8px;
+            margin-top: 6px;
+            font-size: 0.72em;
+            padding-right: 4px;
         }
-
-        .daily-dose-title { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .daily-dose-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 0; }
+        .daily-dose-title { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; line-height: 1.15; }
+        .daily-dose-subtitle { font-size: 0.7rem; color: rgba(255,255,255,0.85); margin-bottom: 0; line-height: 1.2; }
 
         .daily-dose-next {
             background: rgba(255, 255, 255, 0.25);
             border: none; color: white;
-            width: 30px; height: 30px;
+            width: 26px; height: 26px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             flex-shrink: 0;
         }
-
         .daily-dose-next:hover { background: rgba(255, 255, 255, 0.45); transform: rotate(90deg); }
 
         .daily-dose-dots {
             display: flex;
             justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            margin-bottom: 10px;
+            gap: 4px;
+            margin-top: 8px;
+            margin-bottom: 6px;
         }
-
         .daily-dose-dot {
-            width: 6px; height: 6px;
+            width: 5px; height: 5px;
             border-radius: 50%;
             background: rgba(153, 153, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
             border: none; padding: 0;
         }
-
-        .daily-dose-dot.active { background: #9999ff; width: 18px; border-radius: 3px; }
+        .daily-dose-dot.active { background: #9999ff; width: 14px; border-radius: 3px; }
         .daily-dose-dot:hover { background: rgba(153, 153, 255, 0.6); }
 
         .daily-dose-timer {
             position: absolute;
             bottom: 0; left: 0; right: 0;
-            height: 3px;
+            height: 2px;
             background: rgba(153, 153, 255, 0.15);
             overflow: hidden;
         }
-
         .daily-dose-timer-fill {
             height: 100%;
             background: linear-gradient(90deg, #9999ff, #b399ff);
             width: 0%;
             animation: timerProgress 8s linear infinite;
         }
-
         @keyframes timerProgress {
             from { width: 0%; }
             to   { width: 100%; }
         }
 
-        /* ===== CALCULATOR ===== */
+        /* ===== CALCULATOR (SMALLER) ===== */
         .calc-display {
             background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 16px;
-            padding: 16px;
-            min-height: 110px;
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-height: 78px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             overflow: hidden;
             position: relative;
         }
-
-        .calc-top { display: flex; justify-content: flex-end; margin-bottom: 6px; }
-
+        .calc-top { display: flex; justify-content: flex-end; margin-bottom: 4px; }
         .calc-mode {
             background: rgba(255,255,255,0.12);
             color: #38b2ac;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
             border: 1px solid rgba(56,178,172,0.4);
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
         .calc-mode:hover { background: rgba(56,178,172,0.2); }
-
         .calc-history {
             color: rgba(255,255,255,0.45);
-            font-size: 0.8rem;
-            min-height: 1.2em;
+            font-size: 0.66rem;
+            min-height: 1em;
             word-wrap: break-word;
             overflow-wrap: anywhere;
             text-align: right;
-            padding: 0 4px;
+            padding: 0 2px;
         }
-
         .calc-expr {
             color: white;
-            font-size: 1.9rem;
+            font-size: 1.35rem;
             font-weight: 600;
             text-align: right;
             word-wrap: break-word;
             overflow-wrap: anywhere;
-            line-height: 1.25;
-            padding: 0 4px;
-            letter-spacing: 0.5px;
+            line-height: 1.2;
+            padding: 0 2px;
+            letter-spacing: 0.3px;
         }
-
         .calc-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
+            gap: 4px;
         }
-
         .calc-btn {
             background: #f1f5f9;
-            border-radius: 12px;
-            padding: 14px 0;
+            border-radius: 9px;
+            padding: 8px 0;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.8rem;
             color: #0f172a;
             transition: all 0.15s ease;
             cursor: pointer;
             user-select: none;
             border: none;
             font-family: inherit;
+            min-height: 38px;
         }
-
         .calc-btn:hover { background: #e2e8f0; }
         .calc-btn:active { transform: scale(0.94); }
-
-        .calc-btn.op {
-            background: linear-gradient(135deg, #38b2ac, #0e7490);
-            color: white;
-        }
+        .calc-btn.op { background: linear-gradient(135deg, #38b2ac, #0e7490); color: white; }
         .calc-btn.op:hover { filter: brightness(1.08); }
-
         .calc-btn.fn {
             background: #fef3c7;
             color: #92400e;
-            font-size: 0.82rem;
+            font-size: 0.66rem;
         }
         .calc-btn.fn:hover { background: #fde68a; }
-
         .calc-btn.clear {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
         }
         .calc-btn.clear:hover { filter: brightness(1.08); }
-
         .calc-btn.equals {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.05rem;
         }
         .calc-btn.equals:hover { filter: brightness(1.08); }
-
         .calc-btn.row-span-2 { grid-row: span 2; }
 
         /* ===== CALC HISTORY LIST ===== */
         .calc-history-item {
             background: white;
             border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 12px;
+            border-radius: 8px;
+            padding: 8px 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-
         .calc-history-item:hover {
             border-color: #38b2ac;
             background: #f0fdfa;
             transform: translateX(2px);
         }
-
         .calc-history-item:active { transform: scale(0.98); }
-
         .calc-history-expr {
-            font-size: 0.72rem;
+            font-size: 0.66rem;
             color: #64748b;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
-        .calc-history-result {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .calc-history-time {
-            font-size: 0.65rem;
-            color: #94a3b8;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
+        .calc-history-result { font-size: 0.85rem; font-weight: 700; color: #0f172a; }
+        .calc-history-time { font-size: 0.6rem; color: #94a3b8; flex-shrink: 0; margin-top: 2px; }
 
         /* ===== NOTES ===== */
         .note-card {
@@ -455,13 +376,11 @@
             transition: all 0.2s ease;
             margin-bottom: 10px;
         }
-
         .note-card:hover {
             border-color: #38b2ac;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transform: translateY(-2px);
         }
-
         .note-input {
             width: 100%;
             padding: 12px 14px;
@@ -474,9 +393,7 @@
             outline: none;
             background: #f8fafc;
         }
-
         .note-input:focus { border-color: #38b2ac; background: white; }
-
         textarea.note-input { resize: vertical; min-height: 220px; line-height: 1.6; }
 
         .fab {
@@ -494,7 +411,6 @@
             z-index: 40;
             transition: all 0.2s ease;
         }
-
         .fab:hover { transform: scale(1.05); }
         .fab:active { transform: scale(0.95); }
 
@@ -505,14 +421,12 @@
             height: calc(100vh - 180px);
             height: calc(100dvh - 180px);
         }
-
         .nayra-chat {
             display: flex;
             flex-direction: column;
             height: 100%;
             background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
         }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -524,13 +438,8 @@
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
         }
-
         .chat-messages::-webkit-scrollbar { width: 4px; }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.3);
-            border-radius: 2px;
-        }
-
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 2px; }
         .chat-bubble {
             max-width: 82%;
             padding: 10px 14px;
@@ -542,12 +451,10 @@
             overflow-wrap: anywhere;
             animation: bubbleIn 0.25s ease;
         }
-
         @keyframes bubbleIn {
             from { opacity: 0; transform: translateY(6px) scale(0.98); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .chat-bubble.user {
             background: linear-gradient(135deg, #38b2ac, #0e7490);
             color: white;
@@ -555,7 +462,6 @@
             border-bottom-right-radius: 6px;
             box-shadow: 0 2px 8px rgba(56, 178, 172, 0.28);
         }
-
         .chat-bubble.ai {
             background: white;
             color: #1e293b;
@@ -563,7 +469,6 @@
             border-bottom-left-radius: 6px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
-
         .chat-input-row {
             flex-shrink: 0;
             display: flex;
@@ -573,7 +478,6 @@
             border-top: 1px solid #e5e7eb;
             align-items: center;
         }
-
         .chat-input-row input {
             flex: 1;
             padding: 12px 16px;
@@ -587,10 +491,8 @@
             color: #1e293b;
             min-width: 0;
         }
-
         .chat-input-row input:focus { background: #e2e8f0; }
         .chat-input-row input::placeholder { color: #94a3b8; }
-
         .chat-input-row button {
             background: linear-gradient(135deg, #38b2ac, #0e7490);
             color: white;
@@ -606,12 +508,7 @@
             align-items: center;
             justify-content: center;
         }
-
-        .chat-input-row button:hover:not(:disabled) {
-            filter: brightness(1.08);
-            transform: scale(1.05);
-        }
-
+        .chat-input-row button:hover:not(:disabled) { filter: brightness(1.08); transform: scale(1.05); }
         .chat-input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .typing-dots { display: inline-flex; gap: 4px; align-items: center; padding: 2px 0; }
@@ -623,7 +520,6 @@
         }
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
         @keyframes typing {
             0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
             30%           { transform: translateY(-4px); opacity: 1; }
@@ -638,25 +534,24 @@
             cursor: pointer;
             transition: transform 0.2s ease;
         }
-
-        .lab-item:hover { transform: translateY(-3px) scale(1.05); }
+        .lab-item:hover { transform: translateY(-2px) scale(1.03); }
         .lab-item:hover .achievement-badge { box-shadow: 0 8px 16px -4px currentColor; }
 
         .lab-label {
-            font-size: 0.65rem;
+            font-size: 0.58rem;
             font-weight: 600;
             color: #475569;
-            margin-top: 6px;
+            margin-top: 5px;
             text-align: center;
-            line-height: 1.15;
-            max-width: 60px;
+            line-height: 1.1;
+            max-width: 58px;
         }
 
-        /* ===== LAB CAROUSEL (8 + 8 slide) ===== */
+        /* ===== LAB CAROUSEL (8 + 8 slide) — FIX CLIPPING ===== */
         .lab-carousel-wrap {
             position: relative;
             overflow: hidden;
-            margin: 0 -4px;
+            margin: 0 -8px;
         }
         .lab-carousel {
             display: flex;
@@ -673,18 +568,19 @@
             min-width: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
-            padding: 2px 4px;
+            padding: 16px 8px 10px;
             box-sizing: border-box;
         }
+
         .lab-dots {
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 10px;
         }
         .lab-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: #cbd5e1;
             border: none;
@@ -694,13 +590,11 @@
         }
         .lab-dot.active {
             background: linear-gradient(135deg, #14b8a6, #06b6d4);
-            width: 24px;
+            width: 22px;
             border-radius: 4px;
         }
         .lab-dot:hover { background: #94a3b8; }
-        .lab-dot.active:hover {
-            background: linear-gradient(135deg, #14b8a6, #06b6d4);
-        }
+        .lab-dot.active:hover { background: linear-gradient(135deg, #14b8a6, #06b6d4); }
 
         /* ===== NEWTON QUIZ MODAL ===== */
         .newton-modal {
@@ -715,16 +609,8 @@
             justify-content: center;
             padding: 16px;
         }
-
-        .newton-modal.show {
-            display: flex;
-            animation: modalFadeIn 0.25s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
+        .newton-modal.show { display: flex; animation: modalFadeIn 0.25s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .newton-modal-content {
             background: white;
@@ -738,7 +624,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             animation: modalSlideIn 0.3s ease;
         }
-
         @keyframes modalSlideIn {
             from { opacity: 0; transform: translateY(20px) scale(0.96); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -750,7 +635,6 @@
             flex: 1;
             background: #f8fafc;
         }
-
         .newton-modal-body::-webkit-scrollbar { width: 6px; }
         .newton-modal-body::-webkit-scrollbar-thumb {
             background: rgba(148, 163, 184, 0.4);
@@ -765,7 +649,6 @@
             margin-bottom: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-
         .soal-card:last-child { margin-bottom: 0; }
 
         .soal-num {
@@ -782,13 +665,7 @@
         }
 
         /* ===== QUIZ ===== */
-        .quiz-options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
         .quiz-option {
             display: flex;
             align-items: center;
@@ -806,31 +683,11 @@
             color: #1e293b;
             min-height: 44px;
         }
-
-        .quiz-option:hover:not(:disabled) {
-            background: #fff7ed;
-            border-color: #f97316;
-        }
-
+        .quiz-option:hover:not(:disabled) { background: #fff7ed; border-color: #f97316; }
         .quiz-option:disabled { cursor: default; }
-
-        .quiz-option.selected {
-            background: #fff7ed;
-            border-color: #f97316;
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
-        }
-
-        .quiz-option.correct {
-            background: #dcfce7;
-            border-color: #16a34a;
-            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
-        }
-
-        .quiz-option.wrong {
-            background: #fee2e2;
-            border-color: #dc2626;
-            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
-        }
+        .quiz-option.selected { background: #fff7ed; border-color: #f97316; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15); }
+        .quiz-option.correct { background: #dcfce7; border-color: #16a34a; box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15); }
+        .quiz-option.wrong { background: #fee2e2; border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15); }
 
         .quiz-option-letter {
             display: inline-flex;
@@ -846,79 +703,25 @@
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
+        .quiz-option.selected .quiz-option-letter { background: #f97316; color: white; border-color: #f97316; }
+        .quiz-option.correct .quiz-option-letter { background: #16a34a; color: white; border-color: #16a34a; }
+        .quiz-option.wrong .quiz-option-letter { background: #dc2626; color: white; border-color: #dc2626; }
 
-        .quiz-option.selected .quiz-option-letter {
-            background: #f97316;
-            color: white;
-            border-color: #f97316;
-        }
-
-        .quiz-option.correct .quiz-option-letter {
-            background: #16a34a;
-            color: white;
-            border-color: #16a34a;
-        }
-
-        .quiz-option.wrong .quiz-option-letter {
-            background: #dc2626;
-            color: white;
-            border-color: #dc2626;
-        }
-
-        .quiz-option-text {
-            flex: 1;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 2px 0;
-        }
-
+        .quiz-option-text { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
         .quiz-option-text::-webkit-scrollbar { height: 3px; }
-        .quiz-option-text::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.3);
-            border-radius: 2px;
-        }
+        .quiz-option-text::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 2px; }
 
-        .quiz-explanation {
-            margin-top: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid transparent;
-        }
+        .quiz-explanation { margin-top: 12px; padding: 10px; border-radius: 10px; border: 1px solid transparent; }
+        .quiz-explanation.correct { background: #f0fdf4; border-color: #86efac; }
+        .quiz-explanation.wrong { background: #fef2f2; border-color: #fca5a5; }
 
-        .quiz-explanation.correct {
-            background: #f0fdf4;
-            border-color: #86efac;
-        }
-
-        .quiz-explanation.wrong {
-            background: #fef2f2;
-            border-color: #fca5a5;
-        }
-
-        .quiz-status {
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        .quiz-status { font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
         .quiz-status.correct { color: #15803d; }
         .quiz-status.wrong   { color: #b91c1c; }
 
-        .quiz-explanation-math {
-            color: #334155;
-            font-size: 0.82rem;
-            overflow-x: auto;
-            line-height: 1.6;
-        }
-
+        .quiz-explanation-math { color: #334155; font-size: 0.82rem; overflow-x: auto; line-height: 1.6; }
         .quiz-explanation-math::-webkit-scrollbar { height: 4px; }
-        .quiz-explanation-math::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.4);
-            border-radius: 2px;
-        }
+        .quiz-explanation-math::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 2px; }
 
         .quiz-score-box {
             background: linear-gradient(135deg, #fef3c7, #fed7aa);
@@ -928,21 +731,8 @@
             margin-bottom: 12px;
             text-align: center;
         }
-
-        .quiz-score-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #c2410c;
-            line-height: 1;
-        }
-
-        .quiz-score-label {
-            font-size: 0.78rem;
-            color: #92400e;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
+        .quiz-score-value { font-size: 2rem; font-weight: 800; color: #c2410c; line-height: 1; }
+        .quiz-score-label { font-size: 0.78rem; color: #92400e; font-weight: 600; margin-top: 4px; }
         .quiz-stats-badge {
             display: inline-flex;
             align-items: center;
@@ -969,11 +759,7 @@
             justify-content: center;
             padding: 20px;
         }
-
-        .comingsoon-modal.show {
-            display: flex;
-            animation: modalFadeIn 0.25s ease;
-        }
+        .comingsoon-modal.show { display: flex; animation: modalFadeIn 0.25s ease; }
 
         .comingsoon-content {
             background: linear-gradient(160deg, #ffffff 0%, #f1f5f9 100%);
@@ -987,7 +773,6 @@
             animation: modalSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
         }
-
         .comingsoon-content::before {
             content: '';
             position: absolute;
@@ -997,12 +782,10 @@
             background-size: 200% 100%;
             animation: gradientMove 4s linear infinite;
         }
-
         @keyframes gradientMove {
             0%   { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
         }
-
         .comingsoon-icon {
             width: 80px; height: 80px;
             margin: 0 auto 16px;
@@ -1016,25 +799,12 @@
             box-shadow: 0 10px 24px -6px rgba(99, 102, 241, 0.6);
             animation: floatIcon 3s ease-in-out infinite;
         }
-
         @keyframes floatIcon {
             0%, 100% { transform: translateY(0); }
             50%      { transform: translateY(-6px); }
         }
-
-        .comingsoon-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 6px;
-            letter-spacing: -0.3px;
-        }
-
-        .comingsoon-subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 18px;
-        }
+        .comingsoon-title { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 6px; letter-spacing: -0.3px; }
+        .comingsoon-subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 18px; }
 
         .comingsoon-date-box {
             background: linear-gradient(135deg, #eef2ff, #ede9fe);
@@ -1043,7 +813,6 @@
             padding: 14px 12px;
             margin-bottom: 16px;
         }
-
         .comingsoon-date-label {
             font-size: 0.7rem;
             font-weight: 700;
@@ -1052,21 +821,8 @@
             letter-spacing: 1px;
             margin-bottom: 4px;
         }
-
-        .comingsoon-date {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: #4338ca;
-            line-height: 1.15;
-        }
-
-        .comingsoon-desc {
-            font-size: 0.82rem;
-            color: #475569;
-            line-height: 1.55;
-            margin-bottom: 20px;
-        }
-
+        .comingsoon-date { font-size: 1.35rem; font-weight: 800; color: #4338ca; line-height: 1.15; }
+        .comingsoon-desc { font-size: 0.82rem; color: #475569; line-height: 1.55; margin-bottom: 20px; }
         .comingsoon-close-btn {
             width: 100%;
             padding: 12px;
@@ -1081,12 +837,7 @@
             box-shadow: 0 6px 16px -4px rgba(99, 102, 241, 0.5);
             font-family: inherit;
         }
-
-        .comingsoon-close-btn:hover {
-            filter: brightness(1.08);
-            transform: translateY(-1px);
-        }
-
+        .comingsoon-close-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
         .comingsoon-close-btn:active { transform: scale(0.98); }
 
         @media (max-width: 414px) {
@@ -1097,8 +848,9 @@
             }
             .nav-icon { font-size: 1rem; }
             .nav-item span { font-size: 0.55rem; }
-            .achievement-badge { width: 46px; height: 46px; font-size: 20px; }
-            .lab-label { font-size: 0.6rem; }
+            .achievement-badge { width: 40px; height: 40px; font-size: 17px; }
+            .lab-label { font-size: 0.52rem; max-width: 54px; }
+            .lab-slide { padding: 14px 6px 8px; }
         }
 
         /* ============================================================
@@ -1114,25 +866,16 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.65, 0, 0.35, 1),
-                        filter 0.7s ease;
+            transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), filter 0.7s ease;
             will-change: opacity, transform;
         }
-
         .splash-screen.hide {
             opacity: 0;
             transform: scale(1.15);
             filter: blur(8px);
             pointer-events: none;
         }
-
-        .splash-particles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
+        .splash-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
         .splash-particle {
             position: absolute;
             background: rgba(255, 255, 255, 0.7);
@@ -1142,14 +885,12 @@
             animation-iteration-count: infinite;
             box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
         }
-
         @keyframes splashFloat {
-            0%   { transform: translateY(0) scale(1);      opacity: 0; }
+            0%   { transform: translateY(0) scale(1); opacity: 0; }
             10%  { opacity: 1; }
             90%  { opacity: 1; }
             100% { transform: translateY(-110vh) scale(0.2); opacity: 0; }
         }
-
         .splash-content {
             position: relative;
             display: flex;
@@ -1158,12 +899,10 @@
             z-index: 2;
             animation: splashContentIn 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         @keyframes splashContentIn {
             from { opacity: 0; transform: translateY(40px) scale(0.85); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .splash-logo-wrap {
             position: relative;
             width: 150px;
@@ -1173,7 +912,6 @@
             justify-content: center;
             margin-bottom: 22px;
         }
-
         .splash-logo {
             width: 86px;
             height: 86px;
@@ -1187,52 +925,29 @@
             position: relative;
             z-index: 2;
             animation: splashLogoPulse 2s ease-in-out infinite;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8),
-                        0 0 80px rgba(153, 153, 255, 0.7);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 80px rgba(153, 153, 255, 0.7);
         }
-
         @keyframes splashLogoPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 40px rgba(255, 255, 255, 0.8),
-                            0 0 80px rgba(153, 153, 255, 0.7);
-            }
-            50% {
-                transform: scale(1.08);
-                box-shadow: 0 0 55px rgba(255, 255, 255, 1),
-                            0 0 110px rgba(153, 153, 255, 0.95);
-            }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 80px rgba(153, 153, 255, 0.7); }
+            50% { transform: scale(1.08); box-shadow: 0 0 55px rgba(255, 255, 255, 1), 0 0 110px rgba(153, 153, 255, 0.95); }
         }
-
-        .splash-logo i {
-            animation: splashLogoSpin 6s linear infinite;
-        }
-
-        @keyframes splashLogoSpin {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        .splash-logo i { animation: splashLogoSpin 6s linear infinite; }
+        @keyframes splashLogoSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .splash-ring {
             position: absolute;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.55);
-            top: 50%;
-            left: 50%;
-            width: 90px;
-            height: 90px;
+            top: 50%; left: 50%;
+            width: 90px; height: 90px;
             transform: translate(-50%, -50%);
             animation: splashRingExpand 2.2s ease-out infinite;
         }
-
         .splash-ring-2 { animation-delay: 0.7s; border-color: rgba(255, 255, 255, 0.4); }
         .splash-ring-3 { animation-delay: 1.4s; border-color: rgba(255, 255, 255, 0.25); }
-
         @keyframes splashRingExpand {
             0%   { width: 90px;  height: 90px;  opacity: 1; }
             100% { width: 160px; height: 160px; opacity: 0; }
         }
-
         .splash-title {
             display: flex;
             gap: 1px;
@@ -1244,14 +959,12 @@
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
             perspective: 400px;
         }
-
         .splash-title span {
             display: inline-block;
             opacity: 0;
             transform: translateY(24px) rotateX(-90deg);
             animation: splashLetterIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-
         .splash-title span:nth-child(1) { animation-delay: 0.15s; }
         .splash-title span:nth-child(2) { animation-delay: 0.22s; }
         .splash-title span:nth-child(3) { animation-delay: 0.29s; }
@@ -1260,10 +973,7 @@
         .splash-title span:nth-child(6) { animation-delay: 0.50s; }
         .splash-title span:nth-child(7) { animation-delay: 0.57s; }
         .splash-title span:nth-child(8) { animation-delay: 0.64s; }
-
-        @keyframes splashLetterIn {
-            to { opacity: 1; transform: translateY(0) rotateX(0); }
-        }
+        @keyframes splashLetterIn { to { opacity: 1; transform: translateY(0) rotateX(0); } }
 
         .splash-tagline {
             color: rgba(255, 255, 255, 0.88);
@@ -1275,7 +985,6 @@
             opacity: 0;
             animation: splashFadeUp 0.8s ease 0.85s forwards;
         }
-
         .splash-loader {
             width: 170px;
             height: 4px;
@@ -1287,34 +996,21 @@
             animation: splashFadeUp 0.6s ease 1.2s forwards;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
         }
-
         .splash-loader-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #ffffff, #c7d2fe, #ffffff);
             background-size: 200% 100%;
             border-radius: 4px;
-            animation: splashLoadFill 1.7s ease-in-out 1.3s forwards,
-                       splashShimmer 1.2s linear 1.3s infinite;
+            animation: splashLoadFill 1.7s ease-in-out 1.3s forwards, splashShimmer 1.2s linear 1.3s infinite;
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
         }
-
-        @keyframes splashLoadFill {
-            0%   { width: 0%; }
-            55%  { width: 65%; }
-            100% { width: 100%; }
-        }
-
-        @keyframes splashShimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
+        @keyframes splashLoadFill { 0% { width: 0%; } 55% { width: 65%; } 100% { width: 100%; } }
+        @keyframes splashShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .splash-footer {
             position: absolute;
             bottom: 34px;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             text-align: center;
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.72rem;
@@ -1323,17 +1019,12 @@
             opacity: 0;
             animation: splashFadeUp 0.8s ease 1.6s forwards;
         }
-
         @keyframes splashFadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-
         @media (prefers-reduced-motion: reduce) {
-            .splash-particle,
-            .splash-ring,
-            .splash-logo i,
-            .splash-logo { animation: none !important; }
+            .splash-particle, .splash-ring, .splash-logo i, .splash-logo { animation: none !important; }
             .splash-title span { animation: none !important; opacity: 1; transform: none; }
             .splash-tagline, .splash-loader, .splash-footer { opacity: 1; animation: none; }
             .splash-loader-fill { width: 100%; animation: none; }
@@ -1342,37 +1033,25 @@
 </head>
 <body>
 
-    <!-- SPLASH SCREEN -->
     <div id="splashScreen" class="splash-screen" role="dialog" aria-label="Memuat Quantara">
         <div class="splash-particles" id="splashParticles"></div>
-
         <div class="splash-content">
             <div class="splash-logo-wrap">
                 <div class="splash-ring splash-ring-1"></div>
                 <div class="splash-ring splash-ring-2"></div>
                 <div class="splash-ring splash-ring-3"></div>
-                <div class="splash-logo">
-                    <i class="fas fa-atom"></i>
-                </div>
+                <div class="splash-logo"><i class="fas fa-atom"></i></div>
             </div>
-
             <h1 class="splash-title">
                 <span>Q</span><span>U</span><span>A</span><span>N</span><span>T</span><span>A</span><span>R</span><span>A</span>
             </h1>
             <p class="splash-tagline">Science Explorer</p>
-
-            <div class="splash-loader">
-                <div class="splash-loader-fill"></div>
-            </div>
+            <div class="splash-loader"><div class="splash-loader-fill"></div></div>
         </div>
-
-        <div class="splash-footer">
-            ⚛️ Belajar Fisika &amp; Sains jadi menyenangkan
-        </div>
+        <div class="splash-footer">⚛️ Belajar Fisika &amp; Sains jadi menyenangkan</div>
     </div>
 
     <div class="app-container">
-        <!-- App Header -->
         <header class="app-header bg-gradient-to-r from-primary to-secondary p-4 text-white">
             <div class="flex justify-between items-center">
                 <div class="app-logo">
@@ -1392,7 +1071,7 @@
 
             <!-- ================= BERANDA ================= -->
             <div id="page-beranda" class="page active">
-                <section class="p-4 pb-0">
+                <section class="p-3 pb-0">
                     <div class="daily-dose-card" style="border: 2px solid #C7CCFF;">
                         <div class="daily-dose-header" style="background: linear-gradient(135deg, #9999ff, #b399ff, #d1b3ff);">
                             <div>
@@ -1403,25 +1082,22 @@
                                 <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
-
                         <div class="daily-dose-content">
                             <div class="daily-dose-verse" id="dailyFactText">Memuat fakta sains...</div>
                             <div class="daily-dose-dots" id="dailyDots"></div>
-                            <div class="daily-dose-timer">
-                                <div class="daily-dose-timer-fill" id="timerFill"></div>
-                            </div>
+                            <div class="daily-dose-timer"><div class="daily-dose-timer-fill" id="timerFill"></div></div>
                         </div>
                     </div>
                 </section>
 
-                <section class="p-4">
+                <section class="p-3">
                     <!-- ===== MENU ALAT FISIKA (8 + 8 slide) ===== -->
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 mb-4 transition-shadow hover:shadow-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-toolbox text-teal-500 mr-2"></i> Menu Alat Fisika
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-3 mb-3 transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800 flex items-center text-sm">
+                                <i class="fas fa-toolbox text-teal-500 mr-1.5"></i> Menu Alat Fisika
                             </h3>
-                            <span class="text-xs bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-2.5 py-1 rounded-full">16 alat</span>
+                            <span class="text-[10px] bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-2 py-0.5 rounded-full">16 alat</span>
                         </div>
 
                         <div class="lab-carousel-wrap">
@@ -1429,51 +1105,51 @@
 
                                 <!-- SLIDE 1 : Alat 1–8 -->
                                 <div class="lab-slide">
-                                    <div class="grid grid-cols-4 gap-3 text-center">
+                                    <div class="grid grid-cols-4 gap-2 text-center">
                                         <a href="1.html" class="lab-item">
-                                            <div class="achievement-badge bg-yellow-100 text-yellow-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-yellow-100 text-yellow-500 rounded-full shadow-sm">
                                                 <i class="fas fa-bolt-lightning"></i>
                                             </div>
                                             <span class="lab-label">Usaha &amp; Energi</span>
                                         </a>
                                         <a href="2.html" class="lab-item">
-                                            <div class="achievement-badge bg-blue-100 text-blue-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-blue-100 text-blue-500 rounded-full shadow-sm">
                                                 <i class="fas fa-person-running"></i>
                                             </div>
                                             <span class="lab-label">GLB &amp; GLBB</span>
                                         </a>
                                         <a href="3.html" class="lab-item">
-                                            <div class="achievement-badge bg-green-100 text-green-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-green-100 text-green-500 rounded-full shadow-sm">
                                                 <i class="fas fa-eye"></i>
                                             </div>
                                             <span class="lab-label">Optik</span>
                                         </a>
                                         <a href="4.html" class="lab-item">
-                                            <div class="achievement-badge bg-purple-100 text-purple-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-purple-100 text-purple-500 rounded-full shadow-sm">
                                                 <i class="fas fa-ear-listen"></i>
                                             </div>
                                             <span class="lab-label">Organa</span>
                                         </a>
                                         <a href="5.html" class="lab-item">
-                                            <div class="achievement-badge bg-orange-100 text-orange-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-orange-100 text-orange-500 rounded-full shadow-sm">
                                                 <i class="fas fa-weight-hanging"></i>
                                             </div>
                                             <span class="lab-label">Atwood</span>
                                         </a>
                                         <a href="6.html" class="lab-item">
-                                            <div class="achievement-badge bg-red-100 text-red-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-red-100 text-red-500 rounded-full shadow-sm">
                                                 <i class="fas fa-temperature-high"></i>
                                             </div>
                                             <span class="lab-label">Kalorimeter</span>
                                         </a>
                                         <a href="7.html" class="lab-item">
-                                            <div class="achievement-badge bg-amber-100 text-amber-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-amber-100 text-amber-500 rounded-full shadow-sm">
                                                 <i class="fas fa-arrows-spin"></i>
                                             </div>
                                             <span class="lab-label">Inersia</span>
                                         </a>
                                         <a href="8.html" class="lab-item">
-                                            <div class="achievement-badge bg-teal-100 text-teal-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-teal-100 text-teal-500 rounded-full shadow-sm">
                                                 <i class="fas fa-microchip"></i>
                                             </div>
                                             <span class="lab-label">Elektronika</span>
@@ -1483,51 +1159,51 @@
 
                                 <!-- SLIDE 2 : Alat 9–16 -->
                                 <div class="lab-slide">
-                                    <div class="grid grid-cols-4 gap-3 text-center">
+                                    <div class="grid grid-cols-4 gap-2 text-center">
                                         <a href="9.html" class="lab-item">
-                                            <div class="achievement-badge bg-indigo-100 text-indigo-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-indigo-100 text-indigo-500 rounded-full shadow-sm">
                                                 <i class="fas fa-scale-balanced"></i>
                                             </div>
                                             <span class="lab-label">Wheatstone</span>
                                         </a>
                                         <a href="10.html" class="lab-item">
-                                            <div class="achievement-badge bg-pink-100 text-pink-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-pink-100 text-pink-500 rounded-full shadow-sm">
                                                 <i class="fas fa-diagram-project"></i>
                                             </div>
                                             <span class="lab-label">Kirchhoff</span>
                                         </a>
                                         <a href="11.html" class="lab-item">
-                                            <div class="achievement-badge bg-cyan-100 text-cyan-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-cyan-100 text-cyan-500 rounded-full shadow-sm">
                                                 <i class="fas fa-magnet"></i>
                                             </div>
                                             <span class="lab-label">Magnetometer</span>
                                         </a>
                                         <a href="12.html" class="lab-item">
-                                            <div class="achievement-badge bg-lime-100 text-lime-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-lime-100 text-lime-500 rounded-full shadow-sm">
                                                 <i class="fas fa-bolt"></i>
                                             </div>
                                             <span class="lab-label">Trafometer</span>
                                         </a>
                                         <a href="13.html" class="lab-item">
-                                            <div class="achievement-badge bg-rose-100 text-rose-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-rose-100 text-rose-500 rounded-full shadow-sm">
                                                 <i class="fas fa-stopwatch"></i>
                                             </div>
                                             <span class="lab-label">Bandul</span>
                                         </a>
                                         <a href="14.html" class="lab-item">
-                                            <div class="achievement-badge bg-sky-100 text-sky-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-sky-100 text-sky-500 rounded-full shadow-sm">
                                                 <i class="fas fa-wave-square"></i>
                                             </div>
                                             <span class="lab-label">Melde</span>
                                         </a>
                                         <a href="15.html" class="lab-item">
-                                            <div class="achievement-badge bg-violet-100 text-violet-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-violet-100 text-violet-500 rounded-full shadow-sm">
                                                 <i class="fas fa-apple-whole"></i>
                                             </div>
                                             <span class="lab-label">Newton</span>
                                         </a>
                                         <a href="16.html" class="lab-item">
-                                            <div class="achievement-badge bg-fuchsia-100 text-fuchsia-500 p-3 rounded-full shadow-sm">
+                                            <div class="achievement-badge bg-fuchsia-100 text-fuchsia-500 rounded-full shadow-sm">
                                                 <i class="fas fa-water"></i>
                                             </div>
                                             <span class="lab-label">Archimedes</span>
@@ -1538,7 +1214,6 @@
                             </div>
                         </div>
 
-                        <!-- Dot indicator carousel -->
                         <div class="lab-dots" id="labDots">
                             <button class="lab-dot active" data-slide="0" aria-label="Slide 1 (alat 1-8)"></button>
                             <button class="lab-dot" data-slide="1" aria-label="Slide 2 (alat 9-16)"></button>
@@ -1546,50 +1221,50 @@
                     </div>
 
                     <!-- Daily Challenge -->
-                    <div class="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-xl shadow-md p-4 mb-4 border-l-4 border-orange-400">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-bolt text-orange-500 mr-2"></i> Tantangan Fisika
+                    <div class="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-xl shadow-md p-3 mb-3 border-l-4 border-orange-400">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <h3 class="font-bold text-gray-800 flex items-center text-sm">
+                                <i class="fas fa-bolt text-orange-500 mr-1.5"></i> Tantangan Fisika
                             </h3>
-                            <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full">Baru!</span>
+                            <span class="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full">Baru!</span>
                         </div>
-                        <p class="text-sm text-gray-700 mb-3">Selesaikan 5 soal pilihan ganda Hukum Newton dan dapatkan 50 poin bonus!</p>
-                        <button onclick="openNewtonModal()" class="mt-3 w-full py-2 bg-orange-500 text-white rounded-lg text-sm font-medium flex items-center justify-center hover:bg-orange-600 transition">
-                            <i class="fas fa-play mr-2"></i> Mulai Tantangan
+                        <p class="text-xs text-gray-700 mb-2 leading-relaxed">Selesaikan 5 soal pilihan ganda Hukum Newton dan dapatkan 50 poin bonus!</p>
+                        <button onclick="openNewtonModal()" class="w-full py-2 bg-orange-500 text-white rounded-lg text-xs font-medium flex items-center justify-center hover:bg-orange-600 transition">
+                            <i class="fas fa-play mr-1.5"></i> Mulai Tantangan
                         </button>
                     </div>
 
                     <!-- Lab Bintang -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-md p-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-gamepad text-indigo-500 mr-2"></i> Lab Bintang
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-md p-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800 flex items-center text-sm">
+                                <i class="fas fa-gamepad text-indigo-500 mr-1.5"></i> Lab Bintang
                             </h3>
                             <span class="text-[10px] bg-indigo-500 text-white px-2 py-0.5 rounded-full">Soon</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
-                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
-                                    <div class="bg-indigo-100 text-indigo-500 p-2 rounded-full inline-block">
-                                        <i class="fa-solid fa-binoculars"></i>
+                                <div class="bg-white p-1.5 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-indigo-100 text-indigo-500 p-1.5 rounded-full inline-block">
+                                        <i class="fa-solid fa-binoculars text-xs"></i>
                                     </div>
-                                    <p class="text-xs mt-1">Tata Surya</p>
+                                    <p class="text-[10px] mt-1 leading-tight">Tata Surya</p>
                                 </div>
                             </button>
                             <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
-                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
-                                    <div class="bg-green-100 text-green-500 p-2 rounded-full inline-block">
-                                        <i class="fa-solid fa-compass"></i>
+                                <div class="bg-white p-1.5 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-green-100 text-green-500 p-1.5 rounded-full inline-block">
+                                        <i class="fa-solid fa-compass text-xs"></i>
                                     </div>
-                                    <p class="text-xs mt-1">Rasi Bintang</p>
+                                    <p class="text-[10px] mt-1 leading-tight">Rasi Bintang</p>
                                 </div>
                             </button>
                             <button onclick="openComingSoon()" class="block bg-transparent border-0 p-0 cursor-pointer">
-                                <div class="bg-white p-2 rounded-lg shadow-sm text-center hover:shadow-md transition">
-                                    <div class="bg-yellow-100 text-yellow-500 p-2 rounded-full inline-block">
-                                        <i class="fa-solid fa-splotch"></i>
+                                <div class="bg-white p-1.5 rounded-lg shadow-sm text-center hover:shadow-md transition">
+                                    <div class="bg-yellow-100 text-yellow-500 p-1.5 rounded-full inline-block">
+                                        <i class="fa-solid fa-splotch text-xs"></i>
                                     </div>
-                                    <p class="text-xs mt-1">Simulasi Bintang</p>
+                                    <p class="text-[10px] mt-1 leading-tight">Simulasi Bintang</p>
                                 </div>
                             </button>
                         </div>
@@ -1599,12 +1274,12 @@
 
             <!-- ================= KALKULATOR ================= -->
             <div id="page-kalkulator" class="page">
-                <section class="p-4">
-                    <div class="mb-3">
-                        <h2 class="text-lg font-bold text-gray-800 flex items-center">
-                            <i class="fas fa-calculator text-teal-500 mr-2"></i> Kalkulator Scientific
+                <section class="p-3">
+                    <div class="mb-2">
+                        <h2 class="text-base font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-calculator text-teal-500 mr-1.5"></i> Kalkulator Scientific
                         </h2>
-                        <p class="text-xs text-gray-500">Mendukung trigonometri, logaritma, akar, pangkat, π, e, dan banyak lagi.</p>
+                        <p class="text-[10px] text-gray-500 leading-tight">Trigonometri, logaritma, akar, pangkat, π, e, dan lainnya.</p>
                     </div>
 
                     <div class="calc-display">
@@ -1615,7 +1290,7 @@
                         <div class="calc-expr" id="calcExpr">0</div>
                     </div>
 
-                    <div class="calc-grid mt-3">
+                    <div class="calc-grid mt-2">
                         <button class="calc-btn clear" onclick="calcClear()">C</button>
                         <button class="calc-btn fn" onclick="calcBackspace()"><i class="fas fa-delete-left"></i></button>
                         <button class="calc-btn fn" onclick="calcInput('(')">(</button>
@@ -1658,19 +1333,19 @@
                         <button class="calc-btn fn" onclick="calcAns()">Ans</button>
                     </div>
 
-                    <div class="mt-5">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-gray-800 text-sm flex items-center">
-                                <i class="fas fa-history text-teal-500 mr-2"></i> Riwayat Hitungan
-                                <span id="calcHistoryCount" class="ml-2 text-xs font-normal text-gray-400"></span>
+                    <div class="mt-3">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <h3 class="font-bold text-gray-800 text-xs flex items-center">
+                                <i class="fas fa-history text-teal-500 mr-1.5"></i> Riwayat Hitungan
+                                <span id="calcHistoryCount" class="ml-1.5 text-[10px] font-normal text-gray-400"></span>
                             </h3>
-                            <button onclick="clearCalcHistory()" id="calcHistoryClearBtn" class="text-xs text-red-500 hover:text-red-700 hidden">
-                                <i class="fas fa-trash mr-1"></i> Hapus
+                            <button onclick="clearCalcHistory()" id="calcHistoryClearBtn" class="text-[10px] text-red-500 hover:text-red-700 hidden">
+                                <i class="fas fa-trash mr-0.5"></i> Hapus
                             </button>
                         </div>
-                        <div id="calcHistoryList" class="space-y-2"></div>
-                        <div id="calcHistoryEmpty" class="text-center py-6 text-gray-400 text-xs hidden">
-                            <i class="fas fa-calculator text-2xl mb-2 block"></i>
+                        <div id="calcHistoryList" class="space-y-1.5"></div>
+                        <div id="calcHistoryEmpty" class="text-center py-5 text-gray-400 text-[10px] hidden">
+                            <i class="fas fa-calculator text-xl mb-1.5 block"></i>
                             Belum ada riwayat hitungan.<br>
                             Hasil perhitungan akan muncul di sini dan tersimpan otomatis.
                         </div>
@@ -1680,36 +1355,36 @@
 
             <!-- ================= CATATAN ================= -->
             <div id="page-catatan" class="page">
-                <section class="p-4">
+                <section class="p-3">
                     <div id="notesListView">
-                        <div class="flex justify-between items-center mb-3">
-                            <h2 class="text-lg font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-book text-yellow-500 mr-2"></i> Catatan Saya
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-base font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-book text-yellow-500 mr-1.5"></i> Catatan Saya
                             </h2>
-                            <span class="text-xs text-gray-400" id="notesCount"></span>
+                            <span class="text-[10px] text-gray-400" id="notesCount"></span>
                         </div>
                         <div id="notesList"></div>
                         <div id="notesEmpty" class="text-center py-12 text-gray-400" style="display:none;">
-                            <i class="fas fa-note-sticky text-4xl mb-3 block"></i>
-                            <p class="text-sm">Belum ada catatan.</p>
-                            <p class="text-xs mt-1">Tap tombol <b>+</b> untuk membuat catatan baru.</p>
+                            <i class="fas fa-note-sticky text-3xl mb-2 block"></i>
+                            <p class="text-xs">Belum ada catatan.</p>
+                            <p class="text-[10px] mt-1">Tap tombol <b>+</b> untuk membuat catatan baru.</p>
                         </div>
                     </div>
 
                     <div id="noteEditorView" style="display:none;">
-                        <div class="flex items-center gap-2 mb-3">
-                            <button onclick="showList()" class="text-gray-500 hover:text-gray-700 text-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <button onclick="showList()" class="text-gray-500 hover:text-gray-700 text-base">
                                 <i class="fas fa-arrow-left"></i>
                             </button>
-                            <h3 class="font-bold text-gray-800 flex-1" id="noteEditorTitle">Catatan Baru</h3>
-                            <button onclick="deleteNote()" id="noteDeleteBtn" class="text-red-500 hover:text-red-700 text-sm px-2" style="display:none;">
+                            <h3 class="font-bold text-gray-800 flex-1 text-sm" id="noteEditorTitle">Catatan Baru</h3>
+                            <button onclick="deleteNote()" id="noteDeleteBtn" class="text-red-500 hover:text-red-700 text-xs px-1.5" style="display:none;">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                         <input type="text" id="noteTitle" class="note-input mb-2" placeholder="Judul catatan...">
                         <textarea id="noteBody" class="note-input" placeholder="Tulis catatanmu di sini..."></textarea>
-                        <button onclick="saveNote()" class="mt-3 w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg text-sm font-semibold flex items-center justify-center">
-                            <i class="fas fa-save mr-2"></i> Simpan Catatan
+                        <button onclick="saveNote()" class="mt-2 w-full py-2 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg text-xs font-semibold flex items-center justify-center">
+                            <i class="fas fa-save mr-1.5"></i> Simpan Catatan
                         </button>
                     </div>
                 </section>
@@ -1730,12 +1405,10 @@
 
         </main>
 
-        <!-- Floating FAB for notes -->
         <button class="fab" id="notesFab" onclick="newNote()" title="Buat catatan baru" style="display:none;">
             <i class="fas fa-plus"></i>
         </button>
 
-        <!-- FLOATING BOTTOM NAV -->
         <nav class="bottom-nav">
             <a href="#" class="nav-item active" data-page="beranda">
                 <i class="fas fa-home nav-icon"></i>
@@ -1759,22 +1432,17 @@
     <!-- MODAL COMING SOON -->
     <div class="comingsoon-modal" id="comingSoonModal" onclick="if(event.target===this) closeComingSoon()">
         <div class="comingsoon-content">
-            <div class="comingsoon-icon">
-                <i class="fas fa-rocket"></i>
-            </div>
+            <div class="comingsoon-icon"><i class="fas fa-rocket"></i></div>
             <div class="comingsoon-title">Coming Soon!</div>
             <div class="comingsoon-subtitle">Fitur Lab Bintang sedang disiapkan</div>
-
             <div class="comingsoon-date-box">
                 <div class="comingsoon-date-label">Segera Hadir</div>
                 <div class="comingsoon-date">18 November 2026</div>
             </div>
-
             <p class="comingsoon-desc">
                 Simulasi Tata Surya, Rasi Bintang, dan Simulasi Bintang interaktif
                 akan segera tersedia di Quantara. Nantikan ya! 🚀
             </p>
-
             <button class="comingsoon-close-btn" onclick="closeComingSoon()">
                 <i class="fas fa-check mr-1"></i> Oke, Siap!
             </button>
@@ -1798,7 +1466,6 @@
 
             <div class="newton-modal-body" id="newtonModalBody">
                 <div id="quizProgress"></div>
-
                 <div id="quizContainer">
                     <div class="soal-card" data-q="0">
                         <div class="flex items-start gap-2 mb-2">
@@ -1809,22 +1476,10 @@
                             Balok bermassa $m = 5\,\text{kg}$ berada di bidang miring dengan sudut $\theta = 37°$ ($\sin 37° = 0{,}6$, $\cos 37° = 0{,}8$). Koefisien gesek kinetis $\mu_k = 0{,}25$. Balok ditarik gaya $F = 55\,\text{N}$ sejajar bidang ke atas. Jika $g = 10\,\text{m/s}^2$, tentukan percepatan balok.
                         </p>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-q="0" data-idx="0">
-                                <span class="quiz-option-letter">A</span>
-                                <span class="quiz-option-text">$2\;\text{m/s}^2$</span>
-                            </button>
-                            <button class="quiz-option" data-q="0" data-idx="1">
-                                <span class="quiz-option-letter">B</span>
-                                <span class="quiz-option-text">$3\;\text{m/s}^2$</span>
-                            </button>
-                            <button class="quiz-option" data-q="0" data-idx="2">
-                                <span class="quiz-option-letter">C</span>
-                                <span class="quiz-option-text">$4\;\text{m/s}^2$</span>
-                            </button>
-                            <button class="quiz-option" data-q="0" data-idx="3">
-                                <span class="quiz-option-letter">D</span>
-                                <span class="quiz-option-text">$5\;\text{m/s}^2$</span>
-                            </button>
+                            <button class="quiz-option" data-q="0" data-idx="0"><span class="quiz-option-letter">A</span><span class="quiz-option-text">$2\;\text{m/s}^2$</span></button>
+                            <button class="quiz-option" data-q="0" data-idx="1"><span class="quiz-option-letter">B</span><span class="quiz-option-text">$3\;\text{m/s}^2$</span></button>
+                            <button class="quiz-option" data-q="0" data-idx="2"><span class="quiz-option-letter">C</span><span class="quiz-option-text">$4\;\text{m/s}^2$</span></button>
+                            <button class="quiz-option" data-q="0" data-idx="3"><span class="quiz-option-letter">D</span><span class="quiz-option-text">$5\;\text{m/s}^2$</span></button>
                         </div>
                         <div class="quiz-explanation" data-q="0" style="display:none;">
                             <div class="quiz-status"></div>
@@ -1845,22 +1500,10 @@
                             Benda $m_1 = 5\,\text{kg}$ di atas meja kasar ($\mu_k = 0{,}2$) dihubungkan dengan tali dan katrol ke benda $m_2 = 5\,\text{kg}$ yang menggantung. Jika $g = 10\,\text{m/s}^2$, hitung besar tegangan tali $T$.
                         </p>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-q="1" data-idx="0">
-                                <span class="quiz-option-letter">A</span>
-                                <span class="quiz-option-text">$20\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="1" data-idx="1">
-                                <span class="quiz-option-letter">B</span>
-                                <span class="quiz-option-text">$25\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="1" data-idx="2">
-                                <span class="quiz-option-letter">C</span>
-                                <span class="quiz-option-text">$30\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="1" data-idx="3">
-                                <span class="quiz-option-letter">D</span>
-                                <span class="quiz-option-text">$35\;\text{N}$</span>
-                            </button>
+                            <button class="quiz-option" data-q="1" data-idx="0"><span class="quiz-option-letter">A</span><span class="quiz-option-text">$20\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="1" data-idx="1"><span class="quiz-option-letter">B</span><span class="quiz-option-text">$25\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="1" data-idx="2"><span class="quiz-option-letter">C</span><span class="quiz-option-text">$30\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="1" data-idx="3"><span class="quiz-option-letter">D</span><span class="quiz-option-text">$35\;\text{N}$</span></button>
                         </div>
                         <div class="quiz-explanation" data-q="1" style="display:none;">
                             <div class="quiz-status"></div>
@@ -1881,22 +1524,10 @@
                             Dua balok $m_1 = 3\,\text{kg}$ dan $m_2 = 2\,\text{kg}$ bersentuhan di lantai licin. Gaya $F = 20\,\text{N}$ diberikan pada $m_1$ mendorong ke arah $m_2$. Tentukan besar gaya kontak antara kedua balok.
                         </p>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-q="2" data-idx="0">
-                                <span class="quiz-option-letter">A</span>
-                                <span class="quiz-option-text">$4\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="2" data-idx="1">
-                                <span class="quiz-option-letter">B</span>
-                                <span class="quiz-option-text">$6\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="2" data-idx="2">
-                                <span class="quiz-option-letter">C</span>
-                                <span class="quiz-option-text">$8\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="2" data-idx="3">
-                                <span class="quiz-option-letter">D</span>
-                                <span class="quiz-option-text">$10\;\text{N}$</span>
-                            </button>
+                            <button class="quiz-option" data-q="2" data-idx="0"><span class="quiz-option-letter">A</span><span class="quiz-option-text">$4\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="2" data-idx="1"><span class="quiz-option-letter">B</span><span class="quiz-option-text">$6\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="2" data-idx="2"><span class="quiz-option-letter">C</span><span class="quiz-option-text">$8\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="2" data-idx="3"><span class="quiz-option-letter">D</span><span class="quiz-option-text">$10\;\text{N}$</span></button>
                         </div>
                         <div class="quiz-explanation" data-q="2" style="display:none;">
                             <div class="quiz-status"></div>
@@ -1916,22 +1547,10 @@
                             Seseorang bermassa $m = 50\,\text{kg}$ berdiri di dalam lift. Lift bergerak <b>naik</b> dengan percepatan $a = 2\,\text{m/s}^2$. Jika $g = 10\,\text{m/s}^2$, hitung gaya normal $N$ yang dikerjakan lantai lift pada orang tersebut.
                         </p>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-q="3" data-idx="0">
-                                <span class="quiz-option-letter">A</span>
-                                <span class="quiz-option-text">$300\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="3" data-idx="1">
-                                <span class="quiz-option-letter">B</span>
-                                <span class="quiz-option-text">$400\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="3" data-idx="2">
-                                <span class="quiz-option-letter">C</span>
-                                <span class="quiz-option-text">$500\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="3" data-idx="3">
-                                <span class="quiz-option-letter">D</span>
-                                <span class="quiz-option-text">$600\;\text{N}$</span>
-                            </button>
+                            <button class="quiz-option" data-q="3" data-idx="0"><span class="quiz-option-letter">A</span><span class="quiz-option-text">$300\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="3" data-idx="1"><span class="quiz-option-letter">B</span><span class="quiz-option-text">$400\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="3" data-idx="2"><span class="quiz-option-letter">C</span><span class="quiz-option-text">$500\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="3" data-idx="3"><span class="quiz-option-letter">D</span><span class="quiz-option-text">$600\;\text{N}$</span></button>
                         </div>
                         <div class="quiz-explanation" data-q="3" style="display:none;">
                             <div class="quiz-status"></div>
@@ -1951,22 +1570,10 @@
                             Benda $m_1 = 2\,\text{kg}$ di bidang miring licin ($\theta = 30°$) dihubungkan katrol ke $m_2 = 3\,\text{kg}$ yang menggantung. Jika $g = 10\,\text{m/s}^2$, hitung tegangan tali $T$.
                         </p>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-q="4" data-idx="0">
-                                <span class="quiz-option-letter">A</span>
-                                <span class="quiz-option-text">$12\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="4" data-idx="1">
-                                <span class="quiz-option-letter">B</span>
-                                <span class="quiz-option-text">$15\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="4" data-idx="2">
-                                <span class="quiz-option-letter">C</span>
-                                <span class="quiz-option-text">$18\;\text{N}$</span>
-                            </button>
-                            <button class="quiz-option" data-q="4" data-idx="3">
-                                <span class="quiz-option-letter">D</span>
-                                <span class="quiz-option-text">$21\;\text{N}$</span>
-                            </button>
+                            <button class="quiz-option" data-q="4" data-idx="0"><span class="quiz-option-letter">A</span><span class="quiz-option-text">$12\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="4" data-idx="1"><span class="quiz-option-letter">B</span><span class="quiz-option-text">$15\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="4" data-idx="2"><span class="quiz-option-letter">C</span><span class="quiz-option-text">$18\;\text{N}$</span></button>
+                            <button class="quiz-option" data-q="4" data-idx="3"><span class="quiz-option-letter">D</span><span class="quiz-option-text">$21\;\text{N}$</span></button>
                         </div>
                         <div class="quiz-explanation" data-q="4" style="display:none;">
                             <div class="quiz-status"></div>
@@ -2023,13 +1630,10 @@
             function hideSplash() {
                 if (splashHidden) return;
                 splashHidden = true;
-
                 const splash = document.getElementById('splashScreen');
                 if (!splash) return;
-
                 splash.classList.add('hide');
                 document.body.style.overflow = prevOverflow;
-
                 setTimeout(() => {
                     if (splash.parentNode) splash.parentNode.removeChild(splash);
                 }, 950);
@@ -2060,12 +1664,10 @@
             document.getElementById('comingSoonModal').classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
         function closeComingSoon() {
             document.getElementById('comingSoonModal').classList.remove('show');
             document.body.style.overflow = '';
         }
-
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && document.getElementById('comingSoonModal').classList.contains('show')) {
                 closeComingSoon();
@@ -2109,7 +1711,6 @@
                 req.onerror = () => reject(req.error);
             });
         }
-
         async function dbPut(store, data) {
             const db = await openDB();
             return new Promise((resolve, reject) => {
@@ -2119,7 +1720,6 @@
                 req.onerror = () => reject(req.error);
             });
         }
-
         async function dbGetAll(store) {
             const db = await openDB();
             return new Promise((resolve, reject) => {
@@ -2129,7 +1729,6 @@
                 req.onerror = () => reject(req.error);
             });
         }
-
         async function dbGet(store, key) {
             const db = await openDB();
             return new Promise((resolve, reject) => {
@@ -2139,7 +1738,6 @@
                 req.onerror = () => reject(req.error);
             });
         }
-
         async function dbDelete(store, key) {
             const db = await openDB();
             return new Promise((resolve, reject) => {
@@ -2149,7 +1747,6 @@
                 req.onerror = () => reject(req.error);
             });
         }
-
         async function dbClear(store) {
             const db = await openDB();
             return new Promise((resolve, reject) => {
@@ -2187,7 +1784,6 @@
         function escapeHtml(s) {
             return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
-
         function formatDate(ts) {
             const d = new Date(ts);
             const diff = Date.now() - d;
@@ -2371,15 +1967,11 @@
 
             try {
                 await dbAdd('quizResults', {
-                    correct,
-                    total: QUIZ_TOTAL,
-                    score,
+                    correct, total: QUIZ_TOTAL, score,
                     answers: { ...quizAnswers },
                     timestamp: Date.now()
                 });
-            } catch (e) {
-                console.warn('Gagal simpan hasil kuis:', e);
-            }
+            } catch (e) { console.warn('Gagal simpan hasil kuis:', e); }
 
             let statsHtml = '';
             try {
@@ -2411,8 +2003,7 @@
             document.getElementById('quizCloseBtn').style.display = 'block';
 
             if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise([document.getElementById('newtonModalBody')])
-                    .catch(err => console.error(err));
+                MathJax.typesetPromise([document.getElementById('newtonModalBody')]).catch(err => console.error(err));
             }
 
             document.getElementById('newtonModalBody').scrollTop = 0;
@@ -2548,16 +2139,13 @@
             currentFactIndex = (currentFactIndex + 1) % scienceFacts.length;
             showFact(currentFactIndex, true);
         }
-
         function startAutoRotate() {
             stopAutoRotate();
             factTimer = setInterval(nextFact, FACT_DURATION);
         }
-
         function stopAutoRotate() {
             if (factTimer) { clearInterval(factTimer); factTimer = null; }
         }
-
         function restartAutoRotate() {
             timerFill.style.animation = 'none';
             void timerFill.offsetWidth;
@@ -2599,12 +2187,10 @@
             exprDisplay.textContent = calcExpr || '0';
             historyDisplay.textContent = calcHistoryStr;
         }
-
         function toggleAngleMode() {
             isDegMode = !isDegMode;
             angleModeBtn.textContent = isDegMode ? 'DEG' : 'RAD';
         }
-
         function calcInput(val) {
             if (calcJustEvaluated) {
                 const isOperator = ['+', '−', '×', '÷', '^', '²', '%'].includes(val);
@@ -2615,19 +2201,16 @@
             calcExpr += val;
             updateCalcDisplay();
         }
-
         function calcClear() {
             calcExpr = '';
             calcHistoryStr = '';
             calcJustEvaluated = false;
             updateCalcDisplay();
         }
-
         function calcBackspace() {
             calcExpr = calcExpr.slice(0, -1);
             updateCalcDisplay();
         }
-
         function calcToggleSign() {
             if (!calcExpr) { calcExpr = '−'; updateCalcDisplay(); return; }
             if (calcExpr.startsWith('(−')) calcExpr = calcExpr.slice(2);
@@ -2635,13 +2218,11 @@
             else calcExpr = '(−' + calcExpr + ')';
             updateCalcDisplay();
         }
-
         function calcAns() {
             if (calcJustEvaluated) { calcExpr = ''; calcJustEvaluated = false; calcHistoryStr = ''; }
             calcExpr += String(calcLastAns);
             updateCalcDisplay();
         }
-
         async function calcEquals() {
             if (!calcExpr) return;
             try {
@@ -2695,11 +2276,7 @@
 
         async function saveCalcHistory(expression, result) {
             try {
-                await dbAdd('calcHistory', {
-                    expression,
-                    result,
-                    timestamp: Date.now()
-                });
+                await dbAdd('calcHistory', { expression, result, timestamp: Date.now() });
                 const all = await dbGetAll('calcHistory');
                 if (all.length > 100) {
                     all.sort((a, b) => a.timestamp - b.timestamp);
@@ -2709,9 +2286,7 @@
                     }
                 }
                 await renderCalcHistory();
-            } catch (e) {
-                console.warn('Gagal simpan riwayat:', e);
-            }
+            } catch (e) { console.warn('Gagal simpan riwayat:', e); }
         }
 
         async function renderCalcHistory() {
@@ -2722,7 +2297,6 @@
             const empty = document.getElementById('calcHistoryEmpty');
             const count = document.getElementById('calcHistoryCount');
             const clearBtn = document.getElementById('calcHistoryClearBtn');
-
             if (!list) return;
 
             if (items.length === 0) {
@@ -2732,7 +2306,6 @@
                 clearBtn.classList.add('hidden');
                 return;
             }
-
             empty.classList.add('hidden');
             count.textContent = '(' + items.length + ')';
             clearBtn.classList.remove('hidden');
@@ -2766,9 +2339,7 @@
             try {
                 await dbClear('calcHistory');
                 await renderCalcHistory();
-            } catch (e) {
-                console.warn('Gagal hapus riwayat:', e);
-            }
+            } catch (e) { console.warn('Gagal hapus riwayat:', e); }
         }
 
         document.addEventListener('keydown', (e) => {
@@ -2795,9 +2366,7 @@
         let currentNoteId = null;
 
         async function getNotes() {
-            try {
-                return await dbGetAll('notes');
-            } catch { return []; }
+            try { return await dbGetAll('notes'); } catch { return []; }
         }
 
         async function renderNotes() {
@@ -2863,9 +2432,7 @@
                 document.getElementById('noteEditorTitle').textContent = 'Edit Catatan';
                 document.getElementById('noteDeleteBtn').style.display = 'block';
                 showEditor();
-            } catch (e) {
-                console.warn('Gagal buka catatan:', e);
-            }
+            } catch (e) { console.warn('Gagal buka catatan:', e); }
         }
 
         async function saveNote() {
@@ -2914,7 +2481,7 @@
         }
 
         /* ============================================================
-           NAYRA AI CHAT (lokal, rule-based)
+           NAYRA AI CHAT (rule-based)
            ============================================================ */
         const NAYRA_WELCOME = 'Halo! 👋 Aku Nayra, asisten sainsmu. Tanyakan apa saja tentang fisika, kalkulator, atau cara pakai catatan. Aku siap membantu!';
 
@@ -2965,7 +2532,6 @@
             messages.appendChild(div);
             messages.scrollTop = messages.scrollHeight;
         }
-
         function showTyping() {
             const messages = document.getElementById('chatMessages');
             const div = document.createElement('div');
@@ -2975,52 +2541,37 @@
             messages.appendChild(div);
             messages.scrollTop = messages.scrollHeight;
         }
-
         function hideTyping() {
             const el = document.getElementById('typingBubble');
             if (el) el.remove();
         }
-
         function nayraReply(text) {
             const lower = text.toLowerCase();
             for (const rule of nayraRules) {
-                if (rule.keywords.some(k => lower.includes(k))) {
-                    return rule.reply;
-                }
+                if (rule.keywords.some(k => lower.includes(k))) return rule.reply;
             }
             return 'Hmm, aku belum punya jawaban spesifik untuk itu 🤔. Coba tanya tentang:\n\n• Hukum Newton\n• Usaha & Energi\n• Optik (lensa/cermin)\n• Rumus fisika\n• Cara pakai kalkulator atau catatan\n\nAtau klik Tantangan Fisika di Beranda untuk latihan soal!';
         }
-
         function nayraSend() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
-
             addChatBubble(text, 'user');
             input.value = '';
-
             showTyping();
-
             setTimeout(() => {
                 hideTyping();
-                const reply = nayraReply(text);
-                addChatBubble(reply, 'ai');
+                addChatBubble(nayraReply(text), 'ai');
             }, 700 + Math.random() * 600);
         }
 
-        // Enter untuk kirim chat
         document.addEventListener('DOMContentLoaded', () => {
             const chatInput = document.getElementById('chatInput');
             if (chatInput) {
                 chatInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        nayraSend();
-                    }
+                    if (e.key === 'Enter') { e.preventDefault(); nayraSend(); }
                 });
             }
-
-            // Pesan sambutan Nayra
             if (document.getElementById('chatMessages').children.length === 0) {
                 setTimeout(() => addChatBubble(NAYRA_WELCOME, 'ai'), 400);
             }
@@ -3034,9 +2585,7 @@
                 await migrateNotesFromLocalStorage();
                 await renderCalcHistory();
                 await renderNotes();
-            } catch (e) {
-                console.warn('Init error:', e);
-            }
+            } catch (e) { console.warn('Init error:', e); }
         })();
     </script>
 </body>
