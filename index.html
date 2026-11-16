@@ -176,7 +176,7 @@
             transition: all 0.3s ease;
         }
 
-        /* ===== Daily Dose (RAPI) ===== */
+        /* ===== Daily Dose ===== */
         .daily-dose-card {
             background: linear-gradient(135deg, #f4f2ff, #e5e1ff);
             border-radius: 16px;
@@ -650,6 +650,56 @@
             text-align: center;
             line-height: 1.15;
             max-width: 60px;
+        }
+
+        /* ===== LAB CAROUSEL (8 + 8 slide) ===== */
+        .lab-carousel-wrap {
+            position: relative;
+            overflow: hidden;
+            margin: 0 -4px;
+        }
+        .lab-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .lab-carousel::-webkit-scrollbar { display: none; }
+        .lab-slide {
+            flex: 0 0 100%;
+            min-width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            padding: 2px 4px;
+            box-sizing: border-box;
+        }
+        .lab-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .lab-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .lab-dot.active {
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+            width: 24px;
+            border-radius: 4px;
+        }
+        .lab-dot:hover { background: #94a3b8; }
+        .lab-dot.active:hover {
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
         }
 
         /* ===== NEWTON QUIZ MODAL ===== */
@@ -1292,9 +1342,7 @@
 </head>
 <body>
 
-    <!-- ============================================================
-         SPLASH SCREEN
-         ============================================================ -->
+    <!-- SPLASH SCREEN -->
     <div id="splashScreen" class="splash-screen" role="dialog" aria-label="Memuat Quantara">
         <div class="splash-particles" id="splashParticles"></div>
 
@@ -1367,7 +1415,7 @@
                 </section>
 
                 <section class="p-4">
-                    <!-- ===== MENU ALAT FISIKA (16 alat) ===== -->
+                    <!-- ===== MENU ALAT FISIKA (8 + 8 slide) ===== -->
                     <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 mb-4 transition-shadow hover:shadow-xl">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="font-bold text-gray-800 flex items-center">
@@ -1376,103 +1424,124 @@
                             <span class="text-xs bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-2.5 py-1 rounded-full">16 alat</span>
                         </div>
 
-                        <div class="grid grid-cols-4 gap-3 text-center">
-                            <a href="1.html" class="lab-item">
-                                <div class="achievement-badge bg-yellow-100 text-yellow-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-bolt-lightning"></i>
+                        <div class="lab-carousel-wrap">
+                            <div class="lab-carousel" id="labCarousel">
+
+                                <!-- SLIDE 1 : Alat 1–8 -->
+                                <div class="lab-slide">
+                                    <div class="grid grid-cols-4 gap-3 text-center">
+                                        <a href="1.html" class="lab-item">
+                                            <div class="achievement-badge bg-yellow-100 text-yellow-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-bolt-lightning"></i>
+                                            </div>
+                                            <span class="lab-label">Usaha &amp; Energi</span>
+                                        </a>
+                                        <a href="2.html" class="lab-item">
+                                            <div class="achievement-badge bg-blue-100 text-blue-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-person-running"></i>
+                                            </div>
+                                            <span class="lab-label">GLB &amp; GLBB</span>
+                                        </a>
+                                        <a href="3.html" class="lab-item">
+                                            <div class="achievement-badge bg-green-100 text-green-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </div>
+                                            <span class="lab-label">Optik</span>
+                                        </a>
+                                        <a href="4.html" class="lab-item">
+                                            <div class="achievement-badge bg-purple-100 text-purple-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-ear-listen"></i>
+                                            </div>
+                                            <span class="lab-label">Organa</span>
+                                        </a>
+                                        <a href="5.html" class="lab-item">
+                                            <div class="achievement-badge bg-orange-100 text-orange-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-weight-hanging"></i>
+                                            </div>
+                                            <span class="lab-label">Atwood</span>
+                                        </a>
+                                        <a href="6.html" class="lab-item">
+                                            <div class="achievement-badge bg-red-100 text-red-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-temperature-high"></i>
+                                            </div>
+                                            <span class="lab-label">Kalorimeter</span>
+                                        </a>
+                                        <a href="7.html" class="lab-item">
+                                            <div class="achievement-badge bg-amber-100 text-amber-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-arrows-spin"></i>
+                                            </div>
+                                            <span class="lab-label">Inersia</span>
+                                        </a>
+                                        <a href="8.html" class="lab-item">
+                                            <div class="achievement-badge bg-teal-100 text-teal-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-microchip"></i>
+                                            </div>
+                                            <span class="lab-label">Elektronika</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <span class="lab-label">Usaha &amp; Energi</span>
-                            </a>
-                            <a href="2.html" class="lab-item">
-                                <div class="achievement-badge bg-blue-100 text-blue-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-person-running"></i>
+
+                                <!-- SLIDE 2 : Alat 9–16 -->
+                                <div class="lab-slide">
+                                    <div class="grid grid-cols-4 gap-3 text-center">
+                                        <a href="9.html" class="lab-item">
+                                            <div class="achievement-badge bg-indigo-100 text-indigo-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-scale-balanced"></i>
+                                            </div>
+                                            <span class="lab-label">Wheatstone</span>
+                                        </a>
+                                        <a href="10.html" class="lab-item">
+                                            <div class="achievement-badge bg-pink-100 text-pink-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-diagram-project"></i>
+                                            </div>
+                                            <span class="lab-label">Kirchhoff</span>
+                                        </a>
+                                        <a href="11.html" class="lab-item">
+                                            <div class="achievement-badge bg-cyan-100 text-cyan-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-magnet"></i>
+                                            </div>
+                                            <span class="lab-label">Magnetometer</span>
+                                        </a>
+                                        <a href="12.html" class="lab-item">
+                                            <div class="achievement-badge bg-lime-100 text-lime-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                            <span class="lab-label">Trafometer</span>
+                                        </a>
+                                        <a href="13.html" class="lab-item">
+                                            <div class="achievement-badge bg-rose-100 text-rose-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-stopwatch"></i>
+                                            </div>
+                                            <span class="lab-label">Bandul</span>
+                                        </a>
+                                        <a href="14.html" class="lab-item">
+                                            <div class="achievement-badge bg-sky-100 text-sky-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-wave-square"></i>
+                                            </div>
+                                            <span class="lab-label">Melde</span>
+                                        </a>
+                                        <a href="15.html" class="lab-item">
+                                            <div class="achievement-badge bg-violet-100 text-violet-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-apple-whole"></i>
+                                            </div>
+                                            <span class="lab-label">Newton</span>
+                                        </a>
+                                        <a href="16.html" class="lab-item">
+                                            <div class="achievement-badge bg-fuchsia-100 text-fuchsia-500 p-3 rounded-full shadow-sm">
+                                                <i class="fas fa-water"></i>
+                                            </div>
+                                            <span class="lab-label">Archimedes</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <span class="lab-label">GLB &amp; GLBB</span>
-                            </a>
-                            <a href="3.html" class="lab-item">
-                                <div class="achievement-badge bg-green-100 text-green-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <span class="lab-label">Optik</span>
-                            </a>
-                            <a href="4.html" class="lab-item">
-                                <div class="achievement-badge bg-purple-100 text-purple-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-ear-listen"></i>
-                                </div>
-                                <span class="lab-label">Organa</span>
-                            </a>
-                            <a href="5.html" class="lab-item">
-                                <div class="achievement-badge bg-orange-100 text-orange-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-weight-hanging"></i>
-                                </div>
-                                <span class="lab-label">Atwood</span>
-                            </a>
-                            <a href="6.html" class="lab-item">
-                                <div class="achievement-badge bg-red-100 text-red-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-temperature-high"></i>
-                                </div>
-                                <span class="lab-label">Kalorimeter</span>
-                            </a>
-                            <a href="7.html" class="lab-item">
-                                <div class="achievement-badge bg-amber-100 text-amber-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-arrows-spin"></i>
-                                </div>
-                                <span class="lab-label">Inersia</span>
-                            </a>
-                            <a href="8.html" class="lab-item">
-                                <div class="achievement-badge bg-teal-100 text-teal-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-microchip"></i>
-                                </div>
-                                <span class="lab-label">Elektronika</span>
-                            </a>
-                            <a href="9.html" class="lab-item">
-                                <div class="achievement-badge bg-indigo-100 text-indigo-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-scale-balanced"></i>
-                                </div>
-                                <span class="lab-label">Wheatstone</span>
-                            </a>
-                            <a href="10.html" class="lab-item">
-                                <div class="achievement-badge bg-pink-100 text-pink-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-diagram-project"></i>
-                                </div>
-                                <span class="lab-label">Kirchhoff</span>
-                            </a>
-                            <a href="11.html" class="lab-item">
-                                <div class="achievement-badge bg-cyan-100 text-cyan-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-magnet"></i>
-                                </div>
-                                <span class="lab-label">Magnetometer</span>
-                            </a>
-                            <a href="12.html" class="lab-item">
-                                <div class="achievement-badge bg-lime-100 text-lime-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-bolt"></i>
-                                </div>
-                                <span class="lab-label">Trafometer</span>
-                            </a>
-                            <a href="13.html" class="lab-item">
-                                <div class="achievement-badge bg-rose-100 text-rose-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-stopwatch"></i>
-                                </div>
-                                <span class="lab-label">Bandul</span>
-                            </a>
-                            <a href="14.html" class="lab-item">
-                                <div class="achievement-badge bg-sky-100 text-sky-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-wave-square"></i>
-                                </div>
-                                <span class="lab-label">Melde</span>
-                            </a>
-                            <a href="15.html" class="lab-item">
-                                <div class="achievement-badge bg-violet-100 text-violet-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-apple-whole"></i>
-                                </div>
-                                <span class="lab-label">Newton</span>
-                            </a>
-                            <a href="16.html" class="lab-item">
-                                <div class="achievement-badge bg-fuchsia-100 text-fuchsia-500 p-3 rounded-full shadow-sm">
-                                    <i class="fas fa-water"></i>
-                                </div>
-                                <span class="lab-label">Archimedes</span>
-                            </a>
+
+                            </div>
+                        </div>
+
+                        <!-- Dot indicator carousel -->
+                        <div class="lab-dots" id="labDots">
+                            <button class="lab-dot active" data-slide="0" aria-label="Slide 1 (alat 1-8)"></button>
+                            <button class="lab-dot" data-slide="1" aria-label="Slide 2 (alat 9-16)"></button>
                         </div>
                     </div>
 
@@ -1666,7 +1735,7 @@
             <i class="fas fa-plus"></i>
         </button>
 
-        <!-- ============ FLOATING BOTTOM NAV ============ -->
+        <!-- FLOATING BOTTOM NAV -->
         <nav class="bottom-nav">
             <a href="#" class="nav-item active" data-page="beranda">
                 <i class="fas fa-home nav-icon"></i>
@@ -1687,9 +1756,7 @@
         </nav>
     </div>
 
-    <!-- ============================================================
-         MODAL COMING SOON — 18 November 2026
-         ============================================================ -->
+    <!-- MODAL COMING SOON -->
     <div class="comingsoon-modal" id="comingSoonModal" onclick="if(event.target===this) closeComingSoon()">
         <div class="comingsoon-content">
             <div class="comingsoon-icon">
@@ -1714,9 +1781,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-         MODAL NEWTON QUIZ
-         ============================================================ -->
+    <!-- MODAL NEWTON QUIZ -->
     <div class="newton-modal" id="newtonModal" onclick="if(event.target===this) closeNewtonModal()">
         <div class="newton-modal-content">
             <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 flex justify-between items-center flex-shrink-0">
@@ -2147,7 +2212,8 @@
             document.getElementById('page-' + page).classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
+            if (navEl) navEl.classList.add('active');
 
             const info = pageInfo[page];
             if (info) {
@@ -2180,6 +2246,46 @@
                 showPage(this.dataset.page);
             });
         });
+
+        /* ============================================================
+           LAB CAROUSEL — 8 + 8 slide
+           ============================================================ */
+        (function initLabCarousel() {
+            const carousel = document.getElementById('labCarousel');
+            const dots = document.querySelectorAll('#labDots .lab-dot');
+            if (!carousel || !dots.length) return;
+
+            let rafId = null;
+
+            function updateDots() {
+                const slideWidth = carousel.clientWidth || 1;
+                const idx = Math.round(carousel.scrollLeft / slideWidth);
+                const clamped = Math.max(0, Math.min(idx, dots.length - 1));
+                dots.forEach((d, i) => d.classList.toggle('active', i === clamped));
+            }
+
+            carousel.addEventListener('scroll', () => {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(updateDots);
+            }, { passive: true });
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const idx = parseInt(dot.dataset.slide, 10) || 0;
+                    carousel.scrollTo({
+                        left: idx * carousel.clientWidth,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                const idx = Array.from(dots).findIndex(d => d.classList.contains('active'));
+                if (idx > 0) {
+                    carousel.scrollTo({ left: idx * carousel.clientWidth, behavior: 'auto' });
+                }
+            });
+        })();
 
         /* ============================================================
            NEWTON QUIZ MODAL
@@ -2709,7 +2815,8 @@
             }
             empty.style.display = 'none';
             list.innerHTML = notes.map(n => {
-                const preview = n.body.length > 80 ? n.body.slice(0, 80) + '...' : n.body;
+                const bodyText = (n.body || '');
+                const preview = bodyText.length > 80 ? bodyText.slice(0, 80) + '...' : bodyText;
                 const title = n.title || 'Tanpa judul';
                 return `<div class="note-card" onclick="openNote('${n.id}')">
                     <div class="flex justify-between items-start mb-1 gap-2">
@@ -2751,8 +2858,8 @@
                 const note = await dbGet('notes', id);
                 if (!note) return;
                 currentNoteId = id;
-                document.getElementById('noteTitle').value = note.title;
-                document.getElementById('noteBody').value = note.body;
+                document.getElementById('noteTitle').value = note.title || '';
+                document.getElementById('noteBody').value = note.body || '';
                 document.getElementById('noteEditorTitle').textContent = 'Edit Catatan';
                 document.getElementById('noteDeleteBtn').style.display = 'block';
                 showEditor();
@@ -2777,14 +2884,19 @@
                         await dbPut('notes', { id: currentNoteId, title, body, createdAt: now, updatedAt: now });
                     }
                 } else {
-                    const newId = 'n_' + now + '_' + Math.random().toString(36).slice(2, 8);
-                    await dbPut('notes', { id: newId, title, body, createdAt: now, updatedAt: now });
+                    const id = 'note_' + now + '_' + Math.random().toString(36).slice(2, 8);
+                    await dbPut('notes', {
+                        id,
+                        title: title || 'Tanpa judul',
+                        body,
+                        createdAt: now,
+                        updatedAt: now
+                    });
                 }
-                currentNoteId = null;
                 await showList();
             } catch (e) {
                 console.warn('Gagal simpan catatan:', e);
-                alert('Gagal menyimpan catatan: ' + e.message);
+                alert('Gagal menyimpan catatan. Silakan coba lagi.');
             }
         }
 
@@ -2797,121 +2909,133 @@
                 await showList();
             } catch (e) {
                 console.warn('Gagal hapus catatan:', e);
+                alert('Gagal menghapus catatan.');
             }
         }
 
         /* ============================================================
-           NAYRA AI
+           NAYRA AI CHAT (lokal, rule-based)
            ============================================================ */
-        const nayraMessages = [
+        const NAYRA_WELCOME = 'Halo! 👋 Aku Nayra, asisten sainsmu. Tanyakan apa saja tentang fisika, kalkulator, atau cara pakai catatan. Aku siap membantu!';
+
+        const nayraRules = [
             {
-                role: 'system',
-                content: 'Kamu adalah Nayra AI, asisten belajar sains yang ramah, cerdas, dan membantu siswa Indonesia. Jawab dengan bahasa Indonesia yang baik dan mudah dipahami. Berikan penjelasan yang jelas, ringkas, dan akurat. Jika ditanya soal sains, berikan langkah-langkah bila perlu. Tetap fokus dan hindari jawaban bertele-tele.'
+                keywords: ['halo', 'hai', 'hi', 'hello', 'pagi', 'siang', 'sore', 'malam'],
+                reply: 'Halo juga! 👋 Ada yang bisa Nayra bantu hari ini? Kamu bisa tanya rumus fisika, minta penjelasan konsep, atau minta bantuan pakai fitur di Quantara.'
+            },
+            {
+                keywords: ['newton', 'gaya', 'hukum newton'],
+                reply: 'Hukum Newton ada 3:\n\n1️⃣ Hukum I (Inersia): ΣF = 0 → benda diam tetap diam, benda bergerak tetap bergerak lurus beraturan.\n\n2️⃣ Hukum II: ΣF = m · a → percepatan sebanding dengan gaya total.\n\n3️⃣ Hukum III: F_aksi = −F_reaksi → setiap aksi ada reaksi sama besar berlawanan arah.\n\nCoba tantangan Hukum Newton di Beranda untuk latihan!'
+            },
+            {
+                keywords: ['energi', 'usaha', 'kerja'],
+                reply: 'Usaha (W) = F · s · cos θ (satuan Joule).\n\nEnergi kinetik: Ek = ½ m v²\nEnergi potensial: Ep = m g h\n\nHukum kekekalan energi mekanik: Em = Ek + Ep = konstan (jika tanpa gesekan).'
+            },
+            {
+                keywords: ['optik', 'cahaya', 'lensa', 'cermin'],
+                reply: 'Rumus optik:\n\n1/f = 1/s + 1/s\'\n\nPerbesaran: M = |s\'/s| = |h\'/h|\n\nUntuk cermin cekung f positif, cermin cembung f negatif. Untuk lensa cembung f positif, lensa cekung f negatif.'
+            },
+            {
+                keywords: ['kalkulator', 'hitung', 'calculator'],
+                reply: 'Kalkulator Quantara ada di menu bawah (ikon 🧮). Fiturnya:\n\n• Trigonometri (sin, cos, tan) — mode DEG/RAD bisa di-toggle\n• Logaritma (log, ln) dan akar (√)\n• Pangkat (x^y), kuadrat (x²), π, dan e\n• Riwayat hitungan tersimpan otomatis\n\nCoba ketik ekspresi seperti sin(30) + 2^3 ya!'
+            },
+            {
+                keywords: ['catatan', 'note', 'notes'],
+                reply: 'Fitur Catatan ada di menu bawah (ikon 📖). Kamu bisa:\n\n• Tap tombol + untuk buat catatan baru\n• Tap catatan untuk edit\n• Semua catatan tersimpan otomatis di perangkatmu (IndexedDB)\n\nCocok untuk mencatat rumus atau ringkasan materi!'
+            },
+            {
+                keywords: ['terima kasih', 'makasih', 'thanks', 'thank you'],
+                reply: 'Sama-sama! 😊 Senang bisa membantu. Kalau ada pertanyaan lain, tanya saja ya!'
+            },
+            {
+                keywords: ['rumus', 'formula'],
+                reply: 'Rumus fisika populer yang sering dipakai:\n\n• v = s/t (kecepatan)\n• a = Δv/Δt (percepatan)\n• F = m·a (Newton II)\n• W = F·s (usaha)\n• Ek = ½mv² (energi kinetik)\n• Ep = mgh (energi potensial)\n• P = W/t (daya)\n\nMau penjelasan rumus yang mana?'
+            },
+            {
+                keywords: ['siapa kamu', 'kamu siapa', 'nama kamu'],
+                reply: 'Aku Nayra 🤖 — asisten sains virtual di aplikasi Quantara. Aku bisa bantu jelaskan konsep fisika, rumus, dan memandumu memakai fitur aplikasi. Aku bukan AI dengan akses internet, tapi aku punya banyak pengetahuan dasar fisika!'
             }
         ];
 
-        let nayraBusy = false;
-        let nayraWelcomeShown = false;
-
-        function appendBubble(role, content, options = {}) {
+        function addChatBubble(text, sender) {
             const messages = document.getElementById('chatMessages');
-            const bubble = document.createElement('div');
-            bubble.className = 'chat-bubble ' + role;
-            if (options.html) bubble.innerHTML = content;
-            else bubble.textContent = content;
-            if (options.id) bubble.id = options.id;
-            messages.appendChild(bubble);
+            const div = document.createElement('div');
+            div.className = 'chat-bubble ' + sender;
+            div.textContent = text;
+            messages.appendChild(div);
             messages.scrollTop = messages.scrollHeight;
-            return bubble;
         }
 
-        function replaceBubble(id, text) {
-            const bubble = document.getElementById(id);
-            if (bubble) {
-                bubble.textContent = text;
-                const messages = document.getElementById('chatMessages');
-                messages.scrollTop = messages.scrollHeight;
+        function showTyping() {
+            const messages = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'chat-bubble ai';
+            div.id = 'typingBubble';
+            div.innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typingBubble');
+            if (el) el.remove();
+        }
+
+        function nayraReply(text) {
+            const lower = text.toLowerCase();
+            for (const rule of nayraRules) {
+                if (rule.keywords.some(k => lower.includes(k))) {
+                    return rule.reply;
+                }
             }
+            return 'Hmm, aku belum punya jawaban spesifik untuk itu 🤔. Coba tanya tentang:\n\n• Hukum Newton\n• Usaha & Energi\n• Optik (lensa/cermin)\n• Rumus fisika\n• Cara pakai kalkulator atau catatan\n\nAtau klik Tantangan Fisika di Beranda untuk latihan soal!';
         }
 
-        async function nayraSend() {
-            if (nayraBusy) return;
+        function nayraSend() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
 
+            addChatBubble(text, 'user');
             input.value = '';
-            appendBubble('user', text);
-            nayraMessages.push({ role: 'user', content: text });
 
-            const typingId = 'typing_' + Date.now();
-            appendBubble('ai', '<span class="typing-dots"><span></span><span></span><span></span></span>', { html: true, id: typingId });
+            showTyping();
 
-            nayraBusy = true;
-            document.getElementById('chatSend').disabled = true;
-
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 30000);
-
-                const res = await fetch('https://text.pollinations.ai/openai', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: 'openai', messages: nayraMessages }),
-                    signal: controller.signal
-                });
-                clearTimeout(timeout);
-
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                const reply = data?.choices?.[0]?.message?.content?.trim() || 'Maaf, saya tidak bisa menjawab saat ini.';
-
-                nayraMessages.push({ role: 'assistant', content: reply });
-                replaceBubble(typingId, reply);
-            } catch (err) {
-                let msg = 'Maaf, terjadi kesalahan. Coba lagi ya.';
-                if (err.name === 'AbortError') msg = 'Respons terlalu lama (>30 detik). Coba lagi.';
-                else if (err.message) msg = 'Gagal terhubung ke Nayra: ' + err.message;
-                replaceBubble(typingId, msg);
-            } finally {
-                nayraBusy = false;
-                document.getElementById('chatSend').disabled = false;
-                document.getElementById('chatInput').focus();
-            }
+            setTimeout(() => {
+                hideTyping();
+                const reply = nayraReply(text);
+                addChatBubble(reply, 'ai');
+            }, 700 + Math.random() * 600);
         }
 
-        document.getElementById('chatInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                nayraSend();
+        // Enter untuk kirim chat
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        nayraSend();
+                    }
+                });
+            }
+
+            // Pesan sambutan Nayra
+            if (document.getElementById('chatMessages').children.length === 0) {
+                setTimeout(() => addChatBubble(NAYRA_WELCOME, 'ai'), 400);
             }
         });
 
-        if (!nayraWelcomeShown) {
-            nayraWelcomeShown = true;
-            appendBubble('ai', 'Halo! 👋 Aku Nayra AI, siap membantu kamu belajar sains. Tanya apa saja ya — fisika, kimia, biologi, matematika, atau topik lainnya! 🚀');
-        }
-
         /* ============================================================
-           INIT
+           INIT — Muat data dari IndexedDB
            ============================================================ */
-        (async function initIndexedDBData() {
+        (async function initApp() {
             try {
                 await migrateNotesFromLocalStorage();
-            } catch (e) {
-                console.warn('Migrasi gagal:', e);
-            }
-
-            try {
+                await renderCalcHistory();
                 await renderNotes();
             } catch (e) {
-                console.warn('Render catatan gagal:', e);
-            }
-
-            try {
-                await renderCalcHistory();
-            } catch (e) {
-                console.warn('Render riwayat kalkulator gagal:', e);
+                console.warn('Init error:', e);
             }
         })();
     </script>
