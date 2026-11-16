@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Alat Uji Hukum Archimedes</title>
+<style media="not all">
+:root{--fg:#1a1a1a;--card:rgba(255,255,255,.93);--bd:#c3ced4;--ac:#0b7285;--hi:#e8f1f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}}
+:root[data-theme="dark"]{--fg:#eceff1;--card:rgba(26,32,36,.93);--bd:#3a464d;--ac:#4dd0e1;--hi:#26323a}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;font-size:13px;backdrop-filter:blur(6px)}
+#ui{left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:min(290px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto}
+#anw{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100vw - 24px))}
+#an{width:100%;display:block}
+h1{font-size:15px;margin:0 0 8px}
+label{display:block;margin:6px 0}input[type=range]{width:100%}
+button{font:inherit;border:1px solid var(--bd);background:var(--hi);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+button.on,button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+.seg{display:flex;gap:6px}.seg button{flex:1}.row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+p{margin:6px 0 0;line-height:1.4}#rd{font-variant-numeric:tabular-nums}#hint{color:var(--ac)}
+button{min-height:36px}#ui.min .mh{display:none}#anw.h{display:none}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));display:grid;grid-template-columns:repeat(2,52px);gap:6px;padding:6px}
+#nav button{padding:0;height:40px;font-size:15px;min-height:0}#nav .t{font-size:11px}
+#ui.col>*:not(h1){display:none}#ui.col h1{margin:0}#ui.col #bMore{display:none}
+#nav.col button:not(#bNav){display:none}#nav.col{grid-template-columns:auto}#nav #bNav{grid-column:1/-1;font-size:11px;padding:0 8px}
+#anw.col canvas{display:none}#anw.col>div{margin:0!important}
+@media(max-width:700px){#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:52vh}#anw{left:8px;right:auto;width:calc(100vw - 84px);top:calc(8px + env(safe-area-inset-top,0px));bottom:auto}#nav{right:8px;top:calc(8px + env(safe-area-inset-top,0px));grid-template-columns:repeat(2,46px);gap:4px;padding:4px}#nav button{height:36px}.card{font-size:12px}}
+</style>
+<style>
+:root{--fg:#17212b;--mut:#5f6f7c;--card:rgba(255,255,255,.88);--bd:rgba(20,40,60,.12);--ac:#0b7285;--ac2:#18a7bd;--onac:#fff;--hi:rgba(20,40,60,.06);--sh:0 10px 30px rgba(20,40,60,.18);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--fg:#eaf0f4;--mut:#9fb0bc;--card:rgba(24,31,36,.88);--bd:rgba(255,255,255,.12);--ac:#4dd0e1;--ac2:#26a9bd;--onac:#06323a;--hi:rgba(255,255,255,.08);--sh:0 10px 30px rgba(0,0,0,.5)}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:#dfe9ee;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg)}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.card{position:fixed;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);padding:14px;font-size:13px}
+button{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;color:var(--fg);background:var(--hi);border:1px solid var(--bd);border-radius:12px;min-height:44px;padding:0 14px;cursor:pointer;transition:background .15s,transform .1s}
+button:hover{background:var(--bd)}button:active{transform:scale(.95)}
+button.pri,button.act{background:var(--ac);color:var(--onac);border-color:transparent}
+button.pri:hover,button.act:hover{background:var(--ac2)}
+.ib{width:44px;padding:0;flex:none}
+#ui{left:16px;top:calc(16px + env(safe-area-inset-top,0px));width:min(330px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;display:flex;flex-direction:column;gap:14px}
+.hd{display:flex;align-items:center;gap:8px}.hd .ib{width:38px;min-height:38px}
+.lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;font-size:18px;flex:none}
+.tt{flex:1;min-width:0;margin-left:2px}.tt b{display:block;font-size:16px}.tt span{color:var(--mut);font-size:11px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:var(--hi);border-radius:14px}
+.seg button{background:transparent;border:0;min-height:42px}.seg button.on{background:var(--ac);color:var(--onac);box-shadow:0 3px 10px rgba(11,114,133,.35)}
+.mh{display:flex;flex-direction:column;gap:14px}#ui.min .mh{display:none}
+.fl{display:flex;align-items:center;gap:8px;font-weight:600}.fl svg{color:var(--ac);width:16px}
+.v{margin-left:auto;background:var(--hi);padding:3px 11px;border-radius:999px;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:8px 0 0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:var(--hi);border:1px solid var(--bd)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--ac);border:3px solid var(--card);box-shadow:0 1px 6px rgba(0,0,0,.35);margin-top:-9px}
+input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:var(--hi)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ac);border:3px solid var(--card)}
+.row{display:flex;gap:10px}#bGo{flex:1.6}#bRe{flex:1}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{background:var(--hi);border-radius:12px;padding:8px 12px}
+.st small{display:block;color:var(--mut);font-size:11px}.st b{font-size:17px;font-variant-numeric:tabular-nums}.st em{font-style:normal;color:var(--mut);font-size:11px;margin-left:3px}
+.hint{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(24,167,189,.12);line-height:1.45}.hint svg{color:var(--ac);margin-top:2px;flex:none}
+.tip{color:var(--mut);font-size:11px;line-height:1.5}
+#ui.col>*:not(.hd){display:none}#ui.col #bMore{display:none}
+#nav{right:16px;top:calc(16px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:12px;padding:12px}
+.nh{display:flex;align-items:center;justify-content:space-between;gap:14px;font-weight:700;font-size:12px;color:var(--mut)}.nh .ib{width:34px;min-height:34px}
+.g3{display:grid;grid-template-columns:repeat(3,44px);gap:8px}.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ct{display:grid;place-items:center;color:var(--mut)}
+.pv{flex-direction:column;gap:4px;min-height:52px;font-size:10px;padding:0}
+#nav.col .grp{display:none}
+#anw{right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100vw - 32px))}#anw.h{display:none}
+.ah{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:10px}.ah svg{color:var(--ac)}.ah .ib{margin-left:auto;width:34px;min-height:34px}
+#an{width:100%;height:auto;display:block}
+@media(max-width:700px){
+#ui{left:12px;right:12px;top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;max-height:56vh}
+#nav{right:12px;top:calc(12px + env(safe-area-inset-top,0px));padding:10px;gap:10px}
+.g3{grid-template-columns:repeat(3,40px);gap:6px}.g2{gap:6px}.pv{min-height:40px}.pv span{display:none}.ib{width:40px;min-height:40px}
+#anw{left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:auto;z-index:20}
+}
+</style>
+<style>
+/* tata letak ringkas: panel di kolom samping, kanvas 3D di tengah */
+canvas#c{width:auto;height:auto}
+button{min-height:38px;border-radius:10px;font-size:12px;padding:0 12px}.ib{width:38px;padding:0}
+#ui{left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto;width:248px;max-height:calc(100vh - 24px);padding:12px;gap:10px}
+.hd .ib{width:32px;min-height:32px}.lg{width:34px;height:34px;font-size:15px;border-radius:10px}.tt b{font-size:14px}.tt span{font-size:10px}
+.seg button{min-height:36px}.mh{gap:10px}.fl{font-size:12px}.v{padding:1px 9px}
+input[type=range]{height:22px;margin:4px 0 0}
+.st{grid-template-columns:repeat(4,1fr);gap:6px}.st div{padding:6px 2px;text-align:center}.st b{display:block;font-size:13px}.st small,.st em{display:block;font-size:10px;margin:0}
+.hint{padding:8px 10px;font-size:12px;line-height:1.35}
+#rc{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));width:316px;display:flex;flex-direction:column;gap:10px}
+#rc .card{position:static}
+#nav{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:10px;width:auto}
+.nh{grid-column:1/-1;order:0;font-size:11px}#nav .ib{width:auto;min-height:36px;padding:0}#nav .nh .ib{width:30px;min-height:30px}
+.g3{display:contents}.g3 span{display:none}
+#zi{order:1}#zo{order:2}#hm{order:3}#pl{order:4}#pu{order:5}#pdn{order:6}#pr{order:7}
+.g2{grid-column:1/-1;order:8;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pv{flex-direction:row;gap:6px;min-height:36px;font-size:11px;padding:0}.pv span{display:inline}
+#anw{width:auto;padding:10px}
+#rc #ui{position:fixed;left:12px;right:auto;top:calc(12px + env(safe-area-inset-top,0px));bottom:auto}
+@media(max-width:899px){
+#rc{display:contents}#rc .card{position:fixed}
+#nav{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));padding:8px;gap:6px}
+#ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:48vh;padding:10px;gap:8px}
+#anw{left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));bottom:auto;z-index:20}
+#ui.min .hint,#ui.min .tip{display:none}
+#rc #ui{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="rc"><div id="nav" class="card">
+<div class="nh"><span><i class="fa-solid fa-video"></i>&nbsp; Tampilan</span><button id="bNav" class="ib" aria-label="Ciutkan"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="grp g3"><button id="zi" class="ib" aria-label="Zoom in"><i class="fa-solid fa-magnifying-glass-plus"></i></button><button id="zo" class="ib" aria-label="Zoom out"><i class="fa-solid fa-magnifying-glass-minus"></i></button><button id="hm" class="ib" aria-label="Tampilan awal"><i class="fa-solid fa-house"></i></button></div>
+<div class="grp g3"><span></span><button id="pu" class="ib" aria-label="Geser atas"><i class="fa-solid fa-chevron-up"></i></button><span></span><button id="pl" class="ib" aria-label="Geser kiri"><i class="fa-solid fa-chevron-left"></i></button><span class="ct"><i class="fa-solid fa-up-down-left-right"></i></span><button id="pr" class="ib" aria-label="Geser kanan"><i class="fa-solid fa-chevron-right"></i></button><span></span><button id="pdn" class="ib" aria-label="Geser bawah"><i class="fa-solid fa-chevron-down"></i></button><span></span></div>
+<div class="grp g2"><button id="vF" class="pv" aria-label="Depan"><i class="fa-solid fa-eye"></i><span>Depan</span></button><button id="vT" class="pv" aria-label="Fokus"><i class="fa-solid fa-crosshairs"></i><span>Fokus</span></button><button id="vK" class="pv" aria-label="Neraca"><i class="fa-solid fa-scale-balanced"></i><span>Neraca</span></button></div>
+</div>
+<div id="ui" class="card">
+<div class="hd"><div class="lg"><i class="fa-solid fa-water"></i></div><div class="tt"><b>HUKUM ARCHIMEDES</b><span>Alat uji gaya apung</span></div><button id="bMore" class="ib" aria-label="Pengaturan"><i class="fa-solid fa-sliders"></i></button><button id="bMin" class="ib" aria-label="Ciutkan panel"><i class="fa-solid fa-chevron-up"></i></button></div>
+<div class="seg"><button id="bSink" class="on"><i class="fa-solid fa-arrow-down-long"></i>Tenggelam</button><button id="bFloat"><i class="fa-solid fa-arrow-up-long"></i>Terapung</button></div>
+<div class="mh">
+<label id="lM"><span class="fl"><i class="fa-solid fa-droplet"></i>Fluida<b class="v"><span id="vM">1000</span> kg/m³</b></span><input id="sM" type="range" min="700" max="1400" step="20" value="1000"></label>
+<label id="lV" hidden><span class="fl"><i class="fa-solid fa-cube"></i>Benda<b class="v"><span id="vV">600</span> kg/m³</b></span><input id="sV" type="range" min="200" max="900" step="20" value="600"></label>
+<label><span class="fl"><i class="fa-solid fa-clock"></i>Kecepatan simulasi<b class="v"><span id="vS">0,5</span>×</b></span><input id="sS" type="range" min="0.1" max="1" step="0.1" value="0.5"></label>
+</div>
+<div class="row"><button id="bGo" class="pri"><i class="fa-solid fa-arrow-down"></i>Turunkan</button><button id="bRe"><i class="fa-solid fa-rotate-left"></i>Ulang</button><button id="bAn" class="ib" aria-label="Grafik gaya apung"><i class="fa-solid fa-chart-simple"></i></button></div>
+<div class="st"><div><small>Berat</small><b id="rt">0,00</b><em>N</em></div><div><small>Neraca</small><b id="rs">0,00</b><em>N</em></div><div><small>Apung</small><b id="rv">0,00</b><em>N</em></div><div><small>Celup</small><b id="ra">0,0</b><em>%</em></div></div>
+<div class="hint"><i class="fa-solid fa-circle-info"></i><span id="hint"></span></div>
+<div class="tip mh">Seret: putar. Cubit atau gulir: zoom. Geser 2 jari, klik kanan, atau Shift+seret: geser tampilan.</div>
+</div>
+<div id="anw" class="card"><div class="ah"><i class="fa-solid fa-chart-simple"></i><span>Grafik gaya apung</span><button id="bAnM" class="ib" aria-label="Tutup grafik"><i class="fa-solid fa-xmark"></i></button></div><canvas id="an" width="720" height="400"></canvas></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T=THREE,$=id=>document.getElementById(id),fmt=(n,d=2)=>n.toFixed(d).replace('.',',');
+const R=new T.WebGLRenderer({canvas:$('c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.localClippingEnabled=true;
+const SC=new T.Scene();SC.background=new T.Color(0xdfe9ee);const S=new T.Group();SC.add(S);
+const cam=new T.PerspectiveCamera(40,1,.05,60);
+SC.add(new T.HemisphereLight(0xffffff,0xb0b8bc,.95));
+const sun=new T.DirectionalLight(0xffffff,.75);sun.position.set(1.5,3,2);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-2,right:2,top:2,bottom:-2});SC.add(sun);
+const mat=(c,m=0,r=.6)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r});
+function add(g,m,x,y,z,p=S){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;p.add(o);return o}
+const box=(w,h,d,c,x,y,z,p,m=0)=>add(new T.BoxGeometry(w,h,d),mat(c,m),x,y,z,p);
+const cyl=(r,h,c,x,y,z,p,ax,m=0)=>{const o=add(new T.CylinderGeometry(r,r,h,24),mat(c,m,.4),x,y,z,p);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;return o};
+
+/* ================= geometri percobaan ================= */
+const G=9.8;
+const BENCH=.80,Z0=.10;                       /* permukaan meja & kedalaman bidang kerja */
+const BKR=.085,BKH=.26,FLH=.235;              /* gelas kimia */
+const FS=BENCH+.004+FLH;                      /* permukaan fluida */
+const VB=2e-4,A=Math.cbrt(VB);                /* volume benda 200 cm³ -> sisi 5,85 cm */
+
+/* meja kerja */
+box(1.30,.04,.62,0x9b7b53,0,.78,Z0);
+[[-.58,-.18],[-.58,.38],[.58,-.18],[.58,.38]].forEach(([x,z])=>box(.04,.76,.04,0x7a5c3a,x,.38,z));
+
+/* gelas kimia (kaca) */
+const glassMat=new T.MeshStandardMaterial({color:0xdfeef5,transparent:true,opacity:.26,roughness:.06,metalness:0,side:T.DoubleSide,depthWrite:false});
+const bw=new T.Mesh(new T.CylinderGeometry(BKR,BKR,BKH,48,1,true),glassMat);
+bw.position.set(0,BENCH+BKH/2,Z0);S.add(bw);
+const bb=new T.Mesh(new T.CylinderGeometry(BKR,BKR,.006,48),glassMat);
+bb.position.set(0,BENCH+.003,Z0);S.add(bb);
+const brim=new T.Mesh(new T.TorusGeometry(BKR,.0028,8,48),glassMat);
+brim.position.set(0,BENCH+BKH,Z0);brim.rotation.x=Math.PI/2;S.add(brim);
+
+/* fluida */
+const fluidMat=new T.MeshStandardMaterial({color:0x49a7d6,transparent:true,opacity:.55,roughness:.2,metalness:.05,depthWrite:false});
+const fluid=new T.Mesh(new T.CylinderGeometry(BKR-.004,BKR-.004,FLH,48),fluidMat);
+fluid.position.set(0,BENCH+.004+FLH/2,Z0);S.add(fluid);
+
+/* tiang penjepit */
+const RODX=-.30;
+box(.16,.02,.16,0x2b3138,RODX,BENCH+.01,Z0);
+cyl(.008,.74,0x9aa4ac,RODX,1.17,Z0,S);
+cyl(.006,.34,0x9aa4ac,-.13,1.52,Z0,S,'x',.7);
+cyl(.003,.02,0x777777,0,1.51,Z0,S);
+
+/* neraca pegas */
+const STY=1.50,SBOT=1.355,SPR0=.028,KV=.008;
+const tubeMat=new T.MeshStandardMaterial({color:0xe8eef2,transparent:true,opacity:.35,roughness:.1,metalness:0,side:T.DoubleSide,depthWrite:false});
+const tube=new T.Mesh(new T.CylinderGeometry(.024,.024,.13,24,1,true),tubeMat);
+tube.position.set(0,STY-.065,Z0);S.add(tube);
+cyl(.026,.008,0xdfe6ea,0,STY-.004,Z0,S,.5);
+cyl(.026,.008,0xdfe6ea,0,STY-.13,Z0,S,.5);
+cyl(.004,.022,0x777777,0,STY-.145,Z0,S);
+const rings=[];
+for(let i=0;i<9;i++){const m=new T.Mesh(new T.TorusGeometry(.0135,.0016,6,16),mat(0x9aa4ac,.85,.3));m.rotation.x=Math.PI/2;S.add(m);rings.push(m)}
+const ptr=new T.Mesh(new T.TorusGeometry(.0245,.0022,6,28),mat(0xd2412a,.3,.5));ptr.rotation.x=Math.PI/2;S.add(ptr);
+
+/* benda uji */
+const bMat=new T.MeshStandardMaterial({color:0xb9c0c7,metalness:.8,roughness:.3});
+const block=new T.Group();S.add(block);
+const bMesh=new T.Mesh(new T.BoxGeometry(A,A,A),bMat);
+bMesh.castShadow=bMesh.receiveShadow=true;block.add(bMesh);
+block.add(new T.LineSegments(new T.EdgesGeometry(bMesh.geometry),new T.LineBasicMaterial({color:0x4a5560})));
+const bhk=new T.Mesh(new T.TorusGeometry(.006,.0012,6,14),mat(0x8a939a,.9,.3));
+bhk.position.set(0,A/2,0);block.add(bhk);
+
+/* tali */
+const strMat=new T.MeshBasicMaterial({color:0x333333});
+const strB=new T.Mesh(new T.BoxGeometry(.0018,1,.0018),strMat);S.add(strB);
+
+/* ================= kondisi simulasi ================= */
+const st={mode:'sink',rf:1000,rb:600,spd:.5,run:false,done:false,p:0,
+          W:0,T:0,Fa:0,frac:0,y:1.22,rec:[]};
+const Y0=1.22;
+const rhoB=()=>st.mode==='sink'?2700:st.rb;
+const rhoF=()=>st.mode==='sink'?st.rf:1000;
+
+/* warna fluida & benda */
+const cOil=new T.Color(0xf0cf63),cWater=new T.Color(0x49a7d6),cGly=new T.Color(0xc08a3e);
+function setFluidColor(rf){
+ const t=Math.max(0,Math.min(1,(rf-700)/700));
+ if(t<.43)fluidMat.color.copy(cOil).lerp(cWater,t/.43);
+ else fluidMat.color.copy(cWater).lerp(cGly,(t-.43)/.57);
+}
+function blockColor(rb){
+ if(rb>1500)return 0xb9c0c7;
+ const t=(rb-200)/700;
+ return new T.Color(0xe8d6a8).lerp(new T.Color(0xa9763f),t).getHex();
+}
+
+function upd(){
+ const rb=rhoB(),rf=rhoF();
+ st.W=rb*G*VB;
+ const f=Math.min(1,rb/rf);
+ const yEnd=st.mode==='sink'?FS-A/2-.005:FS-f*A+A/2;
+ const e=st.p<.5?2*st.p*st.p:1-Math.pow(-2*st.p+2,2)/2;
+ st.y=Y0+(yEnd-Y0)*e;
+ const ds=Math.max(0,Math.min(A,FS-(st.y-A/2)));
+ st.frac=ds/A;
+ st.Fa=rf*G*A*A*ds;
+ st.T=Math.max(0,st.W-st.Fa);
+ if(st.run){
+  const L=st.rec[st.rec.length-1];
+  if(!L||Math.abs(st.frac-L.f)>=.02){st.rec.push({f:st.frac,Fa:st.Fa});if(st.rec.length>120)st.rec.shift()}
+ }
+}
+function reset(){st.run=false;st.done=false;st.p=0;st.rec=[];upd()}
+
+/* ================= kamera orbit ================= */
+const tgt=new T.Vector3(-.06,.98,Z0),ob={th:.10,ph:1.12,r:1.95};let goal=null;
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v)),HR=()=>{const a=cv.clientWidth/cv.clientHeight;return Math.max(1.7,Math.min(3.0,2.1/a))};
+function zoom(f){ob.r=cl(ob.r*f,.35,4.5)}
+function pan(dx,dy){tgt.x=cl(tgt.x+Math.cos(ob.th)*dx,-1.3,1.1);tgt.z=cl(tgt.z-Math.sin(ob.th)*dx,-.6,.8);tgt.y=cl(tgt.y+dy,.4,1.6)}
+function go(o){goal=Object.assign({th:ob.th,ph:ob.ph,r:ob.r,x:tgt.x,y:tgt.y,z:tgt.z},o)}
+function animGoal(){if(!goal)return;const k=.14;ob.th+=(goal.th-ob.th)*k;ob.ph+=(goal.ph-ob.ph)*k;ob.r+=(goal.r-ob.r)*k;tgt.x+=(goal.x-tgt.x)*k;tgt.y+=(goal.y-tgt.y)*k;tgt.z+=(goal.z-tgt.z)*k;if(Math.abs(goal.r-ob.r)<.003&&Math.abs(goal.th-ob.th)<.003&&Math.abs(goal.ph-ob.ph)<.003&&Math.abs(goal.x-tgt.x)<.003)goal=null}
+function setCam(){cam.position.set(tgt.x+ob.r*Math.sin(ob.ph)*Math.sin(ob.th),tgt.y+ob.r*Math.cos(ob.ph),tgt.z+ob.r*Math.sin(ob.ph)*Math.cos(ob.th));cam.lookAt(tgt)}
+const cv=$('c'),P=new Map();let mv=0;
+cv.addEventListener('pointerdown',e=>{goal=null;cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,b:e.button,s:e.shiftKey});if(P.size===1)mv=0});
+cv.addEventListener('pointermove',e=>{const p=P.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;
+ if(P.size===2){const o=[...P.entries()].find(([k])=>k!==e.pointerId)[1];const d0=Math.hypot(p.x-o.x,p.y-o.y),c0x=(p.x+o.x)/2,c0y=(p.y+o.y)/2;p.x=e.clientX;p.y=e.clientY;const d1=Math.hypot(p.x-o.x,p.y-o.y);if(d0>0&&d1>0)zoom(d0/d1);const k=ob.r*.0011;pan(-((p.x+o.x)/2-c0x)*k,((p.y+o.y)/2-c0y)*k);mv+=99;return}
+ p.x=e.clientX;p.y=e.clientY;mv+=Math.abs(dx)+Math.abs(dy);
+ if(p.b===1||p.b===2||p.s){const k=ob.r*.0012;pan(-dx*k,dy*k)}else{ob.th-=dx*.006;ob.ph=cl(ob.ph-dy*.006,.2,1.5)}});
+cv.addEventListener('pointerup',e=>P.delete(e.pointerId));
+cv.addEventListener('pointercancel',e=>P.delete(e.pointerId));cv.addEventListener('contextmenu',e=>e.preventDefault());
+cv.addEventListener('wheel',e=>{e.preventDefault();goal=null;zoom(1+e.deltaY*.001)},{passive:false});
+function lay(){const m=innerWidth<900,u=$('ui').getBoundingClientRect(),n=$('nav').getBoundingClientRect(),r=$('rc').getBoundingClientRect();
+ const L=m?0:u.right+12,Rr=m?0:innerWidth-r.left+12,Tp=m?n.bottom+6:0,Bt=m?innerHeight-u.top+6:0;
+ cv.style.left=L+'px';cv.style.top=Tp+'px';cv.style.width=Math.max(60,innerWidth-L-Rr)+'px';cv.style.height=Math.max(60,innerHeight-Tp-Bt)+'px';size()}
+function size(){const w=cv.clientWidth||innerWidth,h=cv.clientHeight||innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',lay);const ro=new ResizeObserver(lay);[$('ui'),$('nav'),$('rc')].forEach(e=>ro.observe(e));lay();
+
+/* ================= UI ================= */
+function ui(){
+ $('bSink').classList.toggle('on',st.mode==='sink');
+ $('bFloat').classList.toggle('on',st.mode==='float');
+ $('lM').hidden=st.mode!=='sink';
+ $('lV').hidden=st.mode!=='float';
+ $('vM').textContent=st.rf;
+ $('vV').textContent=st.rb;
+}
+function refresh(){setFluidColor(rhoF());bMat.color.setHex(blockColor(rhoB()));reset()}
+function setMode(m){st.mode=m;ui();refresh()}
+$('bSink').onclick=()=>setMode('sink');
+$('bFloat').onclick=()=>setMode('float');
+$('sM').oninput=e=>{st.rf=+e.target.value;$('vM').textContent=st.rf;refresh()};
+$('sV').oninput=e=>{st.rb=+e.target.value;$('vV').textContent=st.rb;refresh()};
+$('sS').oninput=e=>{st.spd=+e.target.value;$('vS').textContent=fmt(st.spd,1)};
+$('bRe').onclick=reset;
+$('bGo').onclick=()=>{if(st.run)return;if(st.done||st.p>0)reset();st.run=true};
+$('bMore').onclick=()=>{$('bMore').classList.toggle('act',!$('ui').classList.toggle('min'))};
+function showAn(on){$('anw').classList.toggle('h',!on);$('bAn').classList.toggle('act',on)}
+$('bAn').onclick=()=>showAn($('anw').classList.contains('h'));$('bAnM').onclick=()=>showAn(false);
+const tg=(b,el,a,c2)=>$(b).onclick=()=>{const c=$(el).classList.toggle('col');$(b).innerHTML=c?c2:a};
+const CU='<i class="fa-solid fa-chevron-up"></i>',CD='<i class="fa-solid fa-chevron-down"></i>';tg('bMin','ui',CU,CD);tg('bNav','nav',CU,CD);
+const nv=(id,f)=>$(id).onclick=()=>{goal=null;f()};
+nv('zi',()=>zoom(.78));nv('zo',()=>zoom(1.28));nv('pl',()=>pan(-ob.r*.12,0));nv('pr',()=>pan(ob.r*.12,0));nv('pu',()=>pan(0,ob.r*.08));nv('pdn',()=>pan(0,-ob.r*.08));
+$('hm').onclick=$('vF').onclick=()=>go({th:.10,ph:1.12,r:HR(),x:-.06,y:.98,z:Z0});
+$('vT').onclick=()=>go({th:.25,ph:1.20,r:.78,x:0,y:1.02,z:Z0});
+$('vK').onclick=()=>go({th:-.40,ph:1.25,r:.56,x:0,y:1.42,z:Z0});
+
+/* ================= grafik ================= */
+function drawAn(){
+ const c=$('an'),k=c.getContext('2d'),W=360,H=200;k.setTransform(2,0,0,2,0,0);k.clearRect(0,0,W,H);
+ const cs=getComputedStyle(document.documentElement),fg=cs.getPropertyValue('--fg').trim(),ac=cs.getPropertyValue('--ac').trim(),mut=cs.getPropertyValue('--mut').trim();
+ k.fillStyle=fg;k.font='11px system-ui,sans-serif';
+ k.fillText('Gaya apung (N) terhadap bagian benda tercelup (%)',4,12);
+ const bx=40,by=24,bw=W-bx-16,bh=130;
+ const FaMax=rhoF()*G*VB;
+ const yMax=Math.max(.05,FaMax*1.15);
+ k.strokeStyle=mut;k.globalAlpha=.65;k.lineWidth=1;
+ k.beginPath();k.moveTo(bx,by);k.lineTo(bx,by+bh);k.lineTo(bx+bw,by+bh);k.stroke();k.globalAlpha=1;
+ k.fillStyle=mut;k.font='9px system-ui,sans-serif';
+ k.fillText('0',bx-9,by+bh+3);
+ k.fillText(fmt(yMax,1),4,by+4);
+ k.fillText('0%',bx-6,by+bh+12);
+ k.fillText('100%',bx+bw-20,by+bh+12);
+ /* garis teori Fa = rf·g·V·x */
+ k.strokeStyle=ac;k.setLineDash([4,3]);k.lineWidth=1.5;
+ k.beginPath();k.moveTo(bx,by+bh);k.lineTo(bx+bw,by+bh-(FaMax/yMax)*bh);k.stroke();k.setLineDash([]);
+ /* titik rekaman */
+ k.fillStyle=ac;
+ st.rec.forEach(p=>{const px=bx+p.f*bw,py=by+bh-(p.Fa/yMax)*bh;k.beginPath();k.arc(px,py,1.8,0,7);k.fill()});
+ /* titik sekarang */
+ const cx=bx+st.frac*bw,cy=by+bh-(st.Fa/yMax)*bh;
+ k.fillStyle='#d2412a';k.beginPath();k.arc(cx,cy,3.4,0,7);k.fill();
+ /* keterangan */
+ k.fillStyle=fg;k.font='10px system-ui,sans-serif';
+ let msg='Tekan Turunkan untuk mulai.';
+ if(st.done)msg=st.mode==='sink'
+  ?'Tenggelam penuh: Fa = ρf·g·V = '+fmt(st.Fa)+' N, neraca = '+fmt(st.T)+' N'
+  :'Terapung: Fa = W = '+fmt(st.Fa)+' N, tercelup '+fmt(st.frac*100,0)+'%';
+ else if(st.p>0)msg='Sedang dicelupkan… '+fmt(st.frac*100,0)+'% benda di dalam fluida';
+ k.fillText(msg,4,H-4);
+}
+
+/* ================= loop ================= */
+let last=performance.now(),fr=0;
+function frame(now){
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ if(st.run){
+  st.p=Math.min(1,st.p+dt*st.spd/2.6);
+  if(st.p>=1){st.p=1;st.run=false;st.done=true}
+ }
+ upd();
+
+ /* benda & tali */
+ block.position.set(0,st.y,Z0);
+ const btop=st.y+A/2;
+ const sLen=Math.max(.002,SBOT-btop);
+ strB.scale.y=sLen;strB.position.set(0,SBOT-sLen/2,Z0);
+
+ /* pegas & penunjuk */
+ const sl=Math.min(.100,SPR0+st.T*KV);
+ for(let i=0;i<rings.length;i++)rings[i].position.set(0,STY-.020-sl*i/(rings.length-1),Z0);
+ ptr.position.set(0,STY-.020-sl,Z0);
+
+ animGoal();setCam();R.render(SC,cam);
+
+ if(fr++%3==0){
+  $('rt').textContent=fmt(st.W);
+  $('rs').textContent=fmt(st.T);
+  $('rv').textContent=fmt(st.Fa);
+  $('ra').textContent=fmt(st.frac*100,1);
+  $('hint').textContent=st.done
+   ?(st.mode==='sink'
+     ?'Tenggelam penuh: Fa = ρf·g·V = '+fmt(st.Fa)+' N, neraca membaca W − Fa = '+fmt(st.T)+' N.'
+     :'Terapung: Fa = W = '+fmt(st.Fa)+' N, bagian tercelup = ρ benda / ρ fluida = '+fmt(st.frac*100,0)+'%.')
+   :(st.mode==='sink'
+     ?'Tenggelam: benda 2700 kg/m³ selalu tenggelam. Fa = ρ fluida · g · V benda tercelup.'
+     :'Terapung: benda lebih ringan dari fluida. Fa = W, bagian tercelup = ρ benda / ρ fluida.');
+  drawAn();
+ }
+ requestAnimationFrame(frame);
+}
+
+/* ===== keadaan awal: semua panel/navbar tertutup ===== */
+$('nav').classList.add('col');$('bNav').innerHTML=CD;
+$('ui').classList.add('col');$('bMin').innerHTML=CD;
+showAn(false);
+
+ob.r=HR();ui();refresh();requestAnimationFrame(frame);
+</script></body></html>
